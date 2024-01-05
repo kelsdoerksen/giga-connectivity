@@ -23,7 +23,7 @@ args = parser.parse_args()
 bbox_dict = {
     'BWA': [15, 35, -15, -30],
     'RWA': [28.5, 31, -1, -3],
-    'BIH': [15, 19.75, 45.5, 42.75],
+    'BIH': [15, 19.75, 45.5, 42.5],
     'BLZ': [-89.25, -88, 18.75, 15.75],
     'GIN': [-15.5, -7.25, 13, 7],
     'SLV': [-90.25, -87.5, 14.5, 13]
@@ -134,5 +134,6 @@ plot_2d_array(total_gt_2d, aoi, buffer, 'Ground Truth No Connectivity', 'groundt
 
 
 # Yes connectivity schools
-plot_2d_array(total_data_2d, aoi, buffer, 'Random Forest Predictions Yes Connectivity', 'rf_pred_map', 'yes', exp)
+plot_2d_array(total_data_2d, aoi, buffer, 'Random Forest Predictions Yes Connectivity', 'rf_pred_map_yes_connectivity',
+              'yes', exp)
 plot_2d_array(total_gt_2d, aoi, buffer, 'Ground Truth Yes Connectivity', 'groundtruth_map_yes_connectivity', 'yes', exp)

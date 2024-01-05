@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, roc_auc_score, roc_curve
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split, cross_validate
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.utils import shuffle
 import os
@@ -29,7 +29,6 @@ def calc_importance(model, X, save_dir):
   importances.plot.bar()
   ax.set_title("Feature importances using Gini Index")
   ax.set_ylabel("Feature importance score")
-  fig.tight_layout()
   plt.savefig('{}/FeatureImportances.png'.format(save_dir), bbox_inches='tight')
 
   return df
@@ -106,7 +105,8 @@ def run_rf(aoi, buffer_extent, exp_type):
     dataset = dataset[dataset['lat'].notna()]
     dataset = dataset[dataset['lon'].notna()]
 
-    X_train, X_test, y_train, y_test = train_test_split(dataset, dataset['connectivity'], test_size = 0.2, random_state = 42)
+    X_train, X_test, y_train, y_test = train_test_split(dataset, dataset['connectivity'], test_size = 0.2,
+                                                        random_state = 42)
 
     # Save lat, lon for X test and then drop label and location data
     test_latitudes = X_test['lat']
@@ -161,14 +161,18 @@ def run_rf(aoi, buffer_extent, exp_type):
     df_results.to_csv('{}/results_for_plotting.csv'.format(results))
 
     # Cross validation score
-    cv_accuracy = cross_val_score(forest, X_test, y_test, cv=5, scoring='accuracy')
-    print('Scores for each fold are: {}'.format(cv_accuracy))
-    print('Average accuracy: {}'.format(cv_accuracy.mean()))
+    cv_scoring = cross_validate(forest, X_test, y_test, scoring=['accuracy', 'f1'], cv=5)
+    print('Accuracy scores for each fold are: {}'.format(cv_scoring['test_accuracy']))
+    print('Average accuracy is: {}'.format(cv_scoring['test_accuracy'].mean()))
+    print('F1 scores for each fold are: {}'.format(cv_scoring['test_f1']))
+    print('Average F1 is: {}'.format(cv_scoring['test_f1'].mean()))
 
     with open('{}/results.txt'.format(results), 'w') as f:
-        f.write(f'The hard predictions were right {100 * accuracy:5.2f}% of the time')
-        f.write('Scores for each fold are: {}'.format(cv_accuracy))
-        f.write('Average accuracy: {}'.format(cv_accuracy.mean()))
+        f.write(f'The hard predictions were right on the test set {100 * accuracy:5.2f}% of the time')
+        f.write('Accuracy scores for each fold are: {}'.format(cv_scoring['test_accuracy']))
+        f.write('Average accuracy is: {}'.format(cv_scoring['test_accuracy'].mean()))
+        f.write('F1 scores for each fold are: {}'.format(cv_scoring['test_f1']))
+        f.write('Average F1 is: {}'.format(cv_scoring['test_f1'].mean()))
 
     # generate a no skill prediction (majority class)
     ns_probs = [0 for _ in range(len(y_test))]

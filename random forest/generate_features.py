@@ -4,8 +4,6 @@ Script to generate features from gee-generated csvs per country
 
 import pandas as pd
 import argparse
-import matplotlib.pyplot as plt
-import seaborn as sn
 import numpy as np
 
 parser = argparse.ArgumentParser(description='Generating features for Random Forest',
@@ -84,6 +82,21 @@ def unique_lat_lon(df):
     return df_new
 
 
+def get_elec_data(aoi):
+    """
+    Grab the data for the tranmission line distance
+    Note I am using a modified csv file from golden truth on
+    ML Azure
+    :return: df_dist: distance of school point to transmission line
+    """
+
+    df_trans_lines = pd.read_csv('{}/PowerGrid/{}_school_points_with_transmission_line_distance.csv'.format(
+        base_filepath, aoi))
+
+    df_dist = df_trans_lines['distance_to_transmission_line_network']
+
+    return df_dist
+
 
 def get_feature_space(aoi, buffer):
     '''
@@ -99,12 +112,20 @@ def get_feature_space(aoi, buffer):
     df_pop = pd.read_csv('{}/{}/{}m_buffer/pop_population_density_2020_custom_buffersize_{}_with_time.csv'.format
                          (base_filepath, aoi, buffer, buffer))
 
+    df_ghsl = pd.read_csv('{}/{}/{}m_buffer/human_settlement_layer_built_up_built_characteristics_2018'
+                          '_custom_buffersize_{}_with_time.csv'.format(base_filepath, aoi, buffer, buffer))
+
+    df_ghm = pd.read_csv('{}/{}/{}m_buffer/global_human_modification_gHM_2016'
+                         '_custom_buffersize_{}_with_time.csv'.format(base_filepath, aoi, buffer, buffer))
+
+    df_distance = get_elec_data(aoi)
+
     df_avg_rad = get_avg_nightlight(aoi, 'avg_rad', buffer)
     df_cf_cvg = get_avg_nightlight(aoi, 'cf_cvg', buffer)
 
     df_label = add_label(aoi)
 
-    feature_space = pd.concat([df_modis, df_pop, df_avg_rad, df_cf_cvg, df_label], axis=1)
+    feature_space = pd.concat([df_modis, df_pop, df_ghsl, df_ghm, df_distance, df_avg_rad, df_cf_cvg, df_label], axis=1)
     final_feature_space = feature_space.drop(['Unnamed: 0'], axis=1)
 
     # Drop nans that exist in the label -> we can't validate if there is/is not connectivity or if nan in lat, lon
