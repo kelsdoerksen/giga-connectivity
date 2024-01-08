@@ -1,3 +1,18 @@
+site_name: Giga Connectivity
+site_url: https://kelsdoerksen.github.io/giga-connectivity/
+
+markdown_extensions:
+- def_list
+- pymdownx.tasklist:
+    custom_checkbox: true
+    clickable_checkbox: true
+- pymdownx.superfences:
+    custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+- attr_list
+
 nav:
     - Home: index.md
     - Dataset: dataset.md
