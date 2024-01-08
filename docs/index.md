@@ -63,6 +63,7 @@ The GHS-BUILT-C spatial raster dataset delineates the boundaries of the human se
 
 #### [Global Human Modification](https://developers.google.com/earth-engine/datasets/catalog/CSP_HM_GlobalHumanModification)
 The global Human Modification dataset (gHM) provides a cumulative measure of human modification of terrestrial lands globally at 1 square-kilometer resolution.
+
 | Feature      | Description                        |
 | ---------- | -----------------------------------  |
 | `global_human_modification.gHM.mode` | Mode of gHM in grid cell |
