@@ -1,10 +1,12 @@
-This project develops ML predictive models to predict binary connectivity of schools to the internet. The models are trained on a combination of UN-provided survey data and open-source remote sensing data. Open-source data from Google Earth Engine is collected via the [airPy]([https://pages.github.com/](https://github.com/kelsdoerksen/airPy/tree/master)https://github.com/kelsdoerksen/airPy/tree/master).
+
 
 * [Introduction](#introduction)
 * [Dataset](#dataset)
+* [Data Processing](#data-processing)
 
 
 # Introduction
+This project develops ML predictive models to predict binary connectivity of schools to the internet. The models are trained on a combination of UN-provided survey data and open-source remote sensing data.
 
 # Dataset  
 ### Google Earth Engine
@@ -99,3 +101,6 @@ Vectorized predicted distribution and transmission line network data per country
 | Feature      | Description                        |
 | ---------- | -----------------------------------  |
 | `distance_to_transmission_line_network` | Distance of transmission line to school in radians |
+
+# Data Processing
+Open-source data from Google Earth Engine is collected via the [airPy]([https://pages.github.com/](https://github.com/kelsdoerksen/airPy/tree/master)https://github.com/kelsdoerksen/airPy/tree/master).
