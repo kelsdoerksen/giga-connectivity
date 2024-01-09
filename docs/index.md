@@ -3,6 +3,7 @@
 * [Introduction](#introduction)
 * [Dataset](#dataset)
 * [Data Processing](#data-processing)
+* [Results](#results)
 
 
 # Introduction
@@ -121,3 +122,29 @@ Figure 1 depicts an example of the school distances from electrical transmission
 |![Image](imgs/transmission_line_dist.png)
 |:--:| 
 | *Figure 1. Example of Distance from Schools to Transmission Lines in Rwanda* |
+
+#### Cleaning Data
+Data is cleaned by removing duplicate school entries and entries that contain NaNs.
+
+# Results
+Below highlights the results for the Random Forest models predicting binary connectivity for schools per country.
+
+### Botswana (BWA)
+* The hard predictions were right 71.13% of the time
+* Average accuracy with 5-fold cross validation is: 63%
+* Average F1 with 5-fold cross validation is: 61%
+* False positive rate is 37%
+* True positive rate is 76%
+* False negative rate is 24%
+* True negative rate is 62%
+
+|![Image](imgs/results/BWA/BWA_example.png)
+|:--:| 
+| *Figure 1. Botswana Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+
+### Rwanda (RWA
+### El Salvador (SLV)
+### Panama (PAN)
+### Guinea (GIN)
+### Belize (BLZ)
+### Bosnia (BIH)
