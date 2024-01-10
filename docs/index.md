@@ -104,7 +104,11 @@ Vectorized predicted distribution and transmission line network data per country
 | `distance_to_transmission_line_network` | Distance of transmission line to school in radians |
 
 # Data Processing
-Open-source data from Google Earth Engine is collected via the [airPy]([https://pages.github.com/](https://github.com/kelsdoerksen/airPy/tree/master)https://github.com/kelsdoerksen/airPy/tree/master).
+Open-source data from Google Earth Engine is collected via the [airPy]([https://pages.github.com/](https://github.com/kelsdoerksen/airPy/tree/master)https://github.com/kelsdoerksen/airPy/tree/master). Per latitude, longitude point representing a school location and user-specified AOI buffer extent, GEE data can be extracted and processed to generate statistical features of landcover information from MODIS, VIIRS Nightlight, Human Modification, Human Settlement Built Layer, and World Population data.
+
+|![Image](imgs/giga_airpy.png)
+|:--:| 
+| *Figure 1. Example of airPy package processing tool used over Rwanda to extract GEE information* |
 
 #### Distance to Transmission Line
 Steps to calculating the distance of school from electrical transmission lines. In QGIS:
@@ -117,11 +121,11 @@ Steps to calculating the distance of school from electrical transmission lines. 
 | 4   | Calculate distance of school points to nearest transmission line | Select School Locations layer -> Open Attribute Table -> Toggle Editing -> New field (name: distance_to_tranmission_line) -> Open field calculator -> Update existing field (distance_to_transmission_line) -> `length(make_line ($geometry,closest_point (overlay_nearest ('line', $geometry)[0],$geometry)))` |
 | 5   | Export modified School Locations layer with new distance information | Select School Locations layer -> Export -> Save |
 
-Figure 1 depicts an example of the school distances from electrical transmission lines in Rwanda. The left side of the figure depicts the entire country, and the right side of the figure highlights a smaller region for more clarity.
+Figure 2 depicts an example of the school distances from electrical transmission lines in Rwanda. The left side of the figure depicts the entire country, and the right side of the figure highlights a smaller region for more clarity.
 
 |![Image](imgs/transmission_line_dist.png)
 |:--:| 
-| *Figure 1. Example of Distance from Schools to Transmission Lines in Rwanda* |
+| *Figure 2. Example of Distance from Schools to Transmission Lines in Rwanda* |
 
 #### Cleaning Data
 Data is cleaned by removing duplicate school entries and entries that contain NaNs.
