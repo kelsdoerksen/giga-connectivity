@@ -3,7 +3,7 @@
 * [Introduction](#introduction)
 * [Dataset](#dataset)
 * [Data Processing](#data-processing)
-* [Model]*(model)
+* [Model](#model)
 * [Results](#results)
 
 
@@ -122,11 +122,11 @@ Steps to calculating the distance of school from electrical transmission lines. 
 | 4   | Calculate distance of school points to nearest transmission line | Select School Locations layer -> Open Attribute Table -> Toggle Editing -> New field (name: distance_to_tranmission_line) -> Open field calculator -> Update existing field (distance_to_transmission_line) -> `length(make_line ($geometry,closest_point (overlay_nearest ('line', $geometry)[0],$geometry)))` |
 | 5   | Export modified School Locations layer with new distance information | Select School Locations layer -> Export -> Save |
 
-Figure 2 depicts an example of the school distances from electrical transmission lines in Rwanda. The left side of the figure depicts the entire country, and the right side of the figure highlights a smaller region for more clarity.
+Figure 1 depicts an example of the school distances from electrical transmission lines in Rwanda. The left side of the figure depicts the entire country, and the right side of the figure highlights a smaller region for more clarity.
 
 |![Image](imgs/transmission_line_dist.png)
 |:--:| 
-| *Figure 2. Example of Distance from Schools to Transmission Lines in Rwanda* |
+| *Figure 1. Example of Distance from Schools to Transmission Lines in Rwanda* |
 
 #### Cleaning Data
 Data is cleaned by removing duplicate school entries and entries that contain NaNs.
@@ -134,6 +134,9 @@ Data is cleaned by removing duplicate school entries and entries that contain Na
 # Model
 The ML architecture used as a baseline is the Random Forest. Random Forests are a collection of decision trees with the fundamental idea to leverage  a decision tree ensemble method for classification or regression. In the case of this project we are focused on binary classification to predict schools as connected (Class 1) or not-connected (Class 0). This is a **supervised learning** context where the model is provided a labelled target variable (Y/N connectivity) for each sample (school).
 
+|![Image](imgs/rf_example.png)
+|:--:| 
+| *Figure 2. Example of Random Forest Architecture. Fig adadpted from [datacamp](https://www.datacamp.com/tutorial/random-forests-classifier-python)* |
 
 # Results
 Below highlights the results for the Random Forest models predicting binary connectivity for schools per country.
@@ -149,7 +152,7 @@ Below highlights the results for the Random Forest models predicting binary conn
 
 |![Image](imgs/results/BWA/BWA_example.png)
 |:--:| 
-| *Figure 1. Botswana Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+| *Figure 3. Botswana Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
 
 ### Rwanda (RWA
 ### El Salvador (SLV)
