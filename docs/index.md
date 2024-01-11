@@ -177,7 +177,7 @@ Number of schools in test set without connectivity: 90
 * False negative rate is 18%
 * True negative rate is 64%
 
-|![Image](imgs/results/results/BWA_placeholder.png)
+|![Image](imgs/results/BWA_placeholder.png)
 |:--:| 
 | *Figure 3. Botswana Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
 
