@@ -155,7 +155,7 @@ education_level = {
 Data is cleaned by removing duplicate school entries and entries that contain NaNs.
 
 # Model
-The ML architecture used as a baseline is the <strong style="color: green; opacity: 0.80;">Random Forest</strong>. Random Forests are a collection of decision trees with the fundamental idea to leverage  a decision tree ensemble method for classification or regression. In the case of this project we are focused on binary classification to predict schools as connected (Class 1) or not-connected (Class 0). This is a **supervised learning** context where the model is provided a labelled target variable (Y/N connectivity) for each sample (school).
+The ML architecture used as a baseline is the <strong style="color: lightblue; opacity: 0.80;">Random Forest</strong>. Random Forests are a collection of decision trees with the fundamental idea to leverage  a decision tree ensemble method for classification or regression. In the case of this project we are focused on binary classification to predict schools as connected (Class 1) or not-connected (Class 0). This is a **supervised learning** context where the model is provided a labelled target variable (Y/N connectivity) for each sample (school).
 
 |![Image](imgs/rf_example.png)
 |:--:| 
