@@ -134,9 +134,9 @@ Figure 1 depicts an example of the school distances from electrical transmission
 | *Figure 1. Example of Distance from Schools to Transmission Lines in Rwanda* |
 
 #### UNICEF Data
-`education_type` strings are encoded to integers ranging from 1-9 via the following dictionary:
+`education_level` strings are encoded to integers ranging from 1-9 via the following dictionary:
 ```
-education_type = {
+education_level = {
         'Pre-Primary': 0,
         'Primary': 1,
         'Secondary': 2,
@@ -165,9 +165,9 @@ The ML architecture used as a baseline is the Random Forest. Random Forests are 
 Below highlights the results for the Random Forest models predicting binary connectivity for schools per country.
 
 ### Botswana (BWA)
-Total number of uniques schools: 966
-Number of schools in test set with connectivity: 104
-Number of schools in test set without connectivity: 90
+&rarr; Total number of uniques schools: 966
+&rarr; Number of schools in test set with connectivity: 104
+&rarr; Number of schools in test set without connectivity: 90
 
 * The hard predictions were right 75.26% of the time
 * Average accuracy with 5-fold cross validation is: 72%
@@ -182,6 +182,22 @@ Number of schools in test set without connectivity: 90
 | *Figure 3. Botswana Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
 
 ### Rwanda (RWA)
+&rarr; Total number of uniques schools: 3966
+&rarr; Number of schools in test set with connectivity: 464
+&rarr; Number of schools in test set without connectivity: 330
+
+* The hard predictions were right # of the time
+* Average accuracy with 5-fold cross validation is: 59%
+* Average F1 with 5-fold cross validation is: 0.67
+* False positive rate is 59%
+* True positive rate is 72%
+* False negative rate is 28%
+* True negative rate is 41%
+
+|![Image](imgs/results/RWA_placeholder.png)
+|:--:| 
+| *Figure 4. Rwanda Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+
 ### El Salvador (SLV)
 ### Panama (PAN)
 ### Guinea (GIN)
