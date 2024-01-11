@@ -1,5 +1,3 @@
-
-
 * [Introduction](#introduction)
 * [Dataset](#dataset)
 * [Data Processing](#data-processing)
@@ -104,6 +102,13 @@ Vectorized predicted distribution and transmission line network data per country
 | ---------- | -----------------------------------  |
 | `distance_to_transmission_line_network` | Distance of transmission line to school in radians |
 
+#### UNICEF Database
+The UNICEF Giga Database provides school information including location, connectivity status, and more. 
+
+| Feature      | Description                        |
+| ---------- | -----------------------------------  |
+| `education_type` | Education level of school. One of, or a combination of Pre-primary, Primary, Secondary, Post-Secondary and Other. |
+
 # Data Processing
 Open-source data from Google Earth Engine is collected via the [airPy]([https://pages.github.com/](https://github.com/kelsdoerksen/airPy/tree/master)https://github.com/kelsdoerksen/airPy/tree/master). Per latitude, longitude point representing a school location and user-specified AOI buffer extent, GEE data can be extracted and processed to generate statistical features of landcover information from MODIS, VIIRS Nightlight, Human Modification, Human Settlement Built Layer, and World Population data.
 
@@ -128,6 +133,24 @@ Figure 1 depicts an example of the school distances from electrical transmission
 |:--:| 
 | *Figure 1. Example of Distance from Schools to Transmission Lines in Rwanda* |
 
+#### UNICEF Data
+`education_type` strings are encoded to integers ranging from 1-9 via the following dictionary:
+```
+education_type = {
+        'Pre-Primary': 0,
+        'Primary': 1,
+        'Secondary': 2,
+        'Pre-Primary and Secondary': 3,
+        'Primary and Secondary': 4,
+        'Pre-Primary and Primary': 5,
+        'Pre-Primary and Primary and Secondary': 6,
+        'Pre-Primary, Primary and Secondary': 6,
+        'Primary, Secondary and Post-Secondary': 7,
+        'Post-Secondary': 8,
+        'Other': 9
+    }
+```
+
 #### Cleaning Data
 Data is cleaned by removing duplicate school entries and entries that contain NaNs.
 
@@ -142,19 +165,23 @@ The ML architecture used as a baseline is the Random Forest. Random Forests are 
 Below highlights the results for the Random Forest models predicting binary connectivity for schools per country.
 
 ### Botswana (BWA)
-* The hard predictions were right 71.13% of the time
-* Average accuracy with 5-fold cross validation is: 63%
-* Average F1 with 5-fold cross validation is: 61%
-* False positive rate is 37%
-* True positive rate is 76%
-* False negative rate is 24%
-* True negative rate is 62%
+Total number of uniques schools: 966
+Number of schools in test set with connectivity: 104
+Number of schools in test set without connectivity: 90
 
-|![Image](imgs/results/BWA/BWA_example.png)
+* The hard predictions were right 75.26% of the time
+* Average accuracy with 5-fold cross validation is: 72%
+* Average F1 with 5-fold cross validation is: 0.75
+* False positive rate is 35%
+* True positive rate is 82%
+* False negative rate is 18%
+* True negative rate is 64%
+
+|![Image](imgs/results/BWA/BWA_placeholder.png)
 |:--:| 
 | *Figure 3. Botswana Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
 
-### Rwanda (RWA
+### Rwanda (RWA)
 ### El Salvador (SLV)
 ### Panama (PAN)
 ### Guinea (GIN)
