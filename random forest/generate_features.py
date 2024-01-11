@@ -43,19 +43,16 @@ def get_avg_nightlight(location, rad_band, buffer):
     return output_df
 
 
-def add_label(country):
+def add_label(df):
     '''
     Add connectivity label information
     :return: df of labels
     '''
-
-    df_school_info = pd.read_csv('{}/{}/{}_school_geolocation_coverage_master.csv'.format(base_filepath, country,
-                                                                                          country))
-    print('Starting with {} schools'.format(len(df_school_info)))
+    print('Starting with {} schools'.format(len(df)))
     # Replace Yes/No with 1/0 for label
-    df_school_info['connectivity'] = df_school_info['connectivity'].map({'Yes': 1, 'No': 0})
+    df['connectivity'] = df['connectivity'].map({'Yes': 1, 'No': 0})
 
-    return df_school_info['connectivity']
+    return df['connectivity']
 
 
 def unique_lat_lon(df):
@@ -97,6 +94,30 @@ def get_elec_data(aoi):
 
     return df_dist
 
+def get_education_level(df):
+    """
+    Get school type from dataframe encoded as category
+    :return:
+    """
+    education_level_dict = {
+        'Pre-Primary': 0,
+        'Primary': 1,
+        'Secondary': 2,
+        'Pre-Primary and Secondary': 3,
+        'Primary and Secondary': 4,
+        'Pre-Primary and Primary': 5,
+        'Pre-Primary and Primary and Secondary': 6,
+        'Pre-Primary, Primary and Secondary': 6,
+        'Primary, Secondary and Post-Secondary': 7,
+        'Post-Secondary': 8,
+        'Other': 9
+    }
+
+    # Map education level to categories
+    df['education_level'] = df['education_level'].map(education_level_dict)
+
+    return df['education_level']
+
 
 def get_feature_space(aoi, buffer):
     '''
@@ -105,6 +126,10 @@ def get_feature_space(aoi, buffer):
     Grabs modis, population and nightlight features
     :return: df of features for aoi specified
     '''
+
+    df_giga = pd.read_csv('{}/{}/{}_school_geolocation_coverage_master.csv'.format(base_filepath, aoi, aoi))
+
+    df_school_level = get_education_level(df_giga)
 
     df_modis = pd.read_csv('{}/{}/{}m_buffer/modis_LC_Type1_2020_custom_buffersize_{}_with_time.csv'.format(base_filepath, aoi,
                                                                                                     buffer, buffer))
@@ -123,12 +148,13 @@ def get_feature_space(aoi, buffer):
     df_avg_rad = get_avg_nightlight(aoi, 'avg_rad', buffer)
     df_cf_cvg = get_avg_nightlight(aoi, 'cf_cvg', buffer)
 
-    df_label = add_label(aoi)
+    df_label = add_label(df_giga)
 
-    feature_space = pd.concat([df_modis, df_pop, df_ghsl, df_ghm, df_distance, df_avg_rad, df_cf_cvg, df_label], axis=1)
+    feature_space = pd.concat([df_modis, df_pop, df_ghsl, df_ghm, df_distance, df_school_level,
+                               df_avg_rad, df_cf_cvg, df_label], axis=1)
     final_feature_space = feature_space.drop(['Unnamed: 0'], axis=1)
 
-    # Drop nans that exist in the label -> we can't validate if there is/is not connectivity or if nan in lat, lon
+    # Drop nans that exist in the label -> we can't validate if there is/is not connectivity
     final_feature_space = final_feature_space[final_feature_space['connectivity'].notna()]
 
     # Drop if there are multiple entries of the same lat, lon point
