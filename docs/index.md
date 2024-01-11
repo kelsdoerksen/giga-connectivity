@@ -3,6 +3,7 @@
 * [Introduction](#introduction)
 * [Dataset](#dataset)
 * [Data Processing](#data-processing)
+* [Model]*(model)
 * [Results](#results)
 
 
@@ -129,6 +130,10 @@ Figure 2 depicts an example of the school distances from electrical transmission
 
 #### Cleaning Data
 Data is cleaned by removing duplicate school entries and entries that contain NaNs.
+
+# Model
+The ML architecture used as a baseline is the Random Forest. Random Forests are a collection of decision trees with the fundamental idea to leverage  a decision tree ensemble method for classification or regression. In the case of this project we are focused on binary classification to predict schools as connected (Class 1) or not-connected (Class 0). This is a **supervised learning** context where the model is provided a labelled target variable (Y/N connectivity) for each sample (school).
+
 
 # Results
 Below highlights the results for the Random Forest models predicting binary connectivity for schools per country.
