@@ -5,6 +5,7 @@ Script to generate features from gee-generated csvs per country
 import pandas as pd
 import argparse
 import numpy as np
+import geopandas as gpd
 
 parser = argparse.ArgumentParser(description='Generating features for Random Forest',
                                  formatter_class=argparse.RawTextHelpFormatter)
@@ -14,6 +15,23 @@ args = parser.parse_args()
 
 months = ['jan', 'feb', 'mar', 'apr', 'may', 'june', 'july', 'aug', 'sept', 'oct', 'nov', 'dec']
 base_filepath = '/Users/kelseydoerksen/Desktop/Giga'
+
+def filter_schools(aoi, giga_df):
+    """
+    Using Isa's cleaned dataset, filter
+    the schools we don't want
+    :return: clean_df
+    """
+
+    print('The number of schools before cleaning the dataset is: {}'.format(len(giga_df)))
+    cleaned_df = gpd.read_file('{}/isa_clean/{}_clean.geojson'.format(base_filepath, aoi))
+    cleaned_school_ids = cleaned_df[cleaned_df['clean'] <=1]
+    correct_schools_list = cleaned_school_ids['giga_id_school'].tolist()
+
+    cleaned_giga_df = giga_df[giga_df['giga_id_school'].isin(correct_schools_list)]
+    print('The number of schools after cleaning the dataset is: {}'.format(len(cleaned_giga_df)))
+
+    return cleaned_giga_df
 
 
 def get_avg_nightlight(location, rad_band, buffer):
@@ -94,6 +112,45 @@ def get_elec_data(aoi):
 
     return df_dist
 
+def calc_nearest_ookla_point(ookla_df, school_df, ookla_type):
+    """
+    :param ookla_df: geopandas df of ookla data
+    :param school_df: geopandas df of school data
+    :param ookla_type: string of type of ookla data, mobile or fixed
+    :return:
+    """
+
+    dist_df = gpd.sjoin_nearest(school_df, ookla_df, how='left', distance_col='ookla_distance')
+    dist_df = dist_df.drop_duplicates(subset=['giga_id_school'], keep='first')
+
+    return dist_df
+
+
+def get_ookla(aoi, ookla_type):
+    """
+    Add ookla data to feature space
+    :return:
+    """
+    # Load data
+    school_df = gpd.read_file('{}/{}/{}_school_geolocation.geojson'.format(base_filepath, aoi, aoi))
+    country_mask = gpd.read_file('{}/Ookla/{}_extent.geojson'.format(base_filepath, aoi))
+    ookla_df = gpd.read_file('{}/Ookla/2023-10-01_performance_{}_tiles/gps_{}_tiles.shp'.
+                             format(base_filepath, ookla_type, ookla_type), mask=country_mask)
+
+    # Transform crs to 3857 for distance calculation
+    school_df = school_df.to_crs(crs=3857)
+    ookla_df = ookla_df.to_crs(crs=3857)
+
+    # Calculate nearest ookla point
+    combined_df = calc_nearest_ookla_point(ookla_df, school_df, ookla_type)
+
+    combined_df = combined_df[['avg_d_kbps', 'avg_u_kbps', 'avg_lat_ms', 'tests', 'devices', 'ookla_distance']]
+
+    combined_df = combined_df.add_suffix('_{}'.format(ookla_type))
+
+    return combined_df
+
+
 def get_education_level(df):
     """
     Get school type from dataframe encoded as category
@@ -148,11 +205,18 @@ def get_feature_space(aoi, buffer):
     df_avg_rad = get_avg_nightlight(aoi, 'avg_rad', buffer)
     df_cf_cvg = get_avg_nightlight(aoi, 'cf_cvg', buffer)
 
+    df_ookla_mobile = get_ookla(aoi, 'mobile')
+    df_ookla_fixed = get_ookla(aoi, 'fixed')
+
     df_label = add_label(df_giga)
 
-    feature_space = pd.concat([df_modis, df_pop, df_ghsl, df_ghm, df_distance, df_school_level,
-                               df_avg_rad, df_cf_cvg, df_label], axis=1)
-    final_feature_space = feature_space.drop(['Unnamed: 0'], axis=1)
+    feature_space = pd.concat([df_giga['giga_id_school'], df_modis, df_pop, df_ghsl, df_ghm, df_distance, df_school_level,
+                               df_avg_rad, df_cf_cvg, df_ookla_mobile, df_ookla_fixed, df_label], axis=1)
+
+    # Filter out schools from Isabelle's methodology
+    filtered = filter_schools(aoi, feature_space)
+
+    final_feature_space = filtered.drop(['Unnamed: 0'], axis=1)
 
     # Drop nans that exist in the label -> we can't validate if there is/is not connectivity
     final_feature_space = final_feature_space[final_feature_space['connectivity'].notna()]
@@ -164,7 +228,6 @@ def get_feature_space(aoi, buffer):
     unique_df = unique_df.loc[:, ~unique_df.columns.duplicated()]
 
     unique_df.to_csv('{}/{}/{}m_buffer/full_feature_space.csv'.format(base_filepath, aoi, buffer))
-
 
 def calculate_feature_correlation(data):
     """
