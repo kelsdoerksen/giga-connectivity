@@ -109,6 +109,25 @@ The UNICEF Giga Database provides school information including location, connect
 | ---------- | -----------------------------------  |
 | `education_type` | Education level of school. One of, or a combination of Pre-primary, Primary, Secondary, Post-Secondary and Other. |
 
+#### [Speedtest by Ookla Global Fixed and Mobile Network Performance Maps](https://registry.opendata.aws/speedtest-global-performance/)
+Ookla provides freely available global fixed broadband and mobile (cellular) network performance data of zoom level 16 web mercator tiles (approximately 610.8m x 610.8m at the equator). Download speed, upload speed and latency data are collected via Speedtest by Ookla applications for Androis and iOS and averaged for each tile, and measurements are filtered to results containing GPS-quality location accuracy.
+
+| Feature      | Description                        |
+| ---------- | -----------------------------------  |
+| `avg_d_kbps_mobile` | Average download speed of all mobile tests performed in the nearest tile (kilobits per second) |
+| `avg_u_kbps_mobile` | Average upload speed of all mobile tests performed in the nearest tile (kilobits per second) |
+| `avg_lat_ms_mobile` | Average latency of all mobile tests perfomed in the nerarest tile (milliseconds) |
+| `tests_mobile` | Number of mobile tests taken in the nearest tile | 
+| `devices_mobile` | Number of unique mobile devices in the nearest tile |
+| `ookla_distance_mobile` | Distance of the nearest tile to the school location |
+| `avg_d_kbps_fixed` | Average download speed of all fixed broadband tests performed in the nearest tile (kilobits per second) |
+| `avg_u_kbps_fixed` | Average upload speed of all fixed broadband tests performed in the nearest tile (kilobits per second) |
+| `avg_lat_ms_fixed` | Average latency of all fixed broadband tests perfomed in the nerarest tile (milliseconds) |
+| `tests_fixed` | Number of fixed broadband tests taken in the nearest tile | 
+| `devices_fixed` | Number of unique fixed broadband devices in the nearest tile |
+| `ookla_distance_fixed` | Distance of the nearest tile to the school location |
+
+
 # Data Processing
 Open-source data from Google Earth Engine is collected via the [airPy]([https://pages.github.com/](https://github.com/kelsdoerksen/airPy/tree/master)https://github.com/kelsdoerksen/airPy/tree/master). Per latitude, longitude point representing a school location and user-specified AOI buffer extent, GEE data can be extracted and processed to generate statistical features of landcover information from MODIS, VIIRS Nightlight, Human Modification, Human Settlement Built Layer, and World Population data.
 
@@ -150,6 +169,21 @@ education_level = {
         'Other': 9
     }
 ```
+
+#### Ookla Speedtest data
+Similar to the electrical power grid information, per school location provided by UNICEF, the distance to the nearest Ookla tile is calculated and the corresponding metrics from the fixed broadband and mobile networks are included as features. High-level steps are detailed below:
+
+| Step | Instruction |
+| ---- | ----------- |
+| 1    | Convert UNICEF school geolocations csv file to geojson |
+| 2    | Create mask of AOI (specified country) from World Bank boundaries shapefile and save as geojson |
+| 3    | Load school locations geojson file to geopandas dataframe |
+| 4    | Load Ookla dataset to geopandas dataframe specifying country mask to decrease computation time |
+| 5    | Convert crs of school locations and ookla dataframes from EPSG:4326 &rarr; EPSG: 3857* |
+| 6    | Use method `geopandas.sjoin_nearest()` function to find the nearest ookla tile per school location |
+
+<sup>*EPSG:3857 uses a mathematical projection to map the Earth’s curved surface onto a flat, two-dimensional, square plane. This is important to be able to calculate the nearest ookla point to the school locations correctly.</sup>
+
 
 #### Cleaning Data
 Data is cleaned by removing duplicate school entries and entries that contain NaNs.
