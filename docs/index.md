@@ -213,7 +213,11 @@ Below highlights the results for the Random Forest models predicting binary conn
 
 |![Image](imgs/results/BWA_map.png)
 |:--:| 
-| *Figure 3. Botswana Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+| *Figure 3 a). Botswana Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+
+|![Image](imgs/results/BWA_roc.png)
+|:--:| 
+| *Figure 3 b). Botswana ROC curve. No skill refers to a model that always guesses "No" connectivity.* |
 
 ### Rwanda (RWA)
 &rarr; Total number of uniques schools: 3354
@@ -230,7 +234,11 @@ Below highlights the results for the Random Forest models predicting binary conn
 
 |![Image](imgs/results/RWA_map.png)
 |:--:| 
-| *Figure 4. Rwanda Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+| *Figure 4 a). Rwanda Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+
+|![Image](imgs/results/RWA_roc.png)
+|:--:| 
+| *Figure 4 b). Rwanda ROC curve. No skill refers to a model that always guesses "No" connectivity.* |
 
 ### El Salvador (SLV)
 &rarr; Total number of uniques schools: 4966
@@ -249,6 +257,10 @@ Below highlights the results for the Random Forest models predicting binary conn
 |:--:| 
 | *Figure 5. El Salvador Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
 
+|![Image](imgs/results/SLV_roc.png)
+|:--:| 
+| *Figure 5 b). El Salvador ROC curve. No skill refers to a model that always guesses "No" connectivity.* |
+
 
 ### Panama (PAN)
 &rarr; Total number of uniques schools: 2723
@@ -265,7 +277,11 @@ Below highlights the results for the Random Forest models predicting binary conn
 
 |![Image](imgs/results/PAN_map.png)
 |:--:| 
-| *Figure 6. Panama Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+| *Figure 6 a). Panama Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet. No skill refers to a model that always guesses "No" connectivity.* |
+
+|![Image](imgs/results/PAN_roc.png)
+|:--:| 
+| *Figure 6 b). Panama ROC curve* |
 
 ### Guinea (GIN)
 &rarr; Total number of uniques schools: 791
@@ -282,7 +298,11 @@ Below highlights the results for the Random Forest models predicting binary conn
 
 |![Image](imgs/results/GIN_map.png)
 |:--:| 
-| *Figure 7. Guinea Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+| *Figure 7 a). Guinea Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet. No skill refers to a model that always guesses "No" connectivity.* |
+
+|![Image](imgs/results/GIN_roc.png)
+|:--:| 
+| *Figure 7 b). Guinea ROC curve* |
 
 ### Belize (BLZ)
 &rarr; Total number of uniques schools: 315
@@ -299,7 +319,11 @@ Below highlights the results for the Random Forest models predicting binary conn
 
 |![Image](imgs/results/BLZ_map.png)
 |:--:| 
-| *Figure 8. Belize Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+| *Figure 8 a). Belize Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet. No skill refers to a model that always guesses "No" connectivity.* |
+
+|![Image](imgs/results/BLZ_roc.png)
+|:--:| 
+| *Figure 8 b). Belize ROC curve* |
 
 ### Bosnia (BIH)
 &rarr; Total number of uniques schools: 1366
@@ -314,6 +338,10 @@ Below highlights the results for the Random Forest models predicting binary conn
 * False negative rate is 13%
 * True negative rate is 48%
 
-|![Image](imgs/results/BIN_map.png)
+|![Image](imgs/results/BIH_map.png)
 |:--:| 
-| *Figure 9. Bosnia Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+| *Figure 9 a). Bosnia Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet. No skill refers to a model that always guesses "No" connectivity.* |
+
+|![Image](imgs/results/BIH_roc.png)
+|:--:| 
+| *Figure 9 b). Bosnia ROC curve* |
