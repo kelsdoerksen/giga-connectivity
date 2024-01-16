@@ -199,9 +199,9 @@ The ML architecture used as a baseline is the <strong style="color: lightblue; o
 Below highlights the results for the Random Forest models predicting binary connectivity for schools per country.
 
 ### Botswana (BWA)
-&rarr; Total number of uniques schools: 907
-&rarr; Number of schools in test set with connectivity: 135
-&rarr; Number of schools in test set without connectivity: 138
+&rarr; Total number of uniques schools: 907 <br>
+&rarr; Number of schools in test set with connectivity: 135 <br>
+&rarr; Number of schools in test set without connectivity: 138 <br>
 
 * The hard predictions were right 65.57% of the time
 * Average accuracy with 5-fold cross validation is: 67%
@@ -220,9 +220,9 @@ Below highlights the results for the Random Forest models predicting binary conn
 | *Figure 3 b). Botswana ROC curve. No skill refers to a model that always guesses "No" connectivity.* |
 
 ### Rwanda (RWA)
-&rarr; Total number of uniques schools: 3354
-&rarr; Number of schools in test set with connectivity: 581
-&rarr; Number of schools in test set without connectivity: 424
+&rarr; Total number of uniques schools: 3354 <br>
+&rarr; Number of schools in test set with connectivity: 581 <br>
+&rarr; Number of schools in test set without connectivity: 424 <br>
 
 * The hard predictions were right 62.39% of the time
 * Average accuracy with 5-fold cross validation is: 62%
@@ -241,9 +241,9 @@ Below highlights the results for the Random Forest models predicting binary conn
 | *Figure 4 b). Rwanda ROC curve. No skill refers to a model that always guesses "No" connectivity.* |
 
 ### El Salvador (SLV)
-&rarr; Total number of uniques schools: 4966
-&rarr; Number of schools in test set with connectivity: 224
-&rarr; Number of schools in test set without connectivity: 1149
+&rarr; Total number of uniques schools: 4966 <br>
+&rarr; Number of schools in test set with connectivity: 224 <br>
+&rarr; Number of schools in test set without connectivity: 1149 <br>
 
 * The hard predictions were right 85.80% of the time
 * Average accuracy with 5-fold cross validation is: 84%
@@ -263,9 +263,9 @@ Below highlights the results for the Random Forest models predicting binary conn
 
 
 ### Panama (PAN)
-&rarr; Total number of uniques schools: 2723
-&rarr; Number of schools in test set with connectivity: 487
-&rarr; Number of schools in test set without connectivity: 330
+&rarr; Total number of uniques schools: 2723 <br>
+&rarr; Number of schools in test set with connectivity: 487 <br>
+&rarr; Number of schools in test set without connectivity: 330 <br>
 
 * The hard predictions were right 78.95% of the time
 * Average accuracy with 5-fold cross validation is: 79%
@@ -284,9 +284,9 @@ Below highlights the results for the Random Forest models predicting binary conn
 | *Figure 6 b). Panama ROC curve* |
 
 ### Guinea (GIN)
-&rarr; Total number of uniques schools: 791
-&rarr; Number of schools in test set with connectivity: 107
-&rarr; Number of schools in test set without connectivity: 131
+&rarr; Total number of uniques schools: 791 <br>
+&rarr; Number of schools in test set with connectivity: 107 <br>
+&rarr; Number of schools in test set without connectivity: 131 <br>
 
 * The hard predictions were right 77.31% of the time
 * Average accuracy with 5-fold cross validation is: 71%
@@ -305,9 +305,9 @@ Below highlights the results for the Random Forest models predicting binary conn
 | *Figure 7 b). Guinea ROC curve* |
 
 ### Belize (BLZ)
-&rarr; Total number of uniques schools: 315
-&rarr; Number of schools in test set with connectivity: 76
-&rarr; Number of schools in test set without connectivity: 19
+&rarr; Total number of uniques schools: 315 <br>
+&rarr; Number of schools in test set with connectivity: 76 <br>
+&rarr; Number of schools in test set without connectivity: 19 <br>
 
 * The hard predictions were right 82.11% of the time
 * Average accuracy with 5-fold cross validation is: 81%
@@ -326,9 +326,9 @@ Below highlights the results for the Random Forest models predicting binary conn
 | *Figure 8 b). Belize ROC curve* |
 
 ### Bosnia (BIH)
-&rarr; Total number of uniques schools: 1366
-&rarr; Number of schools in test set with connectivity: 274
-&rarr; Number of schools in test set without connectivity: 127
+&rarr; Total number of uniques schools: 1366 <br>
+&rarr; Number of schools in test set with connectivity: 274 <br>
+&rarr; Number of schools in test set without connectivity: 127 <br>
 
 * The hard predictions were right 75.31% of the time
 * Average accuracy with 5-fold cross validation is: 76%
