@@ -80,7 +80,7 @@ The global Human Modification dataset (gHM) provides a cumulative measure of hum
 | `global_human_modification.gHM.min` | Minimum value of gHM in grid cell |
 
 #### [VIIRS Nightlight](https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMCFG)
-Monthly average radiance composite images using nighttime data from the Visible Infrared Imaging Radiometer Suite (VIIRS) Day/Night Band (DNB).
+Monthly average radiance composite images using nighttime data from the Visible Infrared Imaging Radiometer Suite (VIIRS) Day/Night Band (DNB). Monthly nightlight data is extracted for the year 2022, and features are calculated as summary statstics over the year.
 
 | Feature      | Description                        |
 | ---------- | -----------------------------------  |
