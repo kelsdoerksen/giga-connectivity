@@ -199,41 +199,121 @@ The ML architecture used as a baseline is the <strong style="color: lightblue; o
 Below highlights the results for the Random Forest models predicting binary connectivity for schools per country.
 
 ### Botswana (BWA)
-&rarr; Total number of uniques schools: 966
-&rarr; Number of schools in test set with connectivity: 104
-&rarr; Number of schools in test set without connectivity: 90
+&rarr; Total number of uniques schools: 907
+&rarr; Number of schools in test set with connectivity: 135
+&rarr; Number of schools in test set without connectivity: 138
 
-* The hard predictions were right 75.26% of the time
-* Average accuracy with 5-fold cross validation is: 72%
-* Average F1 with 5-fold cross validation is: 0.75
-* False positive rate is 35%
-* True positive rate is 82%
-* False negative rate is 18%
-* True negative rate is 64%
+* The hard predictions were right 65.57% of the time
+* Average accuracy with 5-fold cross validation is: 67%
+* Average F1 with 5-fold cross validation is: 0.67
+* False positive rate is 43%
+* True positive rate is 78%
+* False negative rate is 22%
+* True negative rate is 56%
 
-|![Image](imgs/results/BWA_placeholder.png)
+|![Image](imgs/results/BWA_map.png)
 |:--:| 
 | *Figure 3. Botswana Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
 
 ### Rwanda (RWA)
-&rarr; Total number of uniques schools: 3966
-&rarr; Number of schools in test set with connectivity: 464
-&rarr; Number of schools in test set without connectivity: 330
+&rarr; Total number of uniques schools: 3354
+&rarr; Number of schools in test set with connectivity: 581
+&rarr; Number of schools in test set without connectivity: 424
 
-* The hard predictions were right # of the time
-* Average accuracy with 5-fold cross validation is: 59%
-* Average F1 with 5-fold cross validation is: 0.67
-* False positive rate is 59%
-* True positive rate is 72%
-* False negative rate is 28%
-* True negative rate is 41%
+* The hard predictions were right 62.39% of the time
+* Average accuracy with 5-fold cross validation is: 62%
+* Average F1 with 5-fold cross validation is: 0.69
+* False positive rate is 48%
+* True positive rate is 71%
+* False negative rate is 29%
+* True negative rate is 51%
 
-|![Image](imgs/results/RWA_placeholder.png)
+|![Image](imgs/results/RWA_map.png)
 |:--:| 
 | *Figure 4. Rwanda Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
 
 ### El Salvador (SLV)
+&rarr; Total number of uniques schools: 4966
+&rarr; Number of schools in test set with connectivity: 224
+&rarr; Number of schools in test set without connectivity: 1149
+
+* The hard predictions were right 85.80% of the time
+* Average accuracy with 5-fold cross validation is: 84%
+* Average F1 with 5-fold cross validation is: 0.28
+* False positive rate is 3%
+* True positive rate is 29%
+* False negative rate is 70%
+* True negative rate is 97%
+
+|![Image](imgs/results/SLV_map.png)
+|:--:| 
+| *Figure 5. El Salvador Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+
+
 ### Panama (PAN)
+&rarr; Total number of uniques schools: 2723
+&rarr; Number of schools in test set with connectivity: 487
+&rarr; Number of schools in test set without connectivity: 330
+
+* The hard predictions were right 78.95% of the time
+* Average accuracy with 5-fold cross validation is: 79%
+* Average F1 with 5-fold cross validation is: 0.83
+* False positive rate is 32%
+* True positive rate is 87%
+* False negative rate is 13%
+* True negative rate is 68%
+
+|![Image](imgs/results/PAN_map.png)
+|:--:| 
+| *Figure 6. Panama Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+
 ### Guinea (GIN)
+&rarr; Total number of uniques schools: 791
+&rarr; Number of schools in test set with connectivity: 107
+&rarr; Number of schools in test set without connectivity: 131
+
+* The hard predictions were right 77.31% of the time
+* Average accuracy with 5-fold cross validation is: 71%
+* Average F1 with 5-fold cross validation is: 0.66
+* False positive rate is 18%
+* True positive rate is 70%
+* False negative rate is 30%
+* True negative rate is 82%
+
+|![Image](imgs/results/GIN_map.png)
+|:--:| 
+| *Figure 7. Guinea Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+
 ### Belize (BLZ)
+&rarr; Total number of uniques schools: 315
+&rarr; Number of schools in test set with connectivity: 76
+&rarr; Number of schools in test set without connectivity: 19
+
+* The hard predictions were right 82.11% of the time
+* Average accuracy with 5-fold cross validation is: 81%
+* Average F1 with 5-fold cross validation is: 0.88
+* False positive rate is 58%
+* True positive rate is 92%
+* False negative rate is 8%
+* True negative rate is 42%
+
+|![Image](imgs/results/BLZ_map.png)
+|:--:| 
+| *Figure 8. Belize Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
+
 ### Bosnia (BIH)
+&rarr; Total number of uniques schools: 1366
+&rarr; Number of schools in test set with connectivity: 274
+&rarr; Number of schools in test set without connectivity: 127
+
+* The hard predictions were right 75.31% of the time
+* Average accuracy with 5-fold cross validation is: 76%
+* Average F1 with 5-fold cross validation is: 0.83
+* False positive rate is 52%
+* True positive rate is 87%
+* False negative rate is 13%
+* True negative rate is 48%
+
+|![Image](imgs/results/BIN_map.png)
+|:--:| 
+| *Figure 9. Bosnia Random Forest vs Ground Truth School Connectivity Predictions. Red are schools not connected to internet, green are schools connected to the internet.* |
