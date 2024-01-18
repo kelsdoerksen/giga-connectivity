@@ -2,7 +2,9 @@
 * [Dataset](#dataset)
 * [Data Processing](#data-processing)
 * [Model](#model)
-* [Results](#results)
+* [Experimental Setup](#experimental-setup)
+* [Results](#results) <br>
+  &rarr; [Experiment A](##expermiment-a)
 
 
 # Introduction
@@ -205,10 +207,9 @@ Brief experimental setups are detailed in the table below.
 # Results
 Below highlights the results for the Random Forest models predicting binary connectivity for schools per country.
 
-<details>
-  <summary>Experiment A</summary>
+## Experiment A
 
-  ### Botswana (BWA)
+### Botswana (BWA)
 &rarr; Total number of uniques schools: 907 <br>
 &rarr; Number of schools in test set with connectivity: 135 <br>
 &rarr; Number of schools in test set without connectivity: 138 <br>
@@ -355,6 +356,4 @@ Below highlights the results for the Random Forest models predicting binary conn
 |![Image](imgs/results/BIH_roc.png)
 |:--:| 
 | *Figure 9 b). Bosnia ROC curve* |
-  
-</details>
 
