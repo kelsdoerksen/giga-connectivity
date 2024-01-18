@@ -195,10 +195,20 @@ The ML architecture used as a baseline is the <strong style="color: lightblue; o
 |:--:| 
 | *Figure 2. Example of Random Forest Architecture. Fig adadpted from [datacamp](https://www.datacamp.com/tutorial/random-forests-classifier-python)* |
 
+# Experimental Setup
+Brief experimental setups are detailed in the table below. 
+
+| Experiment | Description | Model Parameters |
+| ---- | ----------- | ----------- |
+| A    | Regional model prediction, Random Forest model is trained and tested on samples from the same country. Full feature space used, except for `education_level` and `human_settlement_layer_built_up`.  | Random Forest Architecture, 100 estimators. |
+
 # Results
 Below highlights the results for the Random Forest models predicting binary connectivity for schools per country.
 
-### Botswana (BWA)
+<details>
+  <summary>Experiment A</summary>
+
+  ### Botswana (BWA)
 &rarr; Total number of uniques schools: 907 <br>
 &rarr; Number of schools in test set with connectivity: 135 <br>
 &rarr; Number of schools in test set without connectivity: 138 <br>
@@ -345,3 +355,6 @@ Below highlights the results for the Random Forest models predicting binary conn
 |![Image](imgs/results/BIH_roc.png)
 |:--:| 
 | *Figure 9 b). Bosnia ROC curve* |
+  
+</details>
+
