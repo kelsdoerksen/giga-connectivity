@@ -230,6 +230,10 @@ Below highlights the results for the Random Forest models predicting binary conn
 |:--:| 
 | *Figure 3 b). Botswana ROC curve. No skill refers to a model that always guesses "No" connectivity.* |
 
+|![Image](imgs/results/BWA_fi.png)
+|:--:| 
+| *Figure 3 c). Botswana Feature Importance* |
+
 ### Rwanda (RWA)
 &rarr; Total number of uniques schools: 3354 <br>
 &rarr; Number of schools in test set with connectivity: 581 <br>
@@ -251,6 +255,10 @@ Below highlights the results for the Random Forest models predicting binary conn
 |:--:| 
 | *Figure 4 b). Rwanda ROC curve. No skill refers to a model that always guesses "No" connectivity.* |
 
+|![Image](imgs/results/RWA_fi.png)
+|:--:| 
+| *Figure 4 c). Rwanda Feature Importance* |
+
 ### El Salvador (SLV)
 &rarr; Total number of uniques schools: 4966 <br>
 &rarr; Number of schools in test set with connectivity: 224 <br>
@@ -271,6 +279,10 @@ Below highlights the results for the Random Forest models predicting binary conn
 |![Image](imgs/results/SLV_roc.png)
 |:--:| 
 | *Figure 5 b). El Salvador ROC curve. No skill refers to a model that always guesses "No" connectivity.* |
+
+|![Image](imgs/results/SLV_fi.png)
+|:--:| 
+| *Figure 5 c). El Salvador Feature Importance* |
 
 
 ### Panama (PAN)
@@ -294,6 +306,10 @@ Below highlights the results for the Random Forest models predicting binary conn
 |:--:| 
 | *Figure 6 b). Panama ROC curve* |
 
+|![Image](imgs/results/PAN_fi.png)
+|:--:| 
+| *Figure 6 c). Panama Feature Importance* |
+
 ### Guinea (GIN)
 &rarr; Total number of uniques schools: 791 <br>
 &rarr; Number of schools in test set with connectivity: 107 <br>
@@ -314,6 +330,10 @@ Below highlights the results for the Random Forest models predicting binary conn
 |![Image](imgs/results/GIN_roc.png)
 |:--:| 
 | *Figure 7 b). Guinea ROC curve* |
+
+|![Image](imgs/results/GIN_fi.png)
+|:--:| 
+| *Figure 7 c). Guinea Feature Importance* |
 
 ### Belize (BLZ)
 &rarr; Total number of uniques schools: 315 <br>
@@ -336,6 +356,10 @@ Below highlights the results for the Random Forest models predicting binary conn
 |:--:| 
 | *Figure 8 b). Belize ROC curve* |
 
+|![Image](imgs/results/BLZ_fi.png)
+|:--:| 
+| *Figure 8 c). Belize Feature Importance* |
+
 ### Bosnia (BIH)
 &rarr; Total number of uniques schools: 1366 <br>
 &rarr; Number of schools in test set with connectivity: 274 <br>
@@ -356,4 +380,8 @@ Below highlights the results for the Random Forest models predicting binary conn
 |![Image](imgs/results/BIH_roc.png)
 |:--:| 
 | *Figure 9 b). Bosnia ROC curve* |
+
+|![Image](imgs/results/BIH_fi.png)
+|:--:| 
+| *Figure 9 c). Bosnia Feature Importance* |
 
