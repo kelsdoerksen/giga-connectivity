@@ -24,9 +24,22 @@ bbox_dict = {
     'BWA': [15, 35, -15, -30],
     'RWA': [28.5, 31, -1, -3],
     'BIH': [15, 19.75, 45.5, 42.5],
-    'BLZ': [-89.25, -88, 18.75, 15.75],
+    'BLZ': [-89.5, -87.75, 18.75, 15.75],
     'GIN': [-15.5, -7.25, 13, 7],
-    'SLV': [-90.25, -87.5, 14.5, 13]
+    'SLV': [-90.25, -87.5, 14.5, 13],
+    'PAN': [-83.5, -76.5, 10, 6.75],
+    'BRA': [-76.0, -34.0, 8, -35]
+}
+
+country_dict = {
+    'BWA': 'Botswana',
+    'RWA': 'Rwanda',
+    'BIH': 'Bosnia',
+    'BLZ': 'Belize',
+    'GIN': 'Guinea',
+    'SLV': 'El Salvador',
+    'PAN': 'Panama',
+    'BRA': 'Brazil'
 }
 
 def plot_2d_array(array, country, buffer_extent, title, savename, connectivity_status, experiment_name):
@@ -79,6 +92,44 @@ def plot_2d_array(array, country, buffer_extent, title, savename, connectivity_s
     #plt.show()
     plt.savefig('/Users/kelseydoerksen/Desktop/Giga/{}/{}_features_results_{}m/{}.png'
                 .format(country, experiment_name, buffer_extent, savename))
+
+def plot_feature_importance(aoi, exp, buffer):
+    """
+    Plotting features by importance
+    :return:
+    """
+    fi_df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/{}/{}_features_results_{}m/Jan19_results/FI.csv'.
+                        format(aoi, exp, buffer))
+    importances = fi_df.loc[0][1:].tolist()
+    features = fi_df.columns[1:].tolist()
+
+    # Normalize importances to 0-1
+    norm_importances = (importances-np.min(importances))/(np.max(importances)-np.min(importances))
+
+    # Remove the prefix from the human settlement layer/human modification because super long
+    strings_to_remove = ['human_settlement_layer_built_up', 'global_human_modification']
+    new_names = []
+    for name in features:
+        prefix = name.split('.',1)[0]
+        if prefix in strings_to_remove:
+            if 'built_characteristics' in name:
+                updated_name = name.replace("built_characteristics", "built_c")
+                new_names.append(updated_name.split('.', 1)[1])
+            else:
+                new_names.append(name.split('.', 1)[1])
+        else:
+            new_names.append(name)
+
+    plt.barh(new_names, norm_importances, height=0.3)
+    plt.rc('ytick', labelsize=6)
+    plt.subplots_adjust(top=0.963, bottom=0.054)
+    plt.xlabel('Importance Score')
+    plt.ylabel('Feature Name')
+    plt.title('Feature Importance for {}'.format(country_dict[aoi]))
+    plt.savefig('/Users/kelseydoerksen/Desktop/Giga/{}/{}_features_results_{}m/Jan19_results/FeatureImportance_{}.png'
+                .format(aoi, exp, buffer, aoi))
+
+
 
 aoi = args.aoi
 buffer = args.buffer
@@ -137,3 +188,6 @@ plot_2d_array(total_gt_2d, aoi, buffer, 'Ground Truth No Connectivity', 'groundt
 plot_2d_array(total_data_2d, aoi, buffer, 'Random Forest Predictions Yes Connectivity', 'rf_pred_map_yes_connectivity',
               'yes', exp)
 plot_2d_array(total_gt_2d, aoi, buffer, 'Ground Truth Yes Connectivity', 'groundtruth_map_yes_connectivity', 'yes', exp)
+
+# Run feature importance plot
+plot_feature_importance(aoi, exp, buffer)

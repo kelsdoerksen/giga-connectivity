@@ -68,23 +68,49 @@ def calc_confusion_matrix(y_test, y_pred, savedir):
         f.write('True negative rate is {}'.format(TN_Rate))
 
 
-def get_class_balance(df, train, test, savedir):
+def get_class_balance(train_df, test_df, savedir):
     """
     Calculate class balance for total, train and test set to save
-    :param: df: dataframe of input
-    :param: train: labels from training set
-    :param: test: labels from testing set
+    :param: train_df: training data
+    :param: test_df: testing data
     :param: savedir: savedirectory
     :return:
     """
+    positive_samples_total = sum(train_df['connectivity']) + sum(test_df['connectivity'])
+    negative_sampels_total = len(train_df) + len(test_df) - positive_samples_total
 
     with open('{}/classbalance.txt'.format(savedir), 'w') as f:
-        f.write('Number of positive samples total is: {}'.format(sum(df['connectivity'])))
-        f.write('Number of negative samples total is: {}'.format(len(df) - sum(df['connectivity'])))
-        f.write('Number of positive training samples is: {}'.format(sum(train)))
-        f.write('Number of positive training samples is: {}'.format(len(train) - sum(train)))
-        f.write('Number of positive testing samples is: {}'.format(sum(test)))
-        f.write('Number of positive testing samples is: {}'.format(len(test) - sum(test)))
+        f.write('Number of positive samples total is: {}'.format(positive_samples_total))
+        f.write('Number of negative samples total is: {}'.format(negative_sampels_total))
+        f.write('Number of positive training samples is: {}'.format(sum(train_df['connectivity'])))
+        f.write('Number of positive training samples is: {}'.format(len(train_df) - sum(train_df['connectivity'])))
+        f.write('Number of positive testing samples is: {}'.format(sum(test_df['connectivity'])))
+        f.write('Number of positive testing samples is: {}'.format(len(test_df) - sum(test_df['connectivity'])))
+
+
+def load_data(aoi, buffer_extent):
+    """
+    Loading data
+    :param aoi:
+    :param buffer_extent:
+    :return:
+    """
+    train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData.csv'.format(root_dir, aoi, buffer_extent))
+    test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData.csv'.format(root_dir, aoi, buffer_extent))
+
+    training_data = train_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1', 'connectivity.1'])
+    testing_data = test_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1', 'connectivity.1'])
+
+    training_data = shuffle(training_data)
+    testing_data = shuffle(testing_data)
+
+    # Drop rows if lat or lon are NaN
+    training_dataset = training_data[training_data['lat'].notna()]
+    training_dataset = training_data[training_data['lon'].notna()]
+    testing_dataset = testing_data[testing_data['lat'].notna()]
+    testing_dataset = testing_data[testing_data['lon'].notna()]
+
+    return training_dataset, testing_dataset
 
 
 def run_rf(aoi, buffer_extent, exp_type):
@@ -96,44 +122,34 @@ def run_rf(aoi, buffer_extent, exp_type):
         os.makedirs(results)
 
     print('Loading data...')
-    dataset = pd.read_csv('{}/{}/{}m_buffer/full_feature_space.csv'.format(root_dir, aoi, buffer_extent))
-
-    dataset = dataset.drop(columns=['Unnamed: 0'])
-    dataset = shuffle(dataset)
-
-    # Drop rows if lat or lon are NaN
-    dataset = dataset[dataset['lat'].notna()]
-    dataset = dataset[dataset['lon'].notna()]
-
-    X_train, X_test, y_train, y_test = train_test_split(dataset, dataset['connectivity'], test_size = 0.2,
-                                                        random_state = 42)
+    train_df, test_df = load_data(aoi, buffer_extent)
 
     # Save lat, lon for X test and then drop label and location data
-    test_latitudes = X_test['lat']
-    test_longitudes = X_test['lon']
+    test_latitudes = test_df['lat']
+    test_longitudes = test_df['lon']
 
-    # Dropping additional features to have a paired down feature space
-    if exp_type == 'limited':
-        feats_to_drop = ['connectivity', 'lat', 'lon', 'school_locations', 'modis.evg_conif', 'modis.evg_broad',
-           'modis.dcd_needle', 'modis.dcd_broad', 'modis.mix_forest',
-           'modis.cls_shrub', 'modis.open_shrub', 'modis.woody_savanna',
-           'modis.savanna', 'modis.grassland', 'modis.perm_wetland',
-           'modis.cropland', 'modis.urban', 'modis.crop_nat_veg',
-           'modis.perm_snow', 'modis.barren', 'modis.water_bds', 'nightlight.avg_rad.var', 'nightlight.cf_cvg.var']
+    # Calculate the class balance accordingly and save
+    get_class_balance(train_df, test_df, results)
 
+    # currently dropping education_level because there are nans in a lot of samples
     if exp_type == 'full':
-        feats_to_drop = ['connectivity', 'lat', 'lon', 'school_locations']
+        cols_to_drop = ['connectivity', 'lat', 'lon', 'school_locations', 'giga_id_school']
 
-    X_test = X_test.drop(columns=feats_to_drop)
-    X_train = X_train.drop(columns=feats_to_drop)
+    # Drop education level first
+    train_df = train_df.drop(columns=['education_level'])
+    test_df = test_df.drop(columns=['education_level'])
+
+    train_df = train_df.dropna()
+    test_df = test_df.dropna()
+
+    y_train = train_df['connectivity']
+    y_test = test_df['connectivity']
+
+    X_test = test_df.drop(columns=cols_to_drop)
+    X_train = train_df.drop(columns=cols_to_drop)
 
     print('Number of positive testing samples: {}'.format(sum(y_test)))
     print('Number of negative testing samples: {}'.format(len(y_test) - sum(y_test)))
-
-    # Calculate the class balance accordingly and save
-    get_class_balance(dataset, y_train, y_test, results)
-
-    f1 = make_scorer(f1_score, average='macro')
 
     # Create an instance of Random Forest
     forest = RandomForestClassifier(criterion='gini',

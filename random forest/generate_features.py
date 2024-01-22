@@ -90,37 +90,20 @@ def unique_lat_lon(df):
 
     # Drop duplicate school locations
     df_new = df.drop_duplicates(subset=['school_locations'])
-    # Drop nans
-    df_new = df_new.dropna()
+    print('The number of retained schools after dropping duplicates is: {}'.format(len(df_new)))
 
-    print('The number of retained schools after dropping duplicates and NaNs is: {}'.format(len(df_new)))
     return df_new
 
 
-def get_elec_data(aoi):
+def calc_nearest_point(target_df, school_df, target_name):
     """
-    Grab the data for the tranmission line distance
-    Note I am using a modified csv file from golden truth on
-    ML Azure
-    :return: df_dist: distance of school point to transmission line
-    """
-
-    df_trans_lines = pd.read_csv('{}/PowerGrid/{}_school_points_with_transmission_line_distance.csv'.format(
-        base_filepath, aoi))
-
-    df_dist = df_trans_lines['distance_to_transmission_line_network']
-
-    return df_dist
-
-def calc_nearest_ookla_point(ookla_df, school_df, ookla_type):
-    """
-    :param ookla_df: geopandas df of ookla data
+    Calculate nearest school location to point of interest
+    :param target_df: geopandas df of target data
     :param school_df: geopandas df of school data
-    :param ookla_type: string of type of ookla data, mobile or fixed
     :return:
     """
 
-    dist_df = gpd.sjoin_nearest(school_df, ookla_df, how='left', distance_col='ookla_distance')
+    dist_df = gpd.sjoin_nearest(school_df, target_df, how='left', distance_col='{}_distance'.format(target_name))
     dist_df = dist_df.drop_duplicates(subset=['giga_id_school'], keep='first')
 
     return dist_df
@@ -133,7 +116,7 @@ def get_ookla(aoi, ookla_type):
     """
     # Load data
     school_df = gpd.read_file('{}/{}/{}_school_geolocation.geojson'.format(base_filepath, aoi, aoi))
-    country_mask = gpd.read_file('{}/Ookla/{}_extent.geojson'.format(base_filepath, aoi))
+    country_mask = gpd.read_file('{}/{}/{}_extent.geojson'.format(base_filepath, aoi, aoi))
     ookla_df = gpd.read_file('{}/Ookla/2023-10-01_performance_{}_tiles/gps_{}_tiles.shp'.
                              format(base_filepath, ookla_type, ookla_type), mask=country_mask)
 
@@ -142,13 +125,34 @@ def get_ookla(aoi, ookla_type):
     ookla_df = ookla_df.to_crs(crs=3857)
 
     # Calculate nearest ookla point
-    combined_df = calc_nearest_ookla_point(ookla_df, school_df, ookla_type)
+    combined_df = calc_nearest_point(ookla_df, school_df, 'ookla')
 
     combined_df = combined_df[['avg_d_kbps', 'avg_u_kbps', 'avg_lat_ms', 'tests', 'devices', 'ookla_distance']]
 
     combined_df = combined_df.add_suffix('_{}'.format(ookla_type))
 
     return combined_df
+
+
+def get_elec(aoi):
+    """
+    Add distance to electrical grid to feature space
+    :param aoi:
+    :return:
+    """
+
+    school_df = gpd.read_file('{}/{}/{}_school_geolocation.geojson'.format(base_filepath, aoi, aoi))
+    country_mask = gpd.read_file('{}/{}/{}_extent.geojson'.format(base_filepath, aoi, aoi))
+    elec_df = gpd.read_file('{}/PowerGrid/grid.gpkg'.format(base_filepath), mask=country_mask)
+
+    # Transform crs to 3857 for distance calculation
+    school_df = school_df.to_crs(crs=3857)
+    elec_df = elec_df.to_crs(crs=3857)
+
+    combined_df = calc_nearest_point(elec_df, school_df, 'transmission_line')
+    distance_df = combined_df[['transmission_line_distance']]
+
+    return distance_df
 
 
 def get_education_level(df):
@@ -200,7 +204,7 @@ def get_feature_space(aoi, buffer):
     df_ghm = pd.read_csv('{}/{}/{}m_buffer/global_human_modification_gHM_2016'
                          '_custom_buffersize_{}_with_time.csv'.format(base_filepath, aoi, buffer, buffer))
 
-    df_distance = get_elec_data(aoi)
+    df_distance = get_elec(aoi)
 
     df_avg_rad = get_avg_nightlight(aoi, 'avg_rad', buffer)
     df_cf_cvg = get_avg_nightlight(aoi, 'cf_cvg', buffer)
@@ -210,8 +214,9 @@ def get_feature_space(aoi, buffer):
 
     df_label = add_label(df_giga)
 
-    feature_space = pd.concat([df_giga['giga_id_school'], df_modis, df_pop, df_ghsl, df_ghm, df_distance, df_school_level,
-                               df_avg_rad, df_cf_cvg, df_ookla_mobile, df_ookla_fixed, df_label], axis=1)
+    feature_space = pd.concat([df_giga['giga_id_school'], df_modis, df_pop, df_ghsl, df_ghm, df_distance,
+                               df_school_level, df_avg_rad, df_cf_cvg, df_ookla_mobile, df_ookla_fixed,
+                               df_label], axis=1)
 
     # Filter out schools from Isabelle's methodology
     filtered = filter_schools(aoi, feature_space)
@@ -250,18 +255,6 @@ def calculate_feature_correlation(data):
 
 # Calling function to generate features
 get_feature_space(args.aoi, args.buffer)
-
-# Loading features and looking at correlation
-'''
-aoi = 'BWA'
-buffer='5000'
-features = pd.read_csv('{}/{}/{}m_buffer/full_feature_space.csv'.format(base_filepath, aoi, buffer))
-# Drop label, lat, lon from features
-only_feats = features.drop(columns=['connectivity', 'lat', 'lon', 'Unnamed: 0'])
-calculate_feature_correlation(only_feats)
-'''
-
-
 
 
 
