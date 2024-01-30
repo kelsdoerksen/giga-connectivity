@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 129, in <module>
+    run_lr(
+NameError: name 'run_lr' is not defined

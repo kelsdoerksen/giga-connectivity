@@ -1,0 +1,8 @@
+
+Loading data...
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/random forest/run_rf.py", line 243, in <module>
+    run_rf(aoi, buffer, experiment_type, experiment)
+  File "/Users/kelseydoerksen/code/giga-connectivity/random forest/run_rf.py", line 149, in run_rf
+    X_test = test_df.drop(columns=cols_to_drop)
+UnboundLocalError: local variable 'cols_to_drop' referenced before assignment

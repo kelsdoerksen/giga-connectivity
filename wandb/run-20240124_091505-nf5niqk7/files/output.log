@@ -1,0 +1,38 @@
+Loading data...
+Number of positive testing samples: 139.0
+Number of negative testing samples: 134.0
+Fitting model...
+Evaluating model...
+The hard predictions were right 69.96% of the time
+Accuracy scores for each fold are: [0.61818182 0.61818182 0.61818182 0.7037037  0.7037037 ]
+Average accuracy is: 0.6523905723905724
+F1 scores for each fold are: [0.68656716 0.6557377  0.61818182 0.69230769 0.73333333]
+Average F1 is: 0.6772255425839961
+No Skill: ROC AUC=0.500
+RFC: ROC AUC=0.767
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/random forest/run_rf.py", line 243, in <module>
+    run_rf(aoi, buffer, experiment_type, experiment)
+  File "/Users/kelseydoerksen/code/giga-connectivity/random forest/run_rf.py", line 227, in run_rf
+    'roc': wandb.plot.roc_curve(y_test, probs[:,1])
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/wandb/plot/roc_curve.py", line 71, in roc_curve
+    fpr[class_label], tpr[class_label], _ = sklearn_metrics.roc_curve(
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/metrics/_ranking.py", line 992, in roc_curve
+    fps, tps, thresholds = _binary_clf_curve(
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/metrics/_ranking.py", line 751, in _binary_clf_curve
+    check_consistent_length(y_true, y_score, sample_weight)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/utils/validation.py", line 394, in check_consistent_length
+    lengths = [_num_samples(X) for X in arrays if X is not None]
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/utils/validation.py", line 394, in <listcomp>
+    lengths = [_num_samples(X) for X in arrays if X is not None]
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/utils/validation.py", line 335, in _num_samples
+    raise TypeError(
+TypeError: Singleton array array(0.7) cannot be considered a valid collection.
+True Positive is 109
+True Negative is 83
+False Positive is 51
+False Negative is 30
+False positive rate is 0.3805970149253731
+True positive rate is 0.7841726618705036
+False negative rate is 0.2158273381294964
+True negative rate is 0.6194029850746269

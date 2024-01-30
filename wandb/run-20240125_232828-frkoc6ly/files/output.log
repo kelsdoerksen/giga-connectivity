@@ -1,0 +1,20 @@
+Loading data...
+Number of positive testing samples: 294
+Number of negative testing samples: 107
+Fitting model...
+Evaluating model...
+The hard predictions were right 77.56% of the time
+Accuracy scores for each fold are: [0.69135802 0.75       0.7875     0.7375     0.6       ]
+Average accuracy is: 0.7132716049382716
+F1 scores for each fold are: [0.79338843 0.83050847 0.85950413 0.832      0.71929825]
+Average F1 is: 0.8069398564347555
+No Skill: ROC AUC=0.500
+RFC: ROC AUC=0.838
+True Positive is 255
+True Negative is 55
+False Positive is 52
+False Negative is 39
+False positive rate is 0.48598130841121495
+True positive rate is 0.8673469387755102
+False negative rate is 0.1326530612244898
+True negative rate is 0.514018691588785

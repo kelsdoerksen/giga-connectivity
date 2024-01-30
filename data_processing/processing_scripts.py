@@ -1,6 +1,11 @@
 import pandas as pd
 import json
 import argparse
+import numpy as np
+
+"""
+Some scrap scripts/functions
+"""
 
 parser = argparse.ArgumentParser(description='Generating features for Random Forest',
                                  formatter_class=argparse.RawTextHelpFormatter)
@@ -29,9 +34,60 @@ def get_lat_lon_list(df, country_name, save_dir):
 
 
 # Running for schools
-save_dir = '/Users/kelseydoerksen/Desktop/Giga/{}'.format(args.aoi)
-df = pd.read_csv('{}/{}_school_geolocation_coverage_master.csv'.format(args.aoi, save_dir))
-get_lat_lon_list(df, args.aoi, save_dir)
+#save_dir = '/Users/kelseydoerksen/Desktop/Giga/{}'.format(args.aoi)
+#df = pd.read_csv('{}/{}_school_geolocation_coverage_master.csv'.format(args.aoi, save_dir))
+#get_lat_lon_list(df, args.aoi, save_dir)
+
+
+def eliminate_correlated_features(df, threshold):
+    """
+    Function from giga-ml-utils
+    :return: df of uncorrelated features
+    """
+    # calculate correlation matrix
+    corr_matrix = df.corr().abs()
+
+    # identify pairs of highly correlated features
+    upper_triangle = corr_matrix.where(
+        np.triu(np.ones(corr_matrix.shape), k=1).astype(bool)
+    )
+    highly_correlated_pairs = (
+        upper_triangle.stack().reset_index().rename(columns={0: 'correlation'})
+    )
+    highly_correlated_pairs = highly_correlated_pairs[
+        highly_correlated_pairs['correlation'] > threshold
+        ]
+
+    # drop features from level_0
+    features_to_drop = set()
+    for idx, row in highly_correlated_pairs.iterrows():
+        features_to_drop.add(row['level_0'])  # Drop the first feature
+    print('Features removed were: {}'.format(features_to_drop))
+    with open('{}/correlated_features.txt'.format(root_dir), 'w') as f:
+        f.write('Features removed were: {}'.format(features_to_drop))
+
+    # drop the identified features
+    df_filtered = df.drop(features_to_drop, axis=1)
+
+    # repeat until there are no more highly correlated features
+    '''
+    if len(features_to_drop) > 0:
+        df_filtered = eliminate_correlated_features(df_filtered, threshold=threshold)
+    '''
+
+    return df_filtered
+
+aois = ['BWA', 'RWA', 'SLV', 'PAN', 'BRA', 'GIN', 'BIH', 'BLZ']
+for aoi in aois:
+    root_dir = '/Users/kelseydoerksen/Desktop/Giga/{}/1000m_buffer'.format(aoi)
+    df = pd.read_csv('{}/full_feature_space.csv'.format(root_dir))
+    identity_cols = ['giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations']
+    df_identity = df[identity_cols]
+    df = df.drop(columns=['Unnamed: 0', 'giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations'])
+    df_filt = eliminate_correlated_features(df, 0.9)
+
+    combined_df = pd.concat([df_identity, df_filt], axis=1)
+    combined_df.to_csv('{}/uncorrelated_feature_space.csv'.format(root_dir))
 
 
 '''
