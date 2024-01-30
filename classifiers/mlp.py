@@ -1,16 +1,15 @@
 """
-Logistic Regression pipeline for ML call
+MLP pipeline for ML call
 """
 
-from sklearn.linear_model import LogisticRegression
+from sklearn.neural_network import MLPClassifier
 import pickle
 import pandas as pd
 from sklearn.model_selection import cross_validate, GridSearchCV
 import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
 
-
-def run_lr(X_train,
+def run_mlp(X_train,
            y_train,
            X_test,
            y_test,
@@ -19,14 +18,14 @@ def run_lr(X_train,
            wandb_exp,
            results_dir):
     """
-    Run logistic regression model
+    Run mlp model
     """
 
-    model_name = 'lr'
+    model_name = 'mlp'
 
-    # Create instance of Logistic Regression model
-    print('Creating instance of LR model...')
-    clf = LogisticRegression(solver='lbfgs', max_iter=200, random_state=48)
+    # Create instance of MLP model
+    print('Creating instance of MLP model...')
+    clf = MLPClassifier(random_state=48, max_iter=300)
 
     # Fit to training data
     print('Fitting data...')
@@ -38,12 +37,13 @@ def run_lr(X_train,
     accuracy = clf.score(X_test, y_test)
     print(f'The hard predictions were right {100 * accuracy:5.2f}% of the time')
 
-    # -----------------
-
     # Tune the model
     param_grid = {
-        'penalty': ['l1', 'l2', 'elasticnet'],
-        'C': [0, 0.1, 1, 10]
+        'hidden_layer_sizes': [(100,), (150,), (200,)],
+        'activation': ['identity', 'logistics', 'tanh', 'relu'],
+        'solver': ['lbfgs', 'sgd', 'adam'],
+        'alpha': [0.0001, 0.005, 0.001],
+        'learning_rate': ['constant', 'invscaling',  'adaptive']
     }
     # grid search cv
     grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=5, n_jobs=-1)

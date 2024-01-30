@@ -1,0 +1,12 @@
+Creating instance of SVM model...
+Fitting data...
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 139, in <module>
+    svm.run_svm(
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/svm.py", line 33, in run_svm
+    probs = clf.predict_proba(X_test)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/utils/_available_if.py", line 32, in __get__
+    if not self.check(obj):
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/svm/_base.py", line 829, in _check_proba
+    raise AttributeError(
+AttributeError: predict_proba is not available when  probability=False

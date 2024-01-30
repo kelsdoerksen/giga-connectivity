@@ -1,0 +1,54 @@
+{
+    "os": "macOS-10.16-x86_64-i386-64bit",
+    "python": "3.10.9",
+    "heartbeatAt": "2024-01-30T02:27:33.493058",
+    "startedAt": "2024-01-30T02:27:32.744242",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--model",
+        "mlp",
+        "--aoi",
+        "BWA",
+        "--buffer",
+        "1000",
+        "--root_dir",
+        "/Users/kelseydoerksen/Desktop/Giga"
+    ],
+    "state": "running",
+    "program": "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py",
+    "codePathLocal": "run_pipeline.py",
+    "codePath": "run_pipeline.py",
+    "git": {
+        "remote": "git@github.com:kelsdoerksen/giga-connectivity.git",
+        "commit": "29d4a17d660253b445aeb470cc48cc3ba25f8946"
+    },
+    "email": "kelseydoerksen@gmail.com",
+    "root": "/Users/kelseydoerksen/code/giga-connectivity",
+    "host": "Kelseys-MBP",
+    "username": "kelseydoerksen",
+    "executable": "/Users/kelseydoerksen/opt/anaconda3/envs/giga/bin/python",
+    "cpu_count": 4,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 2300,
+        "min": 2300,
+        "max": 2300
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2300,
+            "min": 2300,
+            "max": 2300
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 465.62699127197266,
+            "used": 21.749797821044922
+        }
+    },
+    "memory": {
+        "total": 16.0
+    }
+}

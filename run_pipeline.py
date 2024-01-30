@@ -4,7 +4,7 @@ for connectivity prediction
 """
 
 import argparse
-from classifiers import lr, rf
+from classifiers import lr, rf, svm, mlp, gb
 import wandb
 import pandas as pd
 from sklearn.utils import shuffle
@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
     # Run model
     if model == 'rf':
-        run_rf(
+        rf.run_rf(
             Xtrain,
             ytrain,
             Xtest,
@@ -126,6 +126,39 @@ if __name__ == '__main__':
 
     if model == 'lr':
         lr.run_lr(
+            Xtrain,
+            ytrain,
+            Xtest,
+            ytest,
+            test_latitudes,
+            test_longitudes,
+            experiment,
+            results)
+
+    if model == 'svm':
+        svm.run_svm(
+            Xtrain,
+            ytrain,
+            Xtest,
+            ytest,
+            test_latitudes,
+            test_longitudes,
+            experiment,
+            results)
+
+    if model == 'mlp':
+        mlp.run_mlp(
+            Xtrain,
+            ytrain,
+            Xtest,
+            ytest,
+            test_latitudes,
+            test_longitudes,
+            experiment,
+            results)
+
+    if model == 'xgb':
+        gb.run_xgb(
             Xtrain,
             ytrain,
             Xtest,

@@ -1,0 +1,28 @@
+Creating instance of XGB model...
+Fitting data...
+The hard predictions were right 77.66% of the time
+> /Users/kelseydoerksen/code/giga-connectivity/classifiers/xgb.py(41)run_xgb()
+     40     # CV scoring
+---> 41     cv_scoring = cross_validate(clf, X_test, y_test, scoring=['accuracy', 'f1'], cv=5)
+     42     print('Accuracy scores for each fold are: {}'.format(cv_scoring['test_accuracy']))
+{'fit_time': array([0.25297475, 0.27366233, 0.24576521, 0.24615479, 0.24872112]), 'score_time': array([0.0039103 , 0.0040288 , 0.00364971, 0.0038681 , 0.00360274]), 'test_accuracy': array([0.72727273, 0.78181818, 0.70909091, 0.74074074, 0.83333333]), 'test_f1': array([0.75409836, 0.77777778, 0.66666667, 0.73076923, 0.83636364])}
+0.7531351344466098
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 161, in <module>
+    xgb.run_xgb(
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/xgb.py", line 41, in run_xgb
+    cv_scoring = cross_validate(clf, X_test, y_test, scoring=['accuracy', 'f1'], cv=5)
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/xgb.py", line 41, in run_xgb
+    cv_scoring = cross_validate(clf, X_test, y_test, scoring=['accuracy', 'f1'], cv=5)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

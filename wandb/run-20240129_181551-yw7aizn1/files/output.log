@@ -1,0 +1,27 @@
+Creating instance of SVM model...
+Fitting data...
+The hard predictions were right 60.81% of the time
+> /Users/kelseydoerksen/code/giga-connectivity/classifiers/svm.py(41)run_svm()
+     40     # CV scoring
+---> 41     cv_scoring = cross_validate(clf, X_test, y_test, scoring=['accuracy', 'f1'], cv=5)
+     42     print('Accuracy scores for each fold are: {}'.format(cv_scoring['test_accuracy']))
+{'fit_time': array([0.02706289, 0.02351093, 0.02447915, 0.0240941 , 0.02207303]), 'score_time': array([0.00647879, 0.00564194, 0.00616503, 0.00610113, 0.00524378]), 'test_accuracy': array([0.56363636, 0.58181818, 0.65454545, 0.53703704, 0.62962963]), 'test_f1': array([0.64705882, 0.65671642, 0.72463768, 0.59016393, 0.6969697 ])}
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 139, in <module>
+    svm.run_svm(
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/svm.py", line 41, in run_svm
+    cv_scoring = cross_validate(clf, X_test, y_test, scoring=['accuracy', 'f1'], cv=5)
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/svm.py", line 41, in run_svm
+    cv_scoring = cross_validate(clf, X_test, y_test, scoring=['accuracy', 'f1'], cv=5)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

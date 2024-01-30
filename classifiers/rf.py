@@ -7,10 +7,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, roc_auc_score, roc_curve
-from sklearn.model_selection import cross_validate
+from sklearn.model_selection import cross_validate, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 import wandb
 import pickle
+from analysis.generating_results import cross_validate_scoring, results_for_plotting
 
 
 def calc_importance(model, X, save_dir):
@@ -76,6 +77,8 @@ def run_rf(X_train,
     Experiment for train and test set
     """
 
+    model_name = 'rf'
+
     # Create an instance of Random Forest
     print('Creating instance of Random Forest model...')
     forest = RandomForestClassifier(criterion='gini',
@@ -94,31 +97,35 @@ def run_rf(X_train,
     accuracy = forest.score(X_test, y_test)
     print(f'The hard predictions were right {100 * accuracy:5.2f}% of the time')
 
+    # Tune the model
+    param_grid = {
+        'bootstrap': [True],
+        'max_depth': [80, 90, 100],
+        'max_features': [2, 3, 4],
+        'min_samples_leaf': [3, 4, 5],
+        'min_samples_split': [4, 6, 8],
+        'n_estimators': [100, 200, 300, 500]
+    }
+    # grid search cv
+    grid_search = GridSearchCV(estimator=forest, param_grid=param_grid, cv=5, n_jobs=-1)
+
+    # Fit the grid search to the data
+    print('Running grid search cv...')
+    grid_search.fit(X_train, y_train)
+    #grid_search.best_params_
+    best_forest = grid_search.best_estimator_
+
+    probs = best_forest.predict_proba(X_test)
+
     # Save model using pickle
-    with open('{}/rfc_model.pkl'.format(results_dir), 'wb') as f:
-        pickle.dump(forest, f)
+    with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
+        pickle.dump(best_forest, f)
 
-    # Save the preds with labels and location to df for further plotting
-    df_results = pd.DataFrame(columns=['label', 'prediction', 'lat', 'lon'])
-    df_results['label'] = y_test
-    df_results['prediction'] = probs[:,1] >= 0.5
-    df_results['lat'] = test_latitudes
-    df_results['lon'] = test_longitudes
-    df_results.to_csv('{}/rf_results_for_plotting.csv'.format(results_dir))
+    # CV scoring
+    cv_scoring = cross_validate_scoring(best_forest, X_test, y_test, ['accuracy', 'f1'], cv=5, results_dir=results_dir)
 
-    # Cross validation score
-    cv_scoring = cross_validate(forest, X_test, y_test, scoring=['accuracy', 'f1'], cv=5)
-    print('Accuracy scores for each fold are: {}'.format(cv_scoring['test_accuracy']))
-    print('Average accuracy is: {}'.format(cv_scoring['test_accuracy'].mean()))
-    print('F1 scores for each fold are: {}'.format(cv_scoring['test_f1']))
-    print('Average F1 is: {}'.format(cv_scoring['test_f1'].mean()))
-
-    with open('{}/rf_results.txt'.format(results_dir), 'w') as f:
-        f.write(f'The hard predictions were right on the test set {100 * accuracy:5.2f}% of the time')
-        f.write('Accuracy scores for each fold are: {}'.format(cv_scoring['test_accuracy']))
-        f.write('Average accuracy is: {}'.format(cv_scoring['test_accuracy'].mean()))
-        f.write('F1 scores for each fold are: {}'.format(cv_scoring['test_f1']))
-        f.write('Average F1 is: {}'.format(cv_scoring['test_f1'].mean()))
+    # Saving results for further plotting
+    results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
 
     # generate a no skill prediction (majority class)
     ns_probs = [0 for _ in range(len(y_test))]

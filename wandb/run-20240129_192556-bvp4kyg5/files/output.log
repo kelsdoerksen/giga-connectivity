@@ -1,0 +1,83 @@
+Creating instance of LR model...
+Fitting data...
+The hard predictions were right 58.24% of the time
+Running grid search cv...
+/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/linear_model/_logistic.py:458: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:378: FitFailedWarning:
+45 fits failed out of a total of 60.
+The score on these train-test partitions for these parameters will be set to nan.
+If these failures are not expected, you can try to debug them by setting error_score='raise'.
+Below are more details about the failures:
+--------------------------------------------------------------------------------
+15 fits failed with the following error:
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 686, in _fit_and_score
+    estimator.fit(X_train, y_train, **fit_params)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/linear_model/_logistic.py", line 1160, in fit
+    self._validate_params()
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/base.py", line 570, in _validate_params
+    validate_parameter_constraints(
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/utils/_param_validation.py", line 97, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'C' parameter of LogisticRegression must be a float in the range (0, inf]. Got 0 instead.
+--------------------------------------------------------------------------------
+15 fits failed with the following error:
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 686, in _fit_and_score
+    estimator.fit(X_train, y_train, **fit_params)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/linear_model/_logistic.py", line 1162, in fit
+    solver = _check_solver(self.solver, self.penalty, self.dual)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/linear_model/_logistic.py", line 54, in _check_solver
+    raise ValueError(
+ValueError: Solver lbfgs supports only 'l2' or 'none' penalties, got l1 penalty.
+--------------------------------------------------------------------------------
+15 fits failed with the following error:
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 686, in _fit_and_score
+    estimator.fit(X_train, y_train, **fit_params)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/linear_model/_logistic.py", line 1162, in fit
+    solver = _check_solver(self.solver, self.penalty, self.dual)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/linear_model/_logistic.py", line 54, in _check_solver
+    raise ValueError(
+ValueError: Solver lbfgs supports only 'l2' or 'none' penalties, got elasticnet penalty.
+  warnings.warn(some_fits_failed_message, FitFailedWarning)
+/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/model_selection/_search.py:953: UserWarning: One or more of the test scores are non-finite: [       nan        nan        nan        nan 0.52055993        nan
+        nan 0.51268591        nan        nan 0.52370954        nan]
+  warnings.warn(
+/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/linear_model/_logistic.py:458: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+> /Users/kelseydoerksen/code/giga-connectivity/classifiers/lr.py(58)run_lr()
+     57
+---> 58     probs = best_clf.predict_proba(X_test)
+     59
+{'C': 10, 'penalty': 'l2'}
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 128, in <module>
+    lr.run_lr(
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/lr.py", line 58, in run_lr
+    probs = best_clf.predict_proba(X_test)
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/lr.py", line 58, in run_lr
+    probs = best_clf.predict_proba(X_test)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True
