@@ -26,7 +26,7 @@ def run_lr(X_train,
 
     # Create instance of Logistic Regression model
     print('Creating instance of LR model...')
-    clf = LogisticRegression(solver='lbfgs', max_iter=200, random_state=48)
+    clf = LogisticRegression(max_iter=7000, random_state=48)
 
     # Fit to training data
     print('Fitting data...')
@@ -42,8 +42,8 @@ def run_lr(X_train,
 
     # Tune the model
     param_grid = {
-        'penalty': ['l1', 'l2', 'elasticnet'],
-        'C': [0, 0.1, 1, 10]
+        'penalty':  ['l2', None],
+        'C': [0.01, 0.1, 1.0]
     }
     # grid search cv
     grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=5, n_jobs=-1)
@@ -71,7 +71,8 @@ def run_lr(X_train,
     wandb_exp.log({
         'Test set CV accuracies': cv_scoring['test_accuracy'],
         'Average test set accuracy': cv_scoring['test_accuracy'].mean(),
-        'Average test set F1': cv_scoring['test_f1'].mean()
+        'Average test set F1': cv_scoring['test_f1'].mean(),
+        'Best Model Params': grid_search.best_params_
     })
 
     # --- Logging plots

@@ -10,7 +10,7 @@ import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
 
 
-def run_xgb(X_train,
+def run_gb(X_train,
            y_train,
            X_test,
            y_test,
@@ -76,7 +76,8 @@ def run_xgb(X_train,
     wandb_exp.log({
         'Test set CV accuracies': cv_scoring['test_accuracy'],
         'Average test set accuracy': cv_scoring['test_accuracy'].mean(),
-        'Average test set F1': cv_scoring['test_f1'].mean()
+        'Average test set F1': cv_scoring['test_f1'].mean(),
+        'Best Model Params': grid_search.best_params_
     })
 
     # --- Logging plots

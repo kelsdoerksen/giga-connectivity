@@ -9,11 +9,12 @@ import wandb
 import pandas as pd
 from sklearn.utils import shuffle
 import os
+from sklearn.preprocessing import MinMaxScaler
 
 
 def get_args():
     parser = argparse.ArgumentParser(description='Running ML Pipeline for Connectivity Prediction')
-    parser.add_argument('--model', help='ML Model. Must be one of rf, svm, lr, xgb, mlp.')
+    parser.add_argument('--model', help='ML Model. Must be one of rf, svm, lr, gb, mlp.')
     parser.add_argument('--aoi', help='Country of interest')
     parser.add_argument('--buffer', help='Buffer extent for data')
     parser.add_argument('--root_dir', help='Root directory of project')
@@ -66,13 +67,26 @@ def get_class_balance(train_df, test_df, savedir):
         f.write('Number of negative testing samples is: {}'.format(len(test_df) - sum(test_df['connectivity'])))
 
 
-def preprocess_samples(train_df, test_df):
+def preprocess_samples(train_df, test_df, model_type):
     """
     Light preprocessing to data before running through models
     """
     cols_to_drop = ['connectivity', 'lat', 'lon', 'school_locations', 'giga_id_school']
     X_test = test_df.drop(columns=cols_to_drop)
     X_train = train_df.drop(columns=cols_to_drop)
+
+    models_with_scaling = ['svm', 'lr', 'mlp']
+    if model_type in models_with_scaling:
+        print('Scaling data...')
+        # scale the data if we are not using trees/GB model
+        train_scaler = MinMaxScaler()
+        train_scaler.fit(X_train)
+        X_train_scaled = train_scaler.transform(X_train)
+
+        test_scaler = MinMaxScaler()
+        test_scaler.fit(X_test)
+        X_test_scaled = test_scaler.transform(X_test)
+        return X_train_scaled, X_test_scaled
 
     return X_train, X_test
 
@@ -110,7 +124,7 @@ if __name__ == '__main__':
 
     ytrain = train_df['connectivity']
     ytest = test_df['connectivity']
-    Xtrain, Xtest = preprocess_samples(train_df, test_df)
+    Xtrain, Xtest = preprocess_samples(train_df, test_df, model)
 
     # Run model
     if model == 'rf':
@@ -157,8 +171,8 @@ if __name__ == '__main__':
             experiment,
             results)
 
-    if model == 'xgb':
-        gb.run_xgb(
+    if model == 'gb':
+        gb.run_gb(
             Xtrain,
             ytrain,
             Xtest,
@@ -167,11 +181,3 @@ if __name__ == '__main__':
             test_longitudes,
             experiment,
             results)
-
-
-
-
-
-
-
-

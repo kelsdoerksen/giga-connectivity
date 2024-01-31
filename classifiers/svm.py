@@ -39,7 +39,7 @@ def run_svm(X_train,
 
     # Tune the model
     param_grid = {
-        'C': [1, 2, 3],
+        'C': [0.001, 0.01, 0.1, 1.0, 10.0],
         'kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
         'degree': [1, 2, 3, 4],
         'gamma': ['scale', 'auto']
@@ -70,7 +70,8 @@ def run_svm(X_train,
     wandb_exp.log({
         'Test set CV accuracies': cv_scoring['test_accuracy'],
         'Average test set accuracy': cv_scoring['test_accuracy'].mean(),
-        'Average test set F1': cv_scoring['test_f1'].mean()
+        'Average test set F1': cv_scoring['test_f1'].mean(),
+        'Best Model Params': grid_search.best_params_
     })
 
     # --- Logging plots

@@ -25,7 +25,7 @@ def run_mlp(X_train,
 
     # Create instance of MLP model
     print('Creating instance of MLP model...')
-    clf = MLPClassifier(random_state=48, max_iter=300)
+    clf = MLPClassifier(random_state=48, max_iter=5000)
 
     # Fit to training data
     print('Fitting data...')
@@ -40,7 +40,7 @@ def run_mlp(X_train,
     # Tune the model
     param_grid = {
         'hidden_layer_sizes': [(100,), (150,), (200,)],
-        'activation': ['identity', 'logistics', 'tanh', 'relu'],
+        'activation': ['logistic', 'tanh', 'relu'],
         'solver': ['lbfgs', 'sgd', 'adam'],
         'alpha': [0.0001, 0.005, 0.001],
         'learning_rate': ['constant', 'invscaling',  'adaptive']
@@ -71,7 +71,8 @@ def run_mlp(X_train,
     wandb_exp.log({
         'Test set CV accuracies': cv_scoring['test_accuracy'],
         'Average test set accuracy': cv_scoring['test_accuracy'].mean(),
-        'Average test set F1': cv_scoring['test_f1'].mean()
+        'Average test set F1': cv_scoring['test_f1'].mean(),
+        'Best Model Params': grid_search.best_params_
     })
 
     # --- Logging plots
