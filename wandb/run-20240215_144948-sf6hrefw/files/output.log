@@ -1,0 +1,15 @@
+/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py:164: FutureWarning: The default dtype for empty Series will be 'object' instead of 'float64' in a future version. Specify a dtype explicitly to silence this warning.
+  test_latitudes = pd.Series(test_latitudes)
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+The hard predictions were right 58.24% of the time
+Running grid search cv...
+True Positive is 113
+True Negative is 59
+False Positive is 62
+False Negative is 39
+False positive rate is 0.512396694214876
+True positive rate is 0.743421052631579
+False negative rate is 0.2565789473684211
+True negative rate is 0.48760330578512395

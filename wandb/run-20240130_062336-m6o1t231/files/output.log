@@ -1,0 +1,15 @@
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+The hard predictions were right 80.22% of the time
+Running grid search cv...
+No Skill: ROC AUC=0.500
+RFC: ROC AUC=0.887
+True Positive is 123
+True Negative is 94
+False Positive is 35
+False Negative is 21
+False positive rate is 0.2713178294573643
+True positive rate is 0.8541666666666666
+False negative rate is 0.14583333333333334
+True negative rate is 0.7286821705426356

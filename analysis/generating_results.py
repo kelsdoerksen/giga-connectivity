@@ -8,7 +8,7 @@ from sklearn.model_selection import cross_validate
 
 def cross_validate_scoring(classifier, X_test, y_test, scoring, cv, results_dir):
     cv_scoring = cross_validate(classifier, X_test, y_test, scoring=scoring, cv=cv)
-    with open('{}/xgb_results.txt'.format(results_dir), 'w') as f:
+    with open('{}/model_results.txt'.format(results_dir), 'w') as f:
         f.write('Accuracy scores for each fold are: {}'.format(cv_scoring['test_accuracy']))
         f.write('Average accuracy is: {}'.format(cv_scoring['test_accuracy'].mean()))
         f.write('F1 scores for each fold are: {}'.format(cv_scoring['test_f1']))

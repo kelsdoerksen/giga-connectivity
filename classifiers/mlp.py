@@ -6,6 +6,7 @@ from sklearn.neural_network import MLPClassifier
 import pickle
 import pandas as pd
 from sklearn.model_selection import cross_validate, GridSearchCV
+from sklearn.metrics import make_scorer, accuracy_score
 import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
 
@@ -25,7 +26,7 @@ def run_mlp(X_train,
 
     # Create instance of MLP model
     print('Creating instance of MLP model...')
-    clf = MLPClassifier(random_state=48, max_iter=5000)
+    clf = MLPClassifier(random_state=48, max_iter=15000)
 
     # Fit to training data
     print('Fitting data...')
@@ -46,7 +47,12 @@ def run_mlp(X_train,
         'learning_rate': ['constant', 'invscaling',  'adaptive']
     }
     # grid search cv
-    grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=5, n_jobs=-1)
+    grid_search = GridSearchCV(estimator=clf,
+                               param_grid=param_grid,
+                               scoring={"Accuracy": make_scorer(accuracy_score)},
+                               refit='Accuracy',
+                               cv=5,
+                               n_jobs=-1)
 
     # Fit the grid search to the data
     print('Running grid search cv...')
@@ -59,8 +65,6 @@ def run_mlp(X_train,
     # CV scoring
     cv_scoring = cross_validate_scoring(best_clf, X_test, y_test, ['accuracy', 'f1'], cv=5, results_dir=results_dir)
 
-    # Saving results for further plotting
-    results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
 
     # Save model using pickle
     with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
@@ -79,3 +83,6 @@ def run_mlp(X_train,
     wandb_exp.log({
         'roc': wandb.plot.roc_curve(y_test, probs)
     })
+
+    # Saving results for further plotting ignore for now
+    results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)

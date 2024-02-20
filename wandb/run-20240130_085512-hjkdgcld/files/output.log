@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 122, in <module>
+    Xtrain, Xtest = preprocess_samples(train_df, test_df, model)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 82, in preprocess_samples
+    X_train_scaled = scaler.transform(X_train)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/utils/_set_output.py", line 142, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/preprocessing/_data.py", line 506, in transform
+    check_is_fitted(self)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/utils/validation.py", line 1380, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This MinMaxScaler instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.

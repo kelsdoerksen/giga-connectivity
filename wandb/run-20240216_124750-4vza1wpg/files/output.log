@@ -1,0 +1,107 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(74)load_data()
+     73
+---> 74         eng_train_df = eng_train_df.sort_values(by=['school_locations'])
+     75         eng_test_df = emb_test_df.sort_values(by=['school_locations'])
+            0         1         2         3         4         5         6         7         8  ...      1016      1017      1018      1019      1020      1021      1022      1023                 location
+0   -0.499028 -0.624102 -1.327825 -1.286279  1.616524  0.202074  0.158157 -0.289025 -1.634570  ...  1.788837  1.406248  0.261868 -1.205016  1.268992 -0.292668 -0.253712 -1.386031  (20.065064, -22.274953)
+1   -0.163657 -0.599433 -1.047538 -1.354797  1.628503  0.356753  0.486645 -1.308558 -2.171468  ...  1.730020  1.319886  0.706858 -0.855769  1.729695 -0.462147 -0.517675 -1.306382  (20.077232, -22.282558)
+2   -0.326187 -0.632563 -0.917851 -1.748671  1.350551  0.269344  0.177783 -0.982934 -2.155617  ...  1.728775  1.468520  0.728801 -0.638992  1.499626 -0.373014 -0.830533 -1.019575   (20.19289, -22.992894)
+3   -0.682726 -1.299846 -0.903065 -2.066828  1.565288  0.156982 -0.026997 -0.845681 -2.129459  ...  1.890802  1.589981  0.793375 -1.007528  1.375314 -0.360536 -0.329243 -1.113634  (20.284372, -23.135184)
+4   -0.419357 -0.927177 -1.075525 -1.705337  1.473912  0.428553  0.261394 -1.139526 -2.102404  ...  1.787139  1.580923  0.940967 -0.774702  1.479997 -0.629838 -0.761682 -0.916073  (20.317247, -22.192081)
+..        ...       ...       ...       ...       ...       ...       ...       ...       ...  ...       ...       ...       ...       ...       ...       ...       ...       ...                      ...
+629 -0.667918 -0.967561 -0.805235 -1.675079  1.653847  0.524738  0.473806 -1.077656 -2.187823  ...  2.062214  1.575598  0.924444 -0.519201  1.400871 -0.461655 -0.712677 -1.171630  (28.595811, -22.063689)
+630 -0.249300 -0.760722 -0.981549 -1.668733  1.592980  0.188141  0.346281 -0.855717 -2.316667  ...  1.866289  1.262289  0.660858 -0.693634  1.546115 -0.357771 -0.687383 -1.135025   (28.72313, -21.844221)
+631 -0.373225 -1.152495 -0.849973 -1.823786  1.741222  0.274528  0.113117 -0.796656 -2.440836  ...  1.767121  1.602744  0.778212 -0.571155  1.402874 -0.329059 -0.852041 -1.271733  (28.825329, -21.818867)
+632 -0.199081 -0.756455 -0.781508 -1.377826  1.790915  0.072313  0.159447 -0.926372 -2.253168  ...  1.792692  1.279616  0.662210 -0.624750  1.504649 -0.306042 -0.598011 -1.448063  (28.828327, -21.878402)
+633 -0.274731 -0.972705 -0.845585 -1.534989  1.803509  0.143827  0.673062 -1.268593 -2.268954  ...  1.635092  1.515888  1.061370 -0.725103  1.306330 -0.613240 -0.718737 -1.048852  (29.036611, -22.206775)
+[634 rows x 1025 columns]
+            0         1         2         3         4         5         6         7         8  ...      1016      1017      1018      1019      1020      1021      1022      1023                 location
+0   -0.187436 -0.976001 -0.806354 -1.685002  1.794448  0.386896  0.124659 -0.947391 -2.338517  ...  1.890295  1.173100  0.942828 -0.631516  1.326332 -0.640590 -0.577754 -1.067202  (20.118417, -22.389493)
+1   -0.229575 -1.155787 -0.994436 -2.058625  2.138395  0.615974  0.720545 -0.922668 -2.162575  ...  1.563948  1.295522  0.956631 -0.482982  1.456383 -0.708085 -1.058696 -0.973837   (20.27481, -23.126406)
+2   -0.288838 -0.761030 -0.755823 -1.615883  1.794579  0.319383  0.336641 -0.843730 -2.119213  ...  1.928799  1.358294  0.862531 -0.652569  1.383768 -0.497840 -0.736782 -1.258081  (20.496988, -23.558824)
+3   -0.552768 -1.167622 -0.920247 -1.799752  1.597041  0.265157  0.082783 -0.866725 -2.190275  ...  1.908695  1.502683  0.876691 -0.925608  1.375216 -0.478402 -0.845289 -1.277142  (21.207021, -22.154975)
+4    0.004680 -0.760118 -0.790393 -1.582317  1.761316  0.277710  0.426134 -0.884467 -2.543933  ...  1.686390  1.352327  0.741427 -0.797599  1.172639 -0.245047 -0.861140 -0.799860  (21.213108, -21.360545)
+..        ...       ...       ...       ...       ...       ...       ...       ...       ...  ...       ...       ...       ...       ...       ...       ...       ...       ...                      ...
+268 -0.107710 -0.864869 -0.964347 -1.579280  1.872582  0.025172  0.238304 -1.028201 -2.374089  ...  1.849788  1.621025  1.112095 -0.706239  1.182311 -0.632149 -1.110199 -1.171106  (28.417887, -21.973201)
+269 -0.424221 -1.105518 -1.010387 -1.719665  1.544862  0.192816  0.265362 -0.820477 -2.208361  ...  1.546355  1.562325  0.985938 -0.607997  1.405393 -0.389042 -0.446307 -1.310375  (28.422757, -21.998206)
+270 -0.381019 -0.900407 -0.872441 -1.676702  1.537654  0.287235  0.135247 -0.679312 -2.557059  ...  1.857720  1.343794  0.722723 -0.901616  1.287678 -0.328729 -0.763891 -1.327454  (28.428411, -21.968887)
+271 -0.553407 -0.858902 -0.833872 -1.697754  1.641698  0.375767  0.185705 -0.810993 -2.440617  ...  1.917159  1.438370  0.756691 -0.701004  1.389612 -0.277135 -0.622364 -1.069599  (28.751344, -22.267492)
+272 -0.322206 -0.887662 -0.729653 -1.847457  1.622651  0.291527  0.180846 -0.789090 -2.313226  ...  1.862671  1.511919  0.747213 -0.466371  1.613796 -0.506660 -0.926276 -0.962974  (28.874733, -22.175027)
+[273 rows x 1025 columns]
+                           giga_id_school        lat        lon  connectivity  ... boundary_Southern  boundary_Sowa Town  boundary_Tutume  connectivity.1
+0    d9adf7fe-97eb-3e6d-b5b4-49804b494d11 -24.395007  26.140816           1.0  ...               0.0                 0.0              1.0             1.0
+1    b52d3945-e67a-379f-9f27-964c3e1ccde8 -19.985080  23.411433           0.0  ...               0.0                 0.0              0.0             0.0
+2    42fbd74d-5c55-393f-9130-2748fa25bbef -25.547672  25.372981           0.0  ...               0.0                 0.0              0.0             0.0
+3    676ae93e-cd80-3162-86b5-fbea98b04ae5 -24.470647  25.787149           0.0  ...               0.0                 0.0              0.0             0.0
+4    aab571f5-75a8-324a-8020-5c19e8db6227 -20.015205  23.453762           1.0  ...               0.0                 0.0              1.0             1.0
+..                                    ...        ...        ...           ...  ...               ...                 ...              ...             ...
+629  8c967543-7a2a-3ca6-8337-709f89995470 -18.013355  24.404554           0.0  ...               1.0                 0.0              0.0             0.0
+630  9f4729e5-30a9-35ab-88a0-98aa04f2f442 -22.786835  27.757904           1.0  ...               0.0                 0.0              0.0             1.0
+631  6c99859d-29a7-3275-832b-852f12bac260 -21.090594  24.478230           0.0  ...               0.0                 0.0              0.0             0.0
+632  a0514eed-2cb4-3c2c-9161-c127572216cd -21.452409  27.945723           0.0  ...               0.0                 0.0              0.0             0.0
+633  eac69e4f-afc0-332a-b5aa-884aca7c023a -25.201031  25.552939           1.0  ...               1.0                 0.0              0.0             1.0
+[634 rows x 89 columns]
+Index(['giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations',
+       'modis.LC_Type1.mode', 'modis.LC_Type1.var', 'modis.LC_Type1.evg_conif',
+       'modis.LC_Type1.evg_broad', 'modis.LC_Type1.dcd_needle',
+       'modis.LC_Type1.dcd_broad', 'modis.LC_Type1.mix_forest',
+       'modis.LC_Type1.cls_shrub', 'modis.LC_Type1.open_shrub',
+       'modis.LC_Type1.woody_savanna', 'modis.LC_Type1.savanna',
+       'modis.LC_Type1.grassland', 'modis.LC_Type1.perm_wetland',
+       'modis.LC_Type1.cropland', 'modis.LC_Type1.urban',
+       'modis.LC_Type1.crop_nat_veg', 'modis.LC_Type1.perm_snow',
+       'modis.LC_Type1.barren', 'modis.LC_Type1.water_bds',
+       'pop.population_density.var', 'pop.population_density.max',
+       'pop.population_density.min',
+       'human_settlement_layer_built_up.built_characteristics.mode',
+       'human_settlement_layer_built_up.built_characteristics.var',
+       'human_settlement_layer_built_up.built_characteristics.open_low_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_med_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_high_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_water',
+       'human_settlement_layer_built_up.built_characteristics.open_road',
+       'human_settlement_layer_built_up.built_characteristics.built_res_30',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3-6',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_6-15',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_15-30',
+       'human_settlement_layer_built_up.built_characteristics.build_non_res_30',
+       'human_settlement_layer_built_up.built_characteristics.built',
+       'global_human_modification.gHM.var',
+       'global_human_modification.gHM.min', 'transmission_line_distance',
+       'education_level', 'nightlight.avg_rad.var', 'nightlight.avg_rad.max',
+       'nightlight.avg_rad.min', 'nightlight.cf_cvg.var',
+       'nightlight.cf_cvg.max', 'nightlight.cf_cvg.min', 'avg_d_kbps_mobile',
+       'avg_u_kbps_mobile', 'avg_lat_ms_mobile', 'tests_mobile',
+       'devices_mobile', 'ookla_distance_mobile', 'avg_d_kbps_fixed',
+       'avg_u_kbps_fixed', 'avg_lat_ms_fixed', 'tests_fixed', 'devices_fixed',
+       'ookla_distance_fixed', 'boundary_Barolong', 'boundary_Bobonong',
+       'boundary_Boteti', 'boundary_Chobe', 'boundary_Francistown',
+       'boundary_Gaborone', 'boundary_Ghanzi', 'boundary_Kgalagadi North',
+       'boundary_Kgalagadi South', 'boundary_Kgatleng',
+       'boundary_Kweneng East', 'boundary_Kweneng West', 'boundary_Lobatse',
+       'boundary_Mahalapye', 'boundary_Ngamiland East',
+       'boundary_Ngamiland West', 'boundary_Ngwaketse West',
+       'boundary_North East', 'boundary_Orapa', 'boundary_Selibe Phikwe',
+       'boundary_Serowe Palapye', 'boundary_South East', 'boundary_Southern',
+       'boundary_Sowa Town', 'boundary_Tutume', 'connectivity.1'],
+      dtype='object')
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 180, in <module>
+    get_class_balance(train_data, test_data, results)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 74, in load_data
+    training_data = pd.concat([eng_train_df, emb_train_df], axis=1)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 74, in load_data
+    training_data = pd.concat([eng_train_df, emb_train_df], axis=1)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

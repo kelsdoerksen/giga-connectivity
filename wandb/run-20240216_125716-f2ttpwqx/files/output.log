@@ -1,0 +1,23 @@
+/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py:193: FutureWarning: The default dtype for empty Series will be 'object' instead of 'float64' in a future version. Specify a dtype explicitly to silence this warning.
+  test_latitudes = pd.Series(test_latitudes)
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(207)<module>()
+    206     # Run model
+--> 207     if model == 'rf':
+    208         rf.run_rf(
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 207, in <module>
+    ytrain,
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 207, in <module>
+    ytrain,
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

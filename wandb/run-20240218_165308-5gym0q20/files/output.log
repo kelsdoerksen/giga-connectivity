@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 188, in <module>
+    lon = ast.literal_eval(test_data['location'].loc[0])[0]
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/ast.py", line 110, in literal_eval
+    return _convert(node_or_string)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/ast.py", line 109, in _convert
+    return _convert_signed_num(node)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/ast.py", line 83, in _convert_signed_num
+    return _convert_num(node)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/ast.py", line 74, in _convert_num
+    _raise_malformed_node(node)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/ast.py", line 71, in _raise_malformed_node
+    raise ValueError(msg + f': {node!r}')
+ValueError: malformed node or string: nan

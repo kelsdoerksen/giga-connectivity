@@ -16,13 +16,13 @@ parser = argparse.ArgumentParser(description='Plotting Random Forest Results',
                                  formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument("--aoi", help="Country of interest")
 parser.add_argument("--buffer", help="Buffer extent around school to extract data from")
-parser.add_argument("--experiment", help="Experiment type for feature space. Must be one of full or limited.")
+parser.add_argument("--model", help="ML Classifier used. Must be one of mlp, gb, rf, svm, lr")
 parser.add_argument("--wandb_exp", help="Wandb experiment to plot results for")
 args = parser.parse_args()
 
 # lons then lats for countries of interest (up and down goes second)
 bbox_dict = {
-    'BWA': [15, 35, -15, -30],
+    'BWA': [18, 30, -17, -27],
     'RWA': [28.5, 31, -1, -3],
     'BIH': [15, 19.75, 45.5, 42.5],
     'BLZ': [-89.5, -87.75, 18.75, 15.75],
@@ -43,7 +43,7 @@ country_dict = {
     'BRA': 'Brazil'
 }
 
-def plot_2d_array(array, country, buffer_extent, title, savename, connectivity_status, experiment_name):
+def plot_2d_array(array, country, buffer_extent, title, savename, connectivity_status):
     """
     Plotting 2d array of school connectivity
     green points: schools w/ connectivity
@@ -91,16 +91,19 @@ def plot_2d_array(array, country, buffer_extent, title, savename, connectivity_s
     gl.yformatter = LATITUDE_FORMATTER
     plt.title('{}'.format(title))
     #plt.show()
-    plt.savefig('/Users/kelseydoerksen/Desktop/Giga/{}/{}_features_results_{}m/{}/{}.png'
-                .format(country, experiment_name, buffer_extent, wandb_exp, savename))
+    '''
+    plt.savefig('/Users/kelseydoerksen/Desktop/Giga/{}/results_{}m/{}/{}.png'
+                .format(country, buffer_extent, wandb_exp, savename))
+    '''
+    plt.savefig('/Users/kelseydoerksen/Desktop/Giga/isa_new_schools/{}/{}.png'.format(country, savename))
 
-def plot_feature_importance(aoi, exp, buffer):
+def plot_feature_importance(aoi, buffer):
     """
     Plotting features by importance
     :return:
     """
-    fi_df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/{}/{}_features_results_{}m/{}/FI.csv'.
-                        format(aoi, exp, buffer, wandb_exp))
+    fi_df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/{}/results_{}m/{}/FI.csv'.
+                        format(aoi, buffer, wandb_exp))
     importances = fi_df.loc[0][1:].tolist()
     features = fi_df.columns[1:].tolist()
 
@@ -127,16 +130,21 @@ def plot_feature_importance(aoi, exp, buffer):
     plt.xlabel('Importance Score')
     plt.ylabel('Feature Name')
     plt.title('Feature Importance for {}'.format(country_dict[aoi]))
-    plt.savefig('/Users/kelseydoerksen/Desktop/Giga/{}/{}_features_results_{}m/{}/FeatureImportance_{}.png'
-                .format(aoi, exp, buffer, wandb_exp, aoi))
+    plt.savefig('/Users/kelseydoerksen/Desktop/Giga/{}/results_{}m/{}/FeatureImportance_{}.png'
+                .format(aoi, buffer, wandb_exp, aoi))
 
 aoi = args.aoi
 buffer = args.buffer
-exp = args.experiment
-wandb_exp = args.wandb_exp
+model = args.model
 
-df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/{}/{}_features_results_{}m/{}/results_for_plotting.csv'
-                 .format(aoi, exp, buffer, wandb_exp))
+wandb_exp = args.wandb_exp
+'''
+df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/{}/results_{}m/{}/{}_results_for_plotting.csv'
+                 .format(aoi, buffer, wandb_exp, model))
+'''
+df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/isa_new_schools/BWA/'
+                 'BWA_results_new_schools_{}_model.csv'.format(model))
+
 lon_vals = df['lon']
 lat_vals = df['lat']
 
@@ -153,41 +161,40 @@ for lat in lat_vals:
     for lon in lon_vals:
         # Check if there is school at the lat, lon I am specifying, if yes, grab data, if no, set to NaN
         if (lon, lat) in true_locations:
-            prediction = df[df['tuple loc'] == (lon, lat)]['prediction']*1
+            prediction = df[df['tuple loc'] == (lon, lat)]['final_pred']*1
             prediction = float(prediction)
-            groundtruth = float(df[df['tuple loc'] == (lon, lat)]['label'])
+            #groundtruth = float(df[df['tuple loc'] == (lon, lat)]['label'])
             total_pred_data.append(prediction)
-            total_groundtruth.append(groundtruth)
+            #total_groundtruth.append(groundtruth)
         else:
             total_pred_data.append(np.nan)
-            total_groundtruth.append(np.nan)
+            #total_groundtruth.append(np.nan)
 
 total_data_arr = np.array(total_pred_data)
 total_data_2d = np.reshape(total_data_arr, (len(lat_vals), len(lon_vals)))
 
-total_gt_arr = np.array(total_groundtruth)
-total_gt_2d = np.reshape(total_gt_arr, (len(lat_vals), len(lon_vals)))
+#total_gt_arr = np.array(total_groundtruth)
+#total_gt_2d = np.reshape(total_gt_arr, (len(lat_vals), len(lon_vals)))
 
 # Get the array of correctly identified (y/n) school connectivity status
-correct_preds = (total_gt_2d==total_data_2d)*1
-correct_preds = correct_preds.astype('float')
-correct_preds[correct_preds == 0] = np.nan
+#correct_preds = (total_gt_2d==total_data_2d)*1
+#correct_preds = correct_preds.astype('float')
+#correct_preds[correct_preds == 0] = np.nan
 
 # Full Y/N connectivity schools
-
-plot_2d_array(total_data_2d, aoi, buffer, 'Random Forest Predictions', 'rf_pred_map', 'full', exp)
-plot_2d_array(total_gt_2d, aoi, buffer, 'Ground Truth', 'groundtruth_map', 'full', exp)
+plot_2d_array(total_data_2d, aoi, buffer, '{} Predictions'.format(model), '{}_pred_map'.format(model), 'full')
+#plot_2d_array(total_gt_2d, aoi, buffer, 'Ground Truth', 'groundtruth_map', 'full')
 
 # No connectivity schools
-plot_2d_array(total_data_2d, aoi, buffer, 'Random Forest Predictions No Connectivity', 'rf_pred_map_no_connectivity',
-              'no', exp)
-plot_2d_array(total_gt_2d, aoi, buffer, 'Ground Truth No Connectivity', 'groundtruth_map_no_connectivity', 'no', exp)
+plot_2d_array(total_data_2d, aoi, buffer, '{} Predictions No Connectivity'.format(model),
+              '{}_pred_map_no_connectivity'.format(model), 'no')
+#plot_2d_array(total_gt_2d, aoi, buffer, 'Ground Truth No Connectivity', 'groundtruth_map_no_connectivity', 'no')
 
 
 # Yes connectivity schools
-plot_2d_array(total_data_2d, aoi, buffer, 'Random Forest Predictions Yes Connectivity', 'rf_pred_map_yes_connectivity',
-              'yes', exp)
-plot_2d_array(total_gt_2d, aoi, buffer, 'Ground Truth Yes Connectivity', 'groundtruth_map_yes_connectivity', 'yes', exp)
+plot_2d_array(total_data_2d, aoi, buffer, '{} Predictions Yes Connectivity'.format(model),
+              '{}_pred_map_yes_connectivity'.format(model), 'yes')
+#plot_2d_array(total_gt_2d, aoi, buffer, 'Ground Truth Yes Connectivity', 'groundtruth_map_yes_connectivity', 'yes')
 
 # Run feature importance plot
-plot_feature_importance(aoi, exp, buffer)
+#plot_feature_importance(aoi, buffer)

@@ -1,0 +1,39 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(168)<module>()
+    167     # Some light preprocessing on data before running through models
+--> 168     train_df = train_data.dropna()
+    169     test_df = test_data.dropna()
+            0         1         2         3  ...      1022      1023                 location  connectivity
+107 -0.261656 -0.882135 -0.889511 -1.773638  ... -0.825797 -1.128955   (25.598565, -24.38847)           0.0
+98  -0.282678 -0.616315 -0.934983 -1.772255  ... -0.787913 -1.071970  (25.512858, -24.693078)           1.0
+33  -0.405764 -1.302076 -0.771096 -1.654077  ... -0.452518 -1.209952  (22.971492, -23.950401)           1.0
+138 -0.413924 -1.019506 -0.869638 -1.601654  ... -0.293345 -1.162589  (25.908615, -24.679927)           1.0
+255 -0.544524 -1.083813 -0.853551 -1.959115  ... -0.808486 -1.005780  (27.819203, -21.979686)           1.0
+..        ...       ...       ...       ...  ...       ...       ...                      ...           ...
+71  -0.541235 -1.123717 -0.778690 -1.781428  ... -0.754261 -1.221453  (24.958045, -23.636503)           0.0
+93  -0.354239 -0.869133 -0.949260 -1.633048  ... -0.789466 -1.177070  (25.491525, -25.542189)           0.0
+87  -0.360351 -0.925933 -1.039546 -1.504922  ... -0.650648 -1.354290  (25.370006, -24.991577)           1.0
+20  -0.048070 -0.913259 -0.719574 -1.844175  ... -0.756418 -0.784843  (22.158991, -18.734398)           1.0
+131 -0.435388 -1.207884 -1.069927 -1.812348  ... -0.720000 -1.030384  (25.887281, -24.485987)           1.0
+[273 rows x 1026 columns]
+<class 'pandas.core.series.Series'>
+*** NameError: name 'test_logitudes' is not defined
+'precursor-geofoundation_e011_s1_z17'
+<class 'list'>
+<class 'pandas.core.series.Series'>
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 168, in <module>
+    test_df = test_data.dropna()
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 168, in <module>
+    test_df = test_data.dropna()
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

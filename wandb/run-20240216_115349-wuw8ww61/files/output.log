@@ -1,0 +1,44 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(63)load_data()
+     62         ipdb.set_trace()
+---> 63         training_data = pd.concat([eng_train_df, emb_train_df], axis=1)
+     64         testing_data = pd.concat([eng_test_df, emb_test_df], axis=1)
+     Unnamed: 0.1  Unnamed: 0                        giga_id_school        lat        lon  connectivity  ...      1020      1021      1022      1023                 location  connectivity
+0             686         686  d9adf7fe-97eb-3e6d-b5b4-49804b494d11 -24.395007  26.140816           1.0  ...  1.268992 -0.292668 -0.253712 -1.386031  (20.065064, -22.274953)           1.0
+1             374         374  b52d3945-e67a-379f-9f27-964c3e1ccde8 -19.985080  23.411433           0.0  ...  1.729695 -0.462147 -0.517675 -1.306382  (20.077232, -22.282558)           1.0
+2             365         365  42fbd74d-5c55-393f-9130-2748fa25bbef -25.547672  25.372981           0.0  ...  1.499626 -0.373014 -0.830533 -1.019575   (20.19289, -22.992894)           1.0
+3             381         381  676ae93e-cd80-3162-86b5-fbea98b04ae5 -24.470647  25.787149           0.0  ...  1.375314 -0.360536 -0.329243 -1.113634  (20.284372, -23.135184)           1.0
+4             665         665  aab571f5-75a8-324a-8020-5c19e8db6227 -20.015205  23.453762           1.0  ...  1.479997 -0.629838 -0.761682 -0.916073  (20.317247, -22.192081)           1.0
+..            ...         ...                                   ...        ...        ...           ...  ...       ...       ...       ...       ...                      ...           ...
+629           172         172  8c967543-7a2a-3ca6-8337-709f89995470 -18.013355  24.404554           0.0  ...  1.400871 -0.461655 -0.712677 -1.171630  (28.595811, -22.063689)           0.0
+630            64          64  9f4729e5-30a9-35ab-88a0-98aa04f2f442 -22.786835  27.757904           1.0  ...  1.546115 -0.357771 -0.687383 -1.135025   (28.72313, -21.844221)           1.0
+631           390         390  6c99859d-29a7-3275-832b-852f12bac260 -21.090594  24.478230           0.0  ...  1.402874 -0.329059 -0.852041 -1.271733  (28.825329, -21.818867)           0.0
+632           582         582  a0514eed-2cb4-3c2c-9161-c127572216cd -21.452409  27.945723           0.0  ...  1.504649 -0.306042 -0.598011 -1.448063  (28.828327, -21.878402)           0.0
+633           125         125  eac69e4f-afc0-332a-b5aa-884aca7c023a -25.201031  25.552939           1.0  ...  1.306330 -0.613240 -0.718737 -1.048852  (29.036611, -22.206775)           0.0
+[634 rows x 1118 columns]
+*** AttributeError: 'DataFrame' object has no attribute 'cokumns'
+Index(['Unnamed: 0.1', 'Unnamed: 0', 'giga_id_school', 'lat', 'lon',
+       'connectivity', 'school_locations', 'modis.LC_Type1.mode',
+       'modis.LC_Type1.var', 'modis.LC_Type1.evg_conif',
+       ...
+       '1016', '1017', '1018', '1019', '1020', '1021', '1022', '1023',
+       'location', 'connectivity'],
+      dtype='object', length=1118)
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 158, in <module>
+    # Make results directory
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 63, in load_data
+    training_data = pd.concat([eng_train_df, emb_train_df], axis=1)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 63, in load_data
+    training_data = pd.concat([eng_train_df, emb_train_df], axis=1)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

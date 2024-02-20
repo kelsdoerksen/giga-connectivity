@@ -1,0 +1,41 @@
+/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py:164: FutureWarning: The default dtype for empty Series will be 'object' instead of 'float64' in a future version. Specify a dtype explicitly to silence this warning.
+  test_latitudes = pd.Series(test_latitudes)
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+The hard predictions were right 58.97% of the time
+Running grid search cv...
+True Positive is 101
+True Negative is 64
+False Positive is 57
+False Negative is 51
+False positive rate is 0.47107438016528924
+True positive rate is 0.6644736842105263
+False negative rate is 0.3355263157894737
+True negative rate is 0.5289256198347108
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 176, in <module>
+    rf.run_rf(
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/rf.py", line 158, in run_rf
+    calc_confusion_matrix(y_test, probs[:,1], results_dir)
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/rf.py", line 68, in calc_confusion_matrix
+    plt.savefig('{}/confusion_matrix.png'.format(disp))
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/matplotlib/pyplot.py", line 954, in savefig
+    res = fig.savefig(*args, **kwargs)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/matplotlib/figure.py", line 3274, in savefig
+    self.canvas.print_figure(fname, **kwargs)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/matplotlib/backend_bases.py", line 2338, in print_figure
+    result = print_method(
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/matplotlib/backend_bases.py", line 2204, in <lambda>
+    print_method = functools.wraps(meth)(lambda *args, **kwargs: meth(
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/matplotlib/_api/deprecation.py", line 410, in wrapper
+    return func(*inner_args, **inner_kwargs)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/matplotlib/backends/backend_agg.py", line 517, in print_png
+    self._print_pil(filename_or_obj, "png", pil_kwargs, metadata)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/matplotlib/backends/backend_agg.py", line 464, in _print_pil
+    mpl.image.imsave(
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/matplotlib/image.py", line 1664, in imsave
+    image.save(fname, **pil_kwargs)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/PIL/Image.py", line 2350, in save
+    fp = builtins.open(filename, "w+b")
+FileNotFoundError: [Errno 2] No such file or directory: '<sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay object at 0x7f9cfa143bb0>/confusion_matrix.png'

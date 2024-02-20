@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 177, in <module>
+    train_data, test_data = load_data(aoi, buffer, features)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 66, in load_data
+    eng_test_df = eng_test_df.drops(columns=['Unnamed: 0', 'Unnamed: 0.1'])
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/pandas/core/generic.py", line 5902, in __getattr__
+    return object.__getattribute__(self, name)
+AttributeError: 'DataFrame' object has no attribute 'drops'

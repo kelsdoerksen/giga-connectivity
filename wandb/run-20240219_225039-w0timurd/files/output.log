@@ -1,0 +1,16 @@
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+The model score is: 0.7306733167082294
+Pre-tuned Test set CV accuracies: [0.65432099 0.725      0.675      0.6875     0.75      ]
+Average pre-tuned Test set CV accuracies: 0.6983641975308641
+Averged pre-tuned Test set F1 : 0.7868226759559448
+Running grid search cv...
+True Positive is 229
+True Negative is 76
+False Positive is 47
+False Negative is 49
+False positive rate is 0.3821138211382114
+True positive rate is 0.8237410071942446
+False negative rate is 0.17625899280575538
+True negative rate is 0.6178861788617886

@@ -6,12 +6,13 @@ Random Forest ML call for pipeline
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, roc_auc_score, roc_curve
+from sklearn.metrics import confusion_matrix, roc_auc_score, roc_curve, ConfusionMatrixDisplay, make_scorer, accuracy_score
 from sklearn.model_selection import cross_validate, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 import wandb
 import pickle
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
+import seaborn as sn
 
 
 def calc_importance(model, X, save_dir):
@@ -63,6 +64,13 @@ def calc_confusion_matrix(y_test, y_pred, savedir):
         f.write('False negative rate is {}'.format(FN_Rate))
         f.write('True negative rate is {}'.format(TN_Rate))
 
+    classes = ['0','1']
+    df_cfm = pd.DataFrame(CM, index=classes, columns=classes)
+    plt.figure(figsize=(10, 7))
+    cfm_plot = sn.heatmap(df_cfm, annot=True)
+    cfm_plot.figure.savefig("{}/cfm.png".format(savedir))
+
+
 
 
 def run_rf(X_train,
@@ -94,8 +102,13 @@ def run_rf(X_train,
     print('Evaluating model...')
     probs = forest.predict_proba(X_test)
 
-    accuracy = forest.score(X_test, y_test)
-    print(f'The hard predictions were right {100 * accuracy:5.2f}% of the time')
+    model_score = forest.score(X_test, y_test)
+    print('The model score is: {}'.format(model_score))
+
+    pre_tuned_scoring = cross_validate_scoring(forest, X_test, y_test, ['accuracy', 'f1'], cv=5, results_dir=results_dir)
+    print('Pre-tuned Test set CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy']))
+    print('Average pre-tuned Test set CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy'].mean()))
+    print('Averged pre-tuned Test set F1 : {}'.format(pre_tuned_scoring['test_f1'].mean()))
 
     # Tune the model
     param_grid = {
@@ -107,7 +120,12 @@ def run_rf(X_train,
         'n_estimators': [100, 200, 300, 500]
     }
     # grid search cv
-    grid_search = GridSearchCV(estimator=forest, param_grid=param_grid, cv=5, n_jobs=-1)
+    grid_search = GridSearchCV(estimator=forest,
+                               param_grid=param_grid,
+                               scoring={"Accuracy": make_scorer(accuracy_score)},
+                               refit='Accuracy',
+                               cv=5,
+                               n_jobs=-1)
 
     # Fit the grid search to the data
     print('Running grid search cv...')
@@ -127,6 +145,7 @@ def run_rf(X_train,
     # Saving results for further plotting
     results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
 
+    '''
     # generate a no skill prediction (majority class)
     ns_probs = [0 for _ in range(len(y_test))]
     # calculate scores
@@ -146,6 +165,7 @@ def run_rf(X_train,
     plt.ylabel('True Positive Rate')
     plt.legend()
     plt.savefig('{}/roc_auc_curve.png'.format(results_dir))
+    '''
 
     calc_importance(forest, X_test, results_dir)
     calc_confusion_matrix(y_test, probs[:,1], results_dir)
