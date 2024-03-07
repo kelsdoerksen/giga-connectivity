@@ -143,10 +143,12 @@ def process_esa_emb(aoi_df, esa_json, z, datasplit_type):
         'emb': [],
         'location': [],
         'giga_id_school': [],
-        'connectivity': []
+        'connectivity': [],
+        'lat': [],
+        'lon': []
     }
     emb_keys = [key for key, val in esa_json.items()]
-    filt_df = aoi_df[aoi_df['split'] == datasplit_type]
+    filt_df = aoi_df[aoi_df['data_split'] == datasplit_type]
     filt_df = filt_df.reset_index()
     for i in range(len(filt_df)):
         fid = filt_df.loc[i]['fid']
@@ -157,9 +159,11 @@ def process_esa_emb(aoi_df, esa_json, z, datasplit_type):
                     emb = esa_json['{}'.format(key)]
                     emb_new_dict['fid'].append(fid)
                     emb_new_dict['emb'].append(emb)
-                    emb_new_dict['location'].append(filt_df.loc[i]['location'])
+                    emb_new_dict['location'].append(filt_df.loc[i]['school_locations'])
                     emb_new_dict['giga_id_school'].append(filt_df.loc[i]['giga_id_school'])
                     emb_new_dict['connectivity'].append(filt_df.loc[i]['connectivity'])
+                    emb_new_dict['lat'].append(filt_df.loc[i]['lat'])
+                    emb_new_dict['lon'].append(filt_df.loc[i]['lon'])
 
 
     emb_df = pd.DataFrame(emb_new_dict['emb'])
@@ -167,6 +171,8 @@ def process_esa_emb(aoi_df, esa_json, z, datasplit_type):
     emb_df['location'] = emb_new_dict['location']
     emb_df['giga_id_school'] = emb_new_dict['giga_id_school']
     emb_df['connectivity'] = emb_new_dict['connectivity']
+    emb_df['lat'] = emb_new_dict['lat']
+    emb_df['lon'] = emb_new_dict['lon']
 
     return emb_df
 
@@ -177,20 +183,20 @@ data_type = ['Train', 'Test']
 aoi = 'BWA'
 aoi_full = 'botswana'
 for datasplit in data_type:
-    aoi_giga_df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/{}/{}_coordinates_formatted.csv'.
+    aoi_giga_df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/{}/embeddings/{}_coordinates_for_embeddings_with_fid.csv'.
                             format(aoi, aoi))
 
-    esa_models = ['embeddings_precursor-geofoundation_e011.json',
-                  'embeddings_precursor-geofoundation_{}_v04_e008.json'.format(aoi_full),
+    esa_models = ['embeddings_precursor-geofoundation_e011',
+                  'embeddings_precursor-geofoundation_{}_v04_e008'.format(aoi_full),
                   'embeddings_precursor-geofoundation_{}_v04_e025'.format(aoi_full),
                   'embeddings_school-predictor_{}_v01_e025'.format(aoi_full)]
-    esa_model = esa_models[3]
+    esa_model = esa_models[1]
     print('Running {} for aoi {} for esa model {}'.format(datasplit, aoi, esa_model))
 
     with open('/Users/kelseydoerksen/Desktop/Giga/{}/embeddings/{}.json'.format(aoi, esa_model)) as file:
         esa_data = json.load(file)
 
-    z_val = 'z17'
+    z_val = 'z18'
     esa_emb = process_esa_emb(aoi_giga_df, esa_data, z_val, datasplit)
     esa_emb.to_csv('/Users/kelseydoerksen/Desktop/Giga/{}/embeddings/{}ingData_{}_{}_embeddings.csv'.
                    format(aoi, datasplit, esa_model, z_val))

@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 203, in <module>
+    train_data, test_data = load_data(aoi, buffer, features)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 116, in load_data
+    training_dataset = shuffle(training_data)
+UnboundLocalError: local variable 'training_data' referenced before assignment

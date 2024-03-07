@@ -1,0 +1,10 @@
+Scaling data...
+Creating instance of SVM model...
+Fitting data...
+The hard predictions were right 67.03% of the time
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 268, in <module>
+    svm.run_svm(
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/svm.py", line 39, in run_svm
+    pre_tuned_scoring = cross_validate_scoring(clf, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
+TypeError: cross_validate_scoring() got an unexpected keyword argument 'prefix'

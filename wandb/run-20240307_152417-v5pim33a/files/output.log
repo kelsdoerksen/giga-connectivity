@@ -1,0 +1,10 @@
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+Model accuracy is: 0.6886446886446886
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 246, in <module>
+    rf.run_rf(
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/rf.py", line 106, in run_rf
+    pre_tuned_scoring = cross_validate_scoring(forest, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
+TypeError: cross_validate_scoring() got an unexpected keyword argument 'prefix'

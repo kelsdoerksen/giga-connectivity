@@ -1,0 +1,42 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(167)preprocess_samples()
+    166         cols_to_drop = ['connectivity', 'lat', 'lon', 'giga_id_school']
+--> 167     X_test = test_df.drop(columns=cols_to_drop)
+    168     X_train = train_df.drop(columns=cols_to_drop)
+*** NameError: name 'X_test' is not defined
+Index(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+       ...
+       '1019', '1020', '1021', '1022', '1023', 'giga_id_school', 'lat', 'lon',
+       'connectivity', 'data_split'],
+      dtype='object', length=1029)
+            0         1         2         3  ...        lat        lon  connectivity  data_split
+320 -2.904733 -0.477660  0.734600 -0.364714  ... -22.584371  27.644549             0       Train
+352 -2.965564 -0.646806  0.933873 -0.274612  ... -20.490343  27.035339             1       Train
+525 -2.863068 -1.118580  0.703932 -0.184279  ... -20.300744  27.147825             1       Train
+465 -2.526733 -1.207350  1.009629 -0.296747  ... -21.786541  27.278562             0       Train
+265 -2.618351 -0.983988  1.022331 -0.410405  ... -23.840490  26.451029             0       Train
+..        ...       ...       ...       ...  ...        ...        ...           ...         ...
+499 -2.668917 -0.938447  0.556940 -0.659580  ... -23.359571  25.675285             1       Train
+439 -2.974324 -1.039242  0.810905 -0.574488  ... -24.438344  26.075587             0       Train
+559 -2.407752 -1.245123  0.707525 -0.178461  ... -18.973330  21.300041             0       Train
+12  -3.028416 -1.021785  0.488129 -0.564387  ... -20.164746  22.457191             1       Train
+264 -2.650465 -0.787171  1.316597 -0.303838  ... -24.671851  25.915723             1       Train
+[634 rows x 1029 columns]
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 230, in <module>
+    Xtrain, Xtest = preprocess_samples(train_df, test_df, model, features)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 167, in preprocess_samples
+    import ipdb
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 167, in preprocess_samples
+    import ipdb
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

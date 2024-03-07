@@ -6,7 +6,7 @@ Random Forest ML call for pipeline
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, roc_auc_score, roc_curve, ConfusionMatrixDisplay, make_scorer, accuracy_score
+from sklearn.metrics import confusion_matrix, roc_auc_score, roc_curve, ConfusionMatrixDisplay, make_scorer, accuracy_score, f1_score
 from sklearn.model_selection import cross_validate, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 import wandb
@@ -71,8 +71,6 @@ def calc_confusion_matrix(y_test, y_pred, savedir):
     cfm_plot.figure.savefig("{}/cfm.png".format(savedir))
 
 
-
-
 def run_rf(X_train,
            y_train,
            X_test,
@@ -103,12 +101,14 @@ def run_rf(X_train,
     probs = forest.predict_proba(X_test)
 
     model_score = forest.score(X_test, y_test)
-    print('The model score is: {}'.format(model_score))
+    print('Model accuracy is: {}'.format(model_score))
 
-    pre_tuned_scoring = cross_validate_scoring(forest, X_test, y_test, ['accuracy', 'f1'], cv=5, results_dir=results_dir)
-    print('Pre-tuned Test set CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy']))
-    print('Average pre-tuned Test set CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy'].mean()))
-    print('Averged pre-tuned Test set F1 : {}'.format(pre_tuned_scoring['test_f1'].mean()))
+    pre_tuned_scoring = cross_validate_scoring(forest, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
+                                               prefix_name='pretuned')
+    print('Pre-tuned CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy']))
+    print('Average pre-tuned CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy'].mean()))
+    print('Average pre-tuned F1 : {}'.format(pre_tuned_scoring['test_f1'].mean()))
+
 
     # Tune the model
     param_grid = {
@@ -130,20 +130,27 @@ def run_rf(X_train,
     # Fit the grid search to the data
     print('Running grid search cv...')
     grid_search.fit(X_train, y_train)
+
     #grid_search.best_params_
     best_forest = grid_search.best_estimator_
 
-    probs = best_forest.predict_proba(X_test)
+    # CV scoring
+    cv_scoring = cross_validate_scoring(best_forest, X_train, y_train, ['accuracy', 'f1'], cv=5,
+                                        results_dir=results_dir, prefix_name='tuned')
+
+    # Prediction with best forest
+    tuned_probs = best_forest.predict_proba(X_test)
 
     # Save model using pickle
     with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
         pickle.dump(best_forest, f)
 
-    # CV scoring
-    cv_scoring = cross_validate_scoring(best_forest, X_test, y_test, ['accuracy', 'f1'], cv=5, results_dir=results_dir)
-
     # Saving results for further plotting
-    results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
+    results_for_plotting(y_test, tuned_probs, test_latitudes, test_longitudes, results_dir, model_name)
+
+    predictions = (tuned_probs[:, 1] >= 0.5)
+    predictions = predictions*1
+    f1 = f1_score(y_test, predictions)
 
     '''
     # generate a no skill prediction (majority class)
@@ -168,19 +175,19 @@ def run_rf(X_train,
     '''
 
     calc_importance(forest, X_test, results_dir)
-    calc_confusion_matrix(y_test, probs[:,1], results_dir)
+    calc_confusion_matrix(y_test, tuned_probs[:,1], results_dir)
 
     # Logging results to wandb
     # --- Logging metrics
     wandb_exp.log({
-        'Test set CV accuracies': cv_scoring['test_accuracy'],
-        'Average test set accuracy': cv_scoring['test_accuracy'].mean(),
-        'Average test set F1': cv_scoring['test_f1'].mean(),
-        'Best Model Params': grid_search.best_params_
+        'CV accuracies': cv_scoring['test_accuracy'],
+        'Average CV accuracy': cv_scoring['test_accuracy'].mean(),
+        'Average CV F1': cv_scoring['test_f1'].mean(),
+        'Test set F1': f1
     })
 
     # --- Logging plots
     wandb_exp.log({
-        'roc': wandb.plot.roc_curve(y_test, probs)
+        'roc': wandb.plot.roc_curve(y_test, tuned_probs)
     })
 

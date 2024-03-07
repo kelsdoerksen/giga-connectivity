@@ -50,55 +50,80 @@ def load_data(country, buffer_extent, feature_space):
         testing_data = testing_data[testing_data['lat'].notna()]
         testing_data = testing_data[testing_data['lon'].notna()]
 
+    if feature_space == 'engineer_with_aux':
+        train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated_fixed_with_aux.csv'.format(root_dir, country, buffer_extent))
+        test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated_fixed_with_aux.csv'.format(root_dir, country, buffer_extent))
+
+        training_data = train_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1', 'connectivity.1', 'Unnamed: 0.2'])
+        testing_data = test_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1', 'connectivity.1', 'Unnamed: 0.2'])
+
+        # Drop rows if lat or lon are NaN
+        training_data = training_data[training_data['lat'].notna()]
+        training_data = training_data[training_data['lon'].notna()]
+        testing_data = testing_data[testing_data['lat'].notna()]
+        testing_data = testing_data[testing_data['lon'].notna()]
+
     if feature_space == 'combined':
         eng_train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
         eng_test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
-        emb_train_df = pd.read_csv('{}/{}/embeddings/TrainingData_precursor-geofoundation_e011_s1_z18_embeddings.csv'.
+        emb_train_df = pd.read_csv('{}/{}/embeddings/TrainingData_embeddings_precursor-geofoundation_v04_e008_z18_embeddings.csv'.
                                    format(root_dir, country))
-        emb_test_df = pd.read_csv('{}/{}/embeddings/TestingData_precursor-geofoundation_e011_s1_z18_embeddings.csv'.
+        emb_test_df = pd.read_csv('{}/{}/embeddings/TestingData_embeddings_precursor-geofoundation_v04_e008_z18_embeddings.csv'.
                                    format(root_dir, country))
 
-        emb_train_df = emb_train_df.drop(columns=['connectivity', 'Unnamed: 0'])
-        emb_test_df = emb_test_df.drop(columns=['connectivity', 'Unnamed: 0'])
+        emb_test_df = emb_test_df.drop(columns=['Unnamed: 0', 'fid', 'location', 'connectivity', 'lat', 'lon'])
+        emb_train_df = emb_train_df.drop(columns=['Unnamed: 0', 'fid', 'location', 'connectivity', 'lat', 'lon'])
+        eng_train_df = eng_train_df.drop(columns=['Unnamed: 0', 'Unnamed: 0', 'connectivity.1'])
+        eng_test_df = eng_test_df.drop(columns=['Unnamed: 0', 'Unnamed: 0', 'connectivity.1'])
+        eng_train_df = eng_train_df.sort_values(by='giga_id_school')
+        eng_test_df = eng_test_df.sort_values(by='giga_id_school')
+        emb_train_df = emb_train_df.sort_values(by='giga_id_school')
+        emb_test_df = emb_test_df.sort_values(by='giga_id_school')
 
-        # sort the dataframes by location so we can match the features accordingly
-        eng_train_df = eng_train_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1'])
-        eng_test_df = eng_test_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1'])
+        combined_train = pd.concat([eng_train_df, emb_train_df],axis=1)
+        combined_test = pd.concat([eng_test_df, emb_test_df],axis=1)
 
-        emb_train_df = emb_train_df.sort_values(by=['location']).reset_index()
-        emb_test_df = emb_test_df.sort_values(by=['location']).reset_index()
 
-        eng_train_df = eng_train_df.sort_values(by=['school_locations']).reset_index()
-        eng_test_df = eng_test_df.sort_values(by=['school_locations']).reset_index()
+        combined_train = combined_train.drop(columns=['Unnamed: 0.1', 'giga_id_school', 'school_locations'])
+        combined_test = combined_test.drop(columns=['Unnamed: 0.1', 'giga_id_school', 'school_locations'])
 
-        training_data = pd.concat([eng_train_df, emb_train_df], axis=1)
-        testing_data = pd.concat([eng_test_df, emb_test_df], axis=1)
+        training_data = combined_train
+        testing_data = combined_test
 
-        training_data = training_data.drop(columns=['index'])
-        testing_data = testing_data.drop(columns=['index'])
 
-    if feature_space in ['precursor-geofoundation_v04_e008_z18', "precursor-geofoundation_v04_e008_z17", 'GeoCLIP',
+    if feature_space in ['GeoCLIP',
                          'CSPfMoW', 'satclip-resnet18-l10', 'satclip-resnet18-l40', 'satclip-resnet50-l10',
                          'satclip-resnet50-l40', 'satclip-vit16-l10', 'satclip-vit16-l40']:
 
-        training_data = pd.read_csv('{}/{}/embeddings/TrainingData_{}_embeddings_fixed.csv'.format(root_dir, country,
+        training_data = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_Training.csv'.format(root_dir, country, country,
                                                                                              feature_space))
-        testing_data = pd.read_csv('{}/{}/embeddings/TestingData_{}_embeddings_fixed.csv'.format(root_dir, country,
-                                                                                           feature_space))
+        testing_data = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_Testing.csv'.format(root_dir, country, country,
+                                                                                             feature_space))
 
-        training_data = training_data.drop(columns=['Unnamed: 0'])
-        testing_data = testing_data.drop(columns=['Unnamed: 0'])
+        training_data = training_data.drop(columns=['Unnamed: 0', 'data_split'])
+        testing_data = testing_data.drop(columns=['Unnamed: 0', 'data_split'])
 
     if feature_space in ['embeddings_precursor-geofoundation_v04_e025_z17',
                          'embeddings_precursor-geofoundation_v04_e025_z18',
-                         'embeddings_school-predictor_botswana_v01_e025_z17',
-                         'embeddings_school-predictor_botswana_v01_e025_z18']:
+                         'embeddings_school-predictor_v01_e025_z17',
+                         'embeddings_school-predictor_v01_e025_z18',
+                         'embeddings_precursor-geofoundation_v04_e008_z18',
+                         'embeddings_precursor-geofoundation_v04_e008_z17']:
         training_data = pd.read_csv('{}/{}/embeddings/TrainingData_{}_embeddings.csv'.format(root_dir, country,
                                                                                              feature_space))
         testing_data = pd.read_csv('{}/{}/embeddings/TestingData_{}_embeddings.csv'.format(root_dir, country,
                                                                                            feature_space))
+
         training_data = training_data.drop(columns=['Unnamed: 0', 'giga_id_school', 'fid'])
         testing_data = testing_data.drop(columns=['Unnamed: 0', 'giga_id_school', 'fid'])
+
+    if feature_space in ['esa_z18_v2-embeddings', "esa_z17_v2-embeddings"]:
+        training_data = pd.read_csv('{}/{}/embeddings/{}_Train_{}.csv'.format(root_dir, country, country,
+                                                                                             feature_space))
+        testing_data = pd.read_csv('{}/{}/embeddings/{}_Test_{}.csv'.format(root_dir, country, country,
+                                                                              feature_space))
+        training_data = training_data.drop(columns=['Unnamed: 0'])
+        testing_data = testing_data.drop(columns=['Unnamed: 0'])
 
     training_dataset = shuffle(training_data)
     testing_dataset = shuffle(testing_data)
@@ -133,10 +158,24 @@ def preprocess_samples(train_df, test_df, model_type, feature_set):
     cols_to_drop = []
     if feature_set == 'engineer':
         cols_to_drop = ['connectivity', 'lat', 'lon', 'school_locations', 'giga_id_school']
+    elif feature_set == 'engineer_with_aux':
+        cols_to_drop = ['connectivity', 'lat', 'lon', 'school_locations', 'giga_id_school']
     elif feature_set == 'combined':
-        cols_to_drop = ['connectivity', 'lat', 'lon', 'school_locations', 'giga_id_school', 'location', 'connectivity.1']
+        cols_to_drop = ['connectivity', 'lat', 'lon']
+    elif feature_set in ['esa_z18_v2-embeddings', "esa_z17_v2-embeddings"]:
+        cols_to_drop = ['connectivity', 'lat', 'lon', 'data_split', 'giga_id_school']
+    elif feature_set in ['embeddings_precursor-geofoundation_v04_e025_z17',
+                         'embeddings_precursor-geofoundation_v04_e025_z18',
+                         'embeddings_school-predictor_v01_e025_z17',
+                         'embeddings_school-predictor_v01_e025_z18',
+                         'embeddings_precursor-geofoundation_v04_e008_z18',
+                         'embeddings_precursor-geofoundation_v04_e008_z17']:
+
+        cols_to_drop = ['location','connectivity', 'lat', 'lon']
+    elif feature_set == 'combined':
+        cols_to_drop = ['lat','lon', 'connectivity']
     else:
-        cols_to_drop = ['connectivity', 'location']
+        cols_to_drop = ['connectivity', 'lat', 'lon', 'giga_id_school']
     X_test = test_df.drop(columns=cols_to_drop)
     X_train = train_df.drop(columns=cols_to_drop)
 
@@ -191,20 +230,8 @@ if __name__ == '__main__':
     get_class_balance(train_data, test_data, results)
 
     # Save lat, lon for X test and then drop label and location data
-    if features == 'engineer':
-        test_latitudes = test_data['lat']
-        test_longitudes = test_data['lon']
-    else:
-        # A little more processing to get the location info
-        test_longitudes = []
-        test_latitudes = []
-        for i in range(len(test_data)):
-            lon = ast.literal_eval(test_data['location'].loc[i])[0]
-            lat = ast.literal_eval(test_data['location'].loc[i])[1]
-            test_longitudes.append(lon)
-            test_longitudes.append(lat)
-        test_longitudes = pd.Series(test_longitudes)
-        test_latitudes = pd.Series(test_latitudes)
+    test_latitudes = test_data['lat']
+    test_longitudes = test_data['lon']
 
     # Some light preprocessing on data before running through models
     train_df = train_data.dropna()

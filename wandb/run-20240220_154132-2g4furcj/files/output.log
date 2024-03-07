@@ -1,0 +1,34 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(91)load_data()
+     90         ipdb.set_trace()
+---> 91         training_data = training_data.drop(columns=['Unnamed: 0'])
+     92         testing_data = testing_data.drop(columns=['Unnamed: 0'])
+      Unnamed: 0                        giga_id_school  connectivity       lat        lon         0         1         2  ...       249       250       251       252       253       254       255  data_split
+0              0  2349c7aa-98eb-432f-9deb-428dab70d747             1 -2.392440  29.184280  0.049321  6.275826  5.034625  ... -0.329432  1.357196  0.825164 -2.482224 -0.779192  2.719914 -2.729605       Train
+1              1  4bf73474-16e3-408d-96ea-b0bd9f1beedd             0 -1.691694  29.341250  0.108836  5.806522  4.779228  ... -0.687286  0.883784  1.533839 -3.286100 -0.174489  2.740259 -3.645810       Train
+2              2  03edb293-1ffe-4f60-83e1-a3ccf0b45e8c             0 -1.485310  29.832140  0.014586  4.799712  4.348906  ... -1.215423  0.751211  1.736563 -3.012623  0.252767  2.716141 -5.035526       Train
+3              3  0279f9f7-00b4-46ff-9160-a3e95422bf07             0 -2.355670  29.424330 -0.017396  5.966049  4.799695  ... -0.433223  1.368800  0.866180 -2.258494 -0.723476  2.819697 -3.245138       Train
+4              4  b44904e7-e556-4869-ab7d-880e35f0ed09             0 -2.524170  29.023390  0.130812  6.384256  5.197497  ... -0.207421  1.415676  0.704069 -2.456030 -0.851358  2.597567 -2.335935       Train
+...          ...                                   ...           ...       ...        ...       ...       ...       ...  ...       ...       ...       ...       ...       ...       ...       ...         ...
+2343        2343  cdf4f80c-e3cc-4ebc-8931-8fe76018cc61             1 -2.159389  29.547972 -0.041356  5.751299  4.678793  ... -0.606975  1.225141  1.088806 -2.397315 -0.522472  2.828477 -3.708329       Train
+2344        2344  8091da43-a2bf-413e-a430-8f8e8227f0f0             0 -1.397333  30.146389  0.021153  4.124162  4.010274  ... -1.451777  0.676219  1.751103 -2.774966  0.482663  2.716390 -5.714765       Train
+2345        2345  99b5fe1f-9fb0-499a-a2f3-06b1289cf1e4             1 -2.129167  29.777778 -0.034892  5.305870  4.449605  ... -0.683404  1.214887  1.154379 -2.149941 -0.414742  2.857757 -4.211876       Train
+2346        2346  11ea0d4b-bbc1-42d0-bb48-a62a23e1893b             0 -1.494190  29.636280  0.060678  5.161867  4.522306  ... -1.047112  0.764248  1.728087 -3.223382  0.148478  2.724487 -4.569722       Train
+2347        2347  18ada197-dd45-4e5d-86a0-d8e9a5139ab3             0 -1.603500  29.606250  0.039096  5.333486  4.570013  ... -0.968981  0.827015  1.632197 -3.122409  0.026272  2.731504 -4.397699       Train
+[2348 rows x 262 columns]
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 190, in <module>
+    # Save data class balance breakdown
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 91, in load_data
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 91, in load_data
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

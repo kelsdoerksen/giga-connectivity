@@ -8,6 +8,7 @@ import pandas as pd
 from sklearn.model_selection import cross_validate, GridSearchCV
 import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
+from sklearn.metrics import f1_score
 
 
 def run_gb(X_train,
@@ -38,8 +39,13 @@ def run_gb(X_train,
     accuracy = clf.score(X_test, y_test)
     print(f'The hard predictions were right {100 * accuracy:5.2f}% of the time')
 
-    # -----------------
+    pre_tuned_scoring = cross_validate_scoring(clf, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
+                                               prefix_name='pretuned')
+    print('Pre-tuned CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy']))
+    print('Average pre-tuned CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy'].mean()))
+    print('Averged pre-tuned F1 : {}'.format(pre_tuned_scoring['test_f1'].mean()))
 
+    # -----------------
     # Tune the model
     param_grid = {
         'loss': ['log_loss', 'exponential'],
@@ -59,28 +65,34 @@ def run_gb(X_train,
     # grid_search.best_params_
     best_clf = grid_search.best_estimator_
 
-    probs = best_clf.predict_proba(X_test)
-
     # CV scoring
-    cv_scoring = cross_validate_scoring(best_clf, X_test, y_test, ['accuracy', 'f1'], cv=5, results_dir=results_dir)
+    cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
+                                        prefix_name='tuned')
+
+    tuned_probs = best_clf.predict_proba(X_test)
 
     # Saving results for further plotting
     results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
 
     # Save model using pickle
     with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
-        pickle.dump(best_clf, f)
+        pickle.dump(clf, f)
+
+    predictions = (tuned_probs[:, 1] >= 0.5)
+    predictions = predictions * 1
+    f1 = f1_score(y_test, predictions)
 
     # Logging results to wandb
     # --- Logging metrics
     wandb_exp.log({
-        'Test set CV accuracies': cv_scoring['test_accuracy'],
-        'Average test set accuracy': cv_scoring['test_accuracy'].mean(),
-        'Average test set F1': cv_scoring['test_f1'].mean(),
+        'CV accuracies': cv_scoring['test_accuracy'],
+        'Average CV accuracy': cv_scoring['test_accuracy'].mean(),
+        'Average CV F1': cv_scoring['test_f1'].mean(),
+        'Test set F1': f1,
         'Best Model Params': grid_search.best_params_
     })
 
     # --- Logging plots
     wandb_exp.log({
-        'roc': wandb.plot.roc_curve(y_test, probs)
+        'roc': wandb.plot.roc_curve(y_test, tuned_probs)
     })
