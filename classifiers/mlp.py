@@ -9,7 +9,7 @@ from sklearn.model_selection import cross_validate, GridSearchCV
 from sklearn.metrics import make_scorer, accuracy_score
 import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, accuracy_score
 
 def run_mlp(X_train,
            y_train,
@@ -90,7 +90,8 @@ def run_mlp(X_train,
         'Average CV accuracy': cv_scoring['test_accuracy'].mean(),
         'Average CV F1': cv_scoring['test_f1'].mean(),
         'Test set F1': f1,
-        'Best Model Params': grid_search.best_params_
+        'Best Model Params': grid_search.best_params_,
+        'Test set accuracy': accuracy_score(y_test, predictions)
     })
 
     # --- Logging plots

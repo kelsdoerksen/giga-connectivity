@@ -183,7 +183,8 @@ def run_rf(X_train,
         'CV accuracies': cv_scoring['test_accuracy'],
         'Average CV accuracy': cv_scoring['test_accuracy'].mean(),
         'Average CV F1': cv_scoring['test_f1'].mean(),
-        'Test set F1': f1
+        'Test set F1': f1,
+        'Test set accuracy': accuracy_score(y_test, predictions)
     })
 
     # --- Logging plots

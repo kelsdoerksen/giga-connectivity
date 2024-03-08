@@ -25,6 +25,39 @@ _wandb:
       8:
       - 5
       13: darwin-x86_64
+    visualize:
+      roc:
+        panel_type: Vega2
+        panel_config:
+          panelDefId: wandb/area-under-curve/v0
+          fieldSettings:
+            x: fpr
+            y: tpr
+            class: class
+          stringSettings:
+            title: ROC
+            x-axis-title: False positive rate
+            y-axis-title: True positive rate
+          transform:
+            name: tableWithLeafColNames
+          userQuery:
+            queryFields:
+            - name: runSets
+              args:
+              - name: runSets
+                value: ${runSets}
+              fields:
+              - name: id
+                fields: []
+              - name: name
+                fields: []
+              - name: _defaultColorIndex
+                fields: []
+              - name: summaryTable
+                args:
+                - name: tableKey
+                  value: roc_table
+                fields: []
 aoi:
   desc: null
   value: BIH
