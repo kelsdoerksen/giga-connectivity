@@ -7,12 +7,20 @@ import pandas as pd
 import pickle
 
 # For now hard-coding to the BWA schools
-model_dict = {
+old_model_dict = {
     'gb': 'jolly-voice-91/gb_model.pkl',
     'mlp': 'expert-plasma-95/mlp_model.pkl',
     'svm': 'tough-fire-93/svm_model.pkl',
     'rf': 'light-fog-92/rf_model.pkl',
     'lr': 'glorious-resonance-94/lr_model.pkl'
+}
+
+model_dict = {
+    'gb': 'legendary-galaxy-417',
+    'mlp': 'lyric-river-440',
+    'svm': 'jolly-morning-416',
+    'rf': 'colorful-river-413',
+    'lr': 'youthful-sun-415'
 }
 
 for model_type in model_dict.keys():
@@ -102,5 +110,5 @@ for model_type in model_dict.keys():
     results_df['lon'] = location_info['lon']
 
     # Save for plotting and looking at results
-    results_df.to_csv('/Users/kelseydoerksen/Desktop/Giga/isa_new_schools/BWA/BWA_results_new_schools_{}_model.csv'.
+    results_df.to_csv('/Users/kelseydoerksen/Desktop/Giga/isa_new_schools/BWA/BWA_results_new_schools_corrected_{}_model.csv'.
                       format(model_type))
