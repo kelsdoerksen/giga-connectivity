@@ -24,6 +24,7 @@ def get_args():
                                            'satclip-resnet18-l10, satclip-resnet18-l40, satclip-resnet50-l10,'
                                            'satclip-resnet50-l40, satclip-vit16-l10, satclip-vit16-l40,'
                                            'precursor-geofoundation_e011, combined')
+    parser.add_argument('--parameter_tuning', help='Specify if parameter tuning. True or False.')
 
     return parser.parse_args()
 
@@ -208,6 +209,7 @@ if __name__ == '__main__':
     root_dir = args.root_dir
     experiment_type = args.experiment_type
     features = args.features
+    hyper_tuning = args.parameter_tuning
 
     # Set up experiment
     experiment = wandb.init(project='giga-research',
@@ -251,7 +253,8 @@ if __name__ == '__main__':
             test_latitudes,
             test_longitudes,
             experiment,
-            results)
+            results,
+            hyper_tuning)
 
     if model == 'lr':
         lr.run_lr(
@@ -262,7 +265,8 @@ if __name__ == '__main__':
             test_latitudes,
             test_longitudes,
             experiment,
-            results)
+            results,
+            hyper_tuning)
 
     if model == 'svm':
         svm.run_svm(
@@ -273,7 +277,8 @@ if __name__ == '__main__':
             test_latitudes,
             test_longitudes,
             experiment,
-            results)
+            results,
+            hyper_tuning)
 
     if model == 'mlp':
         mlp.run_mlp(
@@ -284,7 +289,8 @@ if __name__ == '__main__':
             test_latitudes,
             test_longitudes,
             experiment,
-            results)
+            results,
+            hyper_tuning)
 
     if model == 'gb':
         gb.run_gb(
@@ -295,4 +301,5 @@ if __name__ == '__main__':
             test_latitudes,
             test_longitudes,
             experiment,
-            results)
+            results,
+            hyper_tuning)

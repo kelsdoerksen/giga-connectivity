@@ -78,7 +78,8 @@ def run_rf(X_train,
            test_latitudes,
            test_longitudes,
            wandb_exp,
-           results_dir):
+           results_dir,
+           tuning):
     """
     Experiment for train and test set
     """
@@ -89,7 +90,7 @@ def run_rf(X_train,
     print('Creating instance of Random Forest model...')
     forest = RandomForestClassifier(criterion='gini',
                                     random_state=87,
-                                    n_estimators=100,
+                                    n_estimators=200,
                                     n_jobs=-1)
 
     # Fit the model
@@ -103,56 +104,81 @@ def run_rf(X_train,
     model_score = forest.score(X_test, y_test)
     print('Model accuracy is: {}'.format(model_score))
 
-    pre_tuned_scoring = cross_validate_scoring(forest, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
-                                               prefix_name='pretuned')
-    print('Pre-tuned CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy']))
-    print('Average pre-tuned CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy'].mean()))
-    print('Average pre-tuned F1 : {}'.format(pre_tuned_scoring['test_f1'].mean()))
+    if not eval(tuning):
+        print('No model hyperparameter tuning')
+        model_setup = 'non-tuned'
+        cv_scoring = cross_validate_scoring(forest, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
+                                                   prefix_name=model_setup)
 
+        with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
+            pickle.dump(forest, f)
 
-    # Tune the model
-    param_grid = {
-        'bootstrap': [True],
-        'max_depth': [80, 90, 100],
-        'max_features': [2, 3, 4],
-        'min_samples_leaf': [3, 4, 5],
-        'min_samples_split': [4, 6, 8],
-        'n_estimators': [100, 200, 300, 500]
-    }
-    # grid search cv
-    grid_search = GridSearchCV(estimator=forest,
-                               param_grid=param_grid,
-                               scoring={"Accuracy": make_scorer(accuracy_score)},
-                               refit='Accuracy',
-                               cv=5,
-                               n_jobs=-1)
+        predictions = (probs[:, 1] >= 0.5)
+        predictions = predictions * 1
+        f1 = f1_score(y_test, predictions)
 
-    # Fit the grid search to the data
-    print('Running grid search cv...')
-    grid_search.fit(X_train, y_train)
+        # Saving results for further plotting
+        results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
+        calc_importance(forest, X_test, results_dir)
+        calc_confusion_matrix(y_test, probs[:, 1], results_dir)
 
-    #grid_search.best_params_
-    best_forest = grid_search.best_estimator_
+        wandb_exp.log({
+            'roc': wandb.plot.roc_curve(y_test, probs)
+        })
 
-    # CV scoring
-    cv_scoring = cross_validate_scoring(best_forest, X_train, y_train, ['accuracy', 'f1'], cv=5,
-                                        results_dir=results_dir, prefix_name='tuned')
+    else:
+        model_setup = 'tuned'
+        # Tune the model
+        param_grid = {
+            'bootstrap': [True],
+            'max_depth': [80, 90, 100],
+            'max_features': [2, 3, 4],
+            'min_samples_leaf': [3, 4, 5],
+            'min_samples_split': [4, 6, 8],
+            'n_estimators': [100, 200, 300, 500]
+        }
+        # grid search cv
+        grid_search = GridSearchCV(estimator=forest,
+                                   param_grid=param_grid,
+                                   scoring={"Accuracy": make_scorer(accuracy_score)},
+                                   refit='Accuracy',
+                                   cv=5,
+                                   n_jobs=-1)
 
-    # Prediction with best forest
-    tuned_probs = best_forest.predict_proba(X_test)
+        # Fit the grid search to the data
+        print('Running grid search cv...')
+        grid_search.fit(X_train, y_train)
 
-    # Save model using pickle
-    with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
-        pickle.dump(best_forest, f)
+        #grid_search.best_params_
+        best_forest = grid_search.best_estimator_
 
-    # Saving results for further plotting
-    results_for_plotting(y_test, tuned_probs, test_latitudes, test_longitudes, results_dir, model_name)
+        # CV scoring
+        cv_scoring = cross_validate_scoring(best_forest, X_train, y_train, ['accuracy', 'f1'], cv=5,
+                                            results_dir=results_dir, prefix_name=model_setup)
 
-    predictions = (tuned_probs[:, 1] >= 0.5)
-    predictions = predictions*1
-    f1 = f1_score(y_test, predictions)
+        # Prediction with best forest
+        tuned_probs = best_forest.predict_proba(X_test)
+
+        with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
+            pickle.dump(best_forest, f)
+
+        # Saving results for further plotting
+        results_for_plotting(y_test, tuned_probs, test_latitudes, test_longitudes, results_dir, model_name)
+
+        predictions = (tuned_probs[:, 1] >= 0.5)
+        predictions = predictions*1
+        f1 = f1_score(y_test, predictions)
+        calc_importance(best_forest, X_test, results_dir)
+        calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
+
+        wandb_exp.log({
+            'Best Model Params': grid_search.best_params_,
+            'roc': wandb.plot.roc_curve(y_test, tuned_probs)
+        })
+
 
     '''
+    # Old - Wandb will generate
     # generate a no skill prediction (majority class)
     ns_probs = [0 for _ in range(len(y_test))]
     # calculate scores
@@ -174,9 +200,6 @@ def run_rf(X_train,
     plt.savefig('{}/roc_auc_curve.png'.format(results_dir))
     '''
 
-    calc_importance(forest, X_test, results_dir)
-    calc_confusion_matrix(y_test, tuned_probs[:,1], results_dir)
-
     # Logging results to wandb
     # --- Logging metrics
     wandb_exp.log({
@@ -186,9 +209,3 @@ def run_rf(X_train,
         'Test set F1': f1,
         'Test set accuracy': accuracy_score(y_test, predictions)
     })
-
-    # --- Logging plots
-    wandb_exp.log({
-        'roc': wandb.plot.roc_curve(y_test, tuned_probs)
-    })
-

@@ -18,7 +18,8 @@ def run_gb(X_train,
            test_latitudes,
            test_longitudes,
            wandb_exp,
-           results_dir):
+           results_dir,
+           tuning):
     """
     Run gb model
     """
@@ -39,49 +40,69 @@ def run_gb(X_train,
     accuracy = clf.score(X_test, y_test)
     print(f'The hard predictions were right {100 * accuracy:5.2f}% of the time')
 
-    pre_tuned_scoring = cross_validate_scoring(clf, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
-                                               prefix_name='pretuned')
-    print('Pre-tuned CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy']))
-    print('Average pre-tuned CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy'].mean()))
-    print('Averged pre-tuned F1 : {}'.format(pre_tuned_scoring['test_f1'].mean()))
+    if not eval(tuning):
+        print('No model hyperparameter tuning')
+        model_setup = 'non-tuned'
+        cv_scoring = cross_validate_scoring(clf, X_train, y_train, ['accuracy', 'f1'], cv=5,
+                                            results_dir=results_dir, prefix_name=model_setup)
+        with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
+            pickle.dump(clf, f)
 
-    # -----------------
-    # Tune the model
-    param_grid = {
-        'loss': ['log_loss', 'exponential'],
-        'learning_rate': [0.05, 0.1, 0.5, 1],
-        'n_estimators': [100, 200, 300],
-        'criterion': ['friedman_mse', 'squared_error'],
-        'min_samples_split': [2, 4, 6],
-        'min_samples_leaf': [1, 3, 5],
-        'max_features': ['sqrt', 'log2', None]
-    }
-    # grid search cv
-    grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=5, n_jobs=-1)
+        predictions = (probs[:, 1] >= 0.5)
+        predictions = predictions * 1
+        f1 = f1_score(y_test, predictions)
 
-    # Fit the grid search to the data
-    # Turning off grid search manually because it is taking so long and I just want to compare
-    print('Running grid search cv...')
-    grid_search.fit(X_train, y_train)
-    # grid_search.best_params_
-    best_clf = grid_search.best_estimator_
+        # Saving results for further plotting
+        results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
 
-    # CV scoring
-    cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
-                                        prefix_name='tuned')
+        wandb_exp.log({
+            'roc': wandb.plot.roc_curve(y_test, probs)
+        })
 
-    tuned_probs = best_clf.predict_proba(X_test)
+    else:
+        model_setup = 'tuned'
+        # Tune the model
+        param_grid = {
+            'loss': ['log_loss', 'exponential'],
+            'learning_rate': [0.05, 0.1, 0.5, 1],
+            'n_estimators': [100, 200, 300],
+            'criterion': ['friedman_mse', 'squared_error'],
+            'min_samples_split': [2, 4, 6],
+            'min_samples_leaf': [1, 3, 5],
+            'max_features': ['sqrt', 'log2', None]
+        }
+        # grid search cv
+        grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=5, n_jobs=-1)
 
-    # Saving results for further plotting
-    results_for_plotting(y_test, tuned_probs, test_latitudes, test_longitudes, results_dir, model_name)
+        # Fit the grid search to the data
+        # Turning off grid search manually because it is taking so long and I just want to compare
+        print('Running grid search cv...')
+        grid_search.fit(X_train, y_train)
+        # grid_search.best_params_
+        best_clf = grid_search.best_estimator_
 
-    # Save model using pickle
-    with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
-        pickle.dump(clf, f)
+        # CV scoring
+        cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5,
+                                            results_dir=results_dir, prefix_name=model_setup)
 
-    predictions = (tuned_probs[:, 1] >= 0.5)
-    predictions = predictions * 1
-    f1 = f1_score(y_test, predictions)
+        tuned_probs = best_clf.predict_proba(X_test)
+        # Saving results for further plotting
+        results_for_plotting(y_test, tuned_probs, test_latitudes, test_longitudes, results_dir, model_name)
+
+        # Save model using pickle
+        with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
+            pickle.dump(best_clf, f)
+
+        predictions = (tuned_probs[:, 1] >= 0.5)
+        predictions = predictions * 1
+        f1 = f1_score(y_test, predictions)
+
+        wandb_exp.log({
+            'Best Model Params': grid_search.best_params_,
+            'roc': wandb.plot.roc_curve(y_test, tuned_probs)
+        })
+
+
 
     # Logging results to wandb
     # --- Logging metrics
@@ -90,11 +111,5 @@ def run_gb(X_train,
         'Average CV accuracy': cv_scoring['test_accuracy'].mean(),
         'Average CV F1': cv_scoring['test_f1'].mean(),
         'Test set F1': f1,
-        'Best Model Params': grid_search.best_params_,
         'Test set accuracy': accuracy_score(y_test, predictions)
-    })
-
-    # --- Logging plots
-    wandb_exp.log({
-        'roc': wandb.plot.roc_curve(y_test, tuned_probs)
     })

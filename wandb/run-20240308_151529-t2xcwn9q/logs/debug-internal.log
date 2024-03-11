@@ -1,0 +1,218 @@
+2024-03-08 15:15:29,836 INFO    StreamThr :43071 [internal.py:wandb_internal():86] W&B internal server running at pid: 43071, started at: 2024-03-08 15:15:29.836175
+2024-03-08 15:15:29,840 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: status
+2024-03-08 15:15:29,842 INFO    WriterThread:43071 [datastore.py:open_for_write():85] open: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/run-t2xcwn9q.wandb
+2024-03-08 15:15:29,842 DEBUG   SenderThread:43071 [sender.py:send():380] send: header
+2024-03-08 15:15:29,871 DEBUG   SenderThread:43071 [sender.py:send():380] send: run
+2024-03-08 15:15:29,872 INFO    SenderThread:43071 [sender.py:_maybe_setup_resume():759] checking resume status for None/giga-research/t2xcwn9q
+2024-03-08 15:15:30,590 INFO    SenderThread:43071 [dir_watcher.py:__init__():211] watching files in: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files
+2024-03-08 15:15:30,591 INFO    SenderThread:43071 [sender.py:_start_run_threads():1122] run started: t2xcwn9q with start time 1709910929.836325
+2024-03-08 15:15:30,607 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: check_version
+2024-03-08 15:15:30,607 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: check_version
+2024-03-08 15:15:30,671 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: run_start
+2024-03-08 15:15:30,681 DEBUG   HandlerThread:43071 [system_info.py:__init__():32] System info init
+2024-03-08 15:15:30,682 DEBUG   HandlerThread:43071 [system_info.py:__init__():47] System info init done
+2024-03-08 15:15:30,682 INFO    HandlerThread:43071 [system_monitor.py:start():181] Starting system monitor
+2024-03-08 15:15:30,682 INFO    SystemMonitor:43071 [system_monitor.py:_start():145] Starting system asset monitoring threads
+2024-03-08 15:15:30,683 INFO    HandlerThread:43071 [system_monitor.py:probe():201] Collecting system info
+2024-03-08 15:15:30,684 INFO    SystemMonitor:43071 [interfaces.py:start():190] Started cpu monitoring
+2024-03-08 15:15:30,684 DEBUG   HandlerThread:43071 [system_info.py:probe():196] Probing system
+2024-03-08 15:15:30,686 INFO    SystemMonitor:43071 [interfaces.py:start():190] Started disk monitoring
+2024-03-08 15:15:30,687 INFO    SystemMonitor:43071 [interfaces.py:start():190] Started memory monitoring
+2024-03-08 15:15:30,688 INFO    SystemMonitor:43071 [interfaces.py:start():190] Started network monitoring
+2024-03-08 15:15:30,697 DEBUG   HandlerThread:43071 [system_info.py:_probe_git():181] Probing git
+2024-03-08 15:15:30,744 DEBUG   HandlerThread:43071 [system_info.py:_probe_git():189] Probing git done
+2024-03-08 15:15:30,745 DEBUG   HandlerThread:43071 [system_info.py:probe():244] Probing system done
+2024-03-08 15:15:30,745 DEBUG   HandlerThread:43071 [system_monitor.py:probe():210] {'os': 'macOS-10.16-x86_64-i386-64bit', 'python': '3.10.9', 'heartbeatAt': '2024-03-08T15:15:30.684629', 'startedAt': '2024-03-08T15:15:29.829642', 'docker': None, 'cuda': None, 'args': ('--model', 'gb', '--aoi', 'BWA', '--buffer', '1000', '--root_dir', '/Users/kelseydoerksen/Desktop/Giga', '--experiment_type', 'None', '--features', 'satclip-resnet50-l40'), 'state': 'running', 'program': '/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py', 'codePathLocal': 'run_pipeline.py', 'codePath': 'run_pipeline.py', 'git': {'remote': 'git@github.com:kelsdoerksen/giga-connectivity.git', 'commit': '88246df185bfdb5bc11ddd0bce727361d4a2379e'}, 'email': 'kelseydoerksen@gmail.com', 'root': '/Users/kelseydoerksen/code/giga-connectivity', 'host': 'Kelseys-MacBook-Pro.local', 'username': 'kelseydoerksen', 'executable': '/Users/kelseydoerksen/opt/anaconda3/envs/giga/bin/python', 'cpu_count': 4, 'cpu_count_logical': 8, 'cpu_freq': {'current': 2300, 'min': 2300, 'max': 2300}, 'cpu_freq_per_core': [{'current': 2300, 'min': 2300, 'max': 2300}], 'disk': {'/': {'total': 465.62699127197266, 'used': 9.432418823242188}}, 'memory': {'total': 16.0}}
+2024-03-08 15:15:30,745 INFO    HandlerThread:43071 [system_monitor.py:probe():211] Finished collecting system info
+2024-03-08 15:15:30,745 INFO    HandlerThread:43071 [system_monitor.py:probe():214] Publishing system info
+2024-03-08 15:15:30,745 DEBUG   HandlerThread:43071 [system_info.py:_save_pip():52] Saving list of pip packages installed into the current environment
+2024-03-08 15:15:30,746 DEBUG   HandlerThread:43071 [system_info.py:_save_pip():68] Saving pip packages done
+2024-03-08 15:15:30,746 DEBUG   HandlerThread:43071 [system_info.py:_save_conda():75] Saving list of conda packages installed into the current environment
+2024-03-08 15:15:31,595 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/requirements.txt
+2024-03-08 15:15:31,595 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/conda-environment.yaml
+2024-03-08 15:15:38,373 DEBUG   HandlerThread:43071 [system_info.py:_save_conda():87] Saving conda packages done
+2024-03-08 15:15:38,374 INFO    HandlerThread:43071 [system_monitor.py:probe():216] Finished publishing system info
+2024-03-08 15:15:38,377 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: status_report
+2024-03-08 15:15:38,377 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: keepalive
+2024-03-08 15:15:38,377 DEBUG   SenderThread:43071 [sender.py:send():380] send: files
+2024-03-08 15:15:38,378 INFO    SenderThread:43071 [sender.py:_save_file():1378] saving file wandb-metadata.json with policy now
+2024-03-08 15:15:38,387 DEBUG   SenderThread:43071 [sender.py:send():380] send: telemetry
+2024-03-08 15:15:38,388 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: stop_status
+2024-03-08 15:15:38,388 DEBUG   SenderThread:43071 [sender.py:send():380] send: config
+2024-03-08 15:15:38,389 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: stop_status
+2024-03-08 15:15:38,391 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: internal_messages
+2024-03-08 15:15:38,606 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/conda-environment.yaml
+2024-03-08 15:15:38,606 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/wandb-metadata.json
+2024-03-08 15:15:38,968 INFO    wandb-upload_0:43071 [upload_job.py:push():131] Uploaded file /var/folders/45/0gt2k_f526x1p6241p2jbczr0000gn/T/tmpzht7wlaewandb/w2pgf5ft-wandb-metadata.json
+2024-03-08 15:15:39,606 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/output.log
+2024-03-08 15:15:40,702 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: status_report
+2024-03-08 15:15:41,607 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/output.log
+2024-03-08 15:15:43,609 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/output.log
+2024-03-08 15:15:46,194 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: status_report
+2024-03-08 15:15:51,216 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: status_report
+2024-03-08 15:15:53,390 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: internal_messages
+2024-03-08 15:15:53,390 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: stop_status
+2024-03-08 15:15:53,391 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: stop_status
+2024-03-08 15:15:56,424 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: status_report
+2024-03-08 15:15:56,915 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: partial_history
+2024-03-08 15:15:56,917 DEBUG   SenderThread:43071 [sender.py:send():380] send: history
+2024-03-08 15:15:56,917 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: summary_record
+2024-03-08 15:15:56,919 INFO    SenderThread:43071 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-03-08 15:15:56,933 DEBUG   SenderThread:43071 [sender.py:send():380] send: config
+2024-03-08 15:15:57,324 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: log_artifact
+2024-03-08 15:15:57,325 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: log_artifact
+2024-03-08 15:15:57,618 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: partial_history
+2024-03-08 15:15:57,651 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/media/table/roc_table_1_84fb637dc26e0bb015c3.table.json
+2024-03-08 15:15:57,652 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/wandb-summary.json
+2024-03-08 15:15:57,653 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/media/table
+2024-03-08 15:15:57,654 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/media
+2024-03-08 15:15:58,236 INFO    wandb-upload_0:43071 [upload_job.py:push():131] Uploaded file /var/folders/45/0gt2k_f526x1p6241p2jbczr0000gn/T/tmpzht7wlaewandb/dtm1typg-media/table/roc_table_1_84fb637dc26e0bb015c3.table.json
+2024-03-08 15:15:58,623 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: poll_exit
+2024-03-08 15:15:58,660 INFO    wandb-upload_1:43071 [upload_job.py:push():89] Uploaded file /Users/kelseydoerksen/Library/Application Support/wandb/artifacts/staging/tmpf9cttzs8
+2024-03-08 15:15:59,419 INFO    SenderThread:43071 [sender.py:send_request_log_artifact():1444] logged artifact run-t2xcwn9q-roc_table - {'id': 'QXJ0aWZhY3Q6NzQ3MDU4MDk0', 'state': 'PENDING', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjE0NjgzMDMyNQ==', 'latestArtifact': None}}
+2024-03-08 15:15:59,420 DEBUG   SenderThread:43071 [sender.py:send():380] send: files
+2024-03-08 15:15:59,420 INFO    SenderThread:43071 [sender.py:_save_file():1378] saving file media/table/roc_table_1_84fb637dc26e0bb015c3.table.json with policy now
+2024-03-08 15:15:59,421 DEBUG   SenderThread:43071 [sender.py:send():380] send: history
+2024-03-08 15:15:59,421 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: summary_record
+2024-03-08 15:15:59,423 INFO    SenderThread:43071 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-03-08 15:15:59,424 DEBUG   SenderThread:43071 [sender.py:send():380] send: exit
+2024-03-08 15:15:59,424 INFO    SenderThread:43071 [sender.py:send_exit():585] handling exit code: 0
+2024-03-08 15:15:59,424 INFO    SenderThread:43071 [sender.py:send_exit():587] handling runtime: 26
+2024-03-08 15:15:59,425 INFO    SenderThread:43071 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-03-08 15:15:59,426 INFO    SenderThread:43071 [sender.py:send_exit():593] send defer
+2024-03-08 15:15:59,426 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: poll_exit
+2024-03-08 15:15:59,426 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:15:59,426 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 0
+2024-03-08 15:15:59,427 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:15:59,427 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 0
+2024-03-08 15:15:59,427 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 1
+2024-03-08 15:15:59,427 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:15:59,427 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 1
+2024-03-08 15:15:59,428 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:15:59,428 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 1
+2024-03-08 15:15:59,428 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 2
+2024-03-08 15:15:59,428 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:15:59,429 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 2
+2024-03-08 15:15:59,429 INFO    HandlerThread:43071 [system_monitor.py:finish():190] Stopping system monitor
+2024-03-08 15:15:59,429 DEBUG   SystemMonitor:43071 [system_monitor.py:_start():159] Starting system metrics aggregation loop
+2024-03-08 15:15:59,429 DEBUG   SystemMonitor:43071 [system_monitor.py:_start():166] Finished system metrics aggregation loop
+2024-03-08 15:15:59,429 DEBUG   SystemMonitor:43071 [system_monitor.py:_start():170] Publishing last batch of metrics
+2024-03-08 15:15:59,430 INFO    HandlerThread:43071 [interfaces.py:finish():202] Joined cpu monitor
+2024-03-08 15:15:59,430 INFO    HandlerThread:43071 [interfaces.py:finish():202] Joined disk monitor
+2024-03-08 15:15:59,430 INFO    HandlerThread:43071 [interfaces.py:finish():202] Joined memory monitor
+2024-03-08 15:15:59,431 INFO    HandlerThread:43071 [interfaces.py:finish():202] Joined network monitor
+2024-03-08 15:15:59,431 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:15:59,431 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 2
+2024-03-08 15:15:59,431 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 3
+2024-03-08 15:15:59,431 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:15:59,432 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 3
+2024-03-08 15:15:59,432 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:15:59,432 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 3
+2024-03-08 15:15:59,432 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 4
+2024-03-08 15:15:59,435 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:15:59,435 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 4
+2024-03-08 15:15:59,436 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:15:59,436 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 4
+2024-03-08 15:15:59,436 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 5
+2024-03-08 15:15:59,436 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:15:59,436 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 5
+2024-03-08 15:15:59,437 DEBUG   SenderThread:43071 [sender.py:send():380] send: summary
+2024-03-08 15:15:59,437 INFO    SenderThread:43071 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-03-08 15:15:59,438 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:15:59,438 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 5
+2024-03-08 15:15:59,438 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 6
+2024-03-08 15:15:59,438 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:15:59,438 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 6
+2024-03-08 15:15:59,438 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:15:59,438 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 6
+2024-03-08 15:15:59,474 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: status_report
+2024-03-08 15:15:59,611 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 7
+2024-03-08 15:15:59,611 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:15:59,612 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 7
+2024-03-08 15:15:59,612 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:15:59,612 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 7
+2024-03-08 15:15:59,624 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: poll_exit
+2024-03-08 15:15:59,660 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/config.yaml
+2024-03-08 15:15:59,660 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/wandb-summary.json
+2024-03-08 15:15:59,661 INFO    Thread-12 :43071 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/output.log
+2024-03-08 15:15:59,942 INFO    wandb-upload_0:43071 [upload_job.py:push():131] Uploaded file /var/folders/45/0gt2k_f526x1p6241p2jbczr0000gn/T/tmpzht7wlaewandb/db3a3w6z-media/table/roc_table_1_84fb637dc26e0bb015c3.table.json
+2024-03-08 15:16:00,733 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 8
+2024-03-08 15:16:00,734 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: poll_exit
+2024-03-08 15:16:00,735 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:16:00,735 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 8
+2024-03-08 15:16:00,736 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:16:00,736 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 8
+2024-03-08 15:16:00,736 INFO    SenderThread:43071 [job_builder.py:build():281] Attempting to build job artifact
+2024-03-08 15:16:00,737 INFO    SenderThread:43071 [job_builder.py:_get_source_type():393] is repo sourced job
+2024-03-08 15:16:00,741 INFO    SenderThread:43071 [job_builder.py:build():369] adding wandb-job metadata file
+2024-03-08 15:16:00,746 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 9
+2024-03-08 15:16:00,746 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:16:00,746 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 9
+2024-03-08 15:16:00,747 DEBUG   SenderThread:43071 [sender.py:send():380] send: artifact
+2024-03-08 15:16:01,286 INFO    SenderThread:43071 [sender.py:send_artifact():1456] sent artifact job-git_github.com_kelsdoerksen_giga-connectivity.git_run_pipeline.py - {'id': 'QXJ0aWZhY3Q6NzQ2ODM5Nzc2', 'state': 'COMMITTED', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjEzNTAwNDI3Ng==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6NzQ2OTg5NDc1', 'versionIndex': 49}}}
+2024-03-08 15:16:01,286 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:16:01,286 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 9
+2024-03-08 15:16:01,286 INFO    SenderThread:43071 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-03-08 15:16:01,671 INFO    SenderThread:43071 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/output.log
+2024-03-08 15:16:01,671 INFO    SenderThread:43071 [dir_watcher.py:finish():388] scan: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files
+2024-03-08 15:16:01,672 INFO    SenderThread:43071 [dir_watcher.py:finish():402] scan save: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/requirements.txt requirements.txt
+2024-03-08 15:16:01,672 INFO    SenderThread:43071 [dir_watcher.py:finish():402] scan save: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/output.log output.log
+2024-03-08 15:16:01,672 INFO    SenderThread:43071 [dir_watcher.py:finish():402] scan save: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/config.yaml config.yaml
+2024-03-08 15:16:01,678 INFO    SenderThread:43071 [dir_watcher.py:finish():402] scan save: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/wandb-summary.json wandb-summary.json
+2024-03-08 15:16:01,678 INFO    SenderThread:43071 [dir_watcher.py:finish():402] scan save: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/conda-environment.yaml conda-environment.yaml
+2024-03-08 15:16:01,680 INFO    SenderThread:43071 [dir_watcher.py:finish():402] scan save: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/wandb-metadata.json wandb-metadata.json
+2024-03-08 15:16:01,690 INFO    SenderThread:43071 [dir_watcher.py:finish():402] scan save: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/media/table/roc_table_1_84fb637dc26e0bb015c3.table.json media/table/roc_table_1_84fb637dc26e0bb015c3.table.json
+2024-03-08 15:16:01,690 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 10
+2024-03-08 15:16:01,691 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:16:01,691 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 10
+2024-03-08 15:16:01,692 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:16:01,692 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 10
+2024-03-08 15:16:01,692 INFO    SenderThread:43071 [file_pusher.py:finish():175] shutting down file pusher
+2024-03-08 15:16:02,042 INFO    wandb-upload_1:43071 [upload_job.py:push():131] Uploaded file /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/requirements.txt
+2024-03-08 15:16:02,276 INFO    wandb-upload_0:43071 [upload_job.py:push():131] Uploaded file /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/output.log
+2024-03-08 15:16:02,289 INFO    wandb-upload_2:43071 [upload_job.py:push():131] Uploaded file /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/config.yaml
+2024-03-08 15:16:02,305 INFO    wandb-upload_3:43071 [upload_job.py:push():131] Uploaded file /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/wandb-summary.json
+2024-03-08 15:16:02,433 INFO    wandb-upload_4:43071 [upload_job.py:push():131] Uploaded file /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/files/conda-environment.yaml
+2024-03-08 15:16:02,634 INFO    Thread-11 (_thread_body):43071 [sender.py:transition_state():613] send defer: 11
+2024-03-08 15:16:02,635 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:16:02,635 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 11
+2024-03-08 15:16:02,636 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:16:02,636 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 11
+2024-03-08 15:16:02,636 INFO    SenderThread:43071 [file_pusher.py:join():181] waiting for file pusher
+2024-03-08 15:16:02,636 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 12
+2024-03-08 15:16:02,637 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:16:02,637 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 12
+2024-03-08 15:16:02,637 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:16:02,637 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 12
+2024-03-08 15:16:02,637 INFO    SenderThread:43071 [file_stream.py:finish():595] file stream finish called
+2024-03-08 15:16:02,784 INFO    SenderThread:43071 [file_stream.py:finish():599] file stream finish is done
+2024-03-08 15:16:02,784 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 13
+2024-03-08 15:16:02,785 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:16:02,786 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 13
+2024-03-08 15:16:02,786 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:16:02,787 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 13
+2024-03-08 15:16:02,787 INFO    SenderThread:43071 [sender.py:transition_state():613] send defer: 14
+2024-03-08 15:16:02,788 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: defer
+2024-03-08 15:16:02,788 INFO    HandlerThread:43071 [handler.py:handle_request_defer():170] handle defer: 14
+2024-03-08 15:16:02,789 DEBUG   SenderThread:43071 [sender.py:send():380] send: final
+2024-03-08 15:16:02,789 DEBUG   SenderThread:43071 [sender.py:send():380] send: footer
+2024-03-08 15:16:02,790 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: defer
+2024-03-08 15:16:02,790 INFO    SenderThread:43071 [sender.py:send_request_defer():609] handle sender defer: 14
+2024-03-08 15:16:02,791 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: poll_exit
+2024-03-08 15:16:02,792 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: poll_exit
+2024-03-08 15:16:02,793 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: server_info
+2024-03-08 15:16:02,793 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: server_info
+2024-03-08 15:16:02,796 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: get_summary
+2024-03-08 15:16:02,797 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: sampled_history
+2024-03-08 15:16:02,800 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: internal_messages
+2024-03-08 15:16:02,801 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: job_info
+2024-03-08 15:16:02,956 DEBUG   SenderThread:43071 [sender.py:send_request():407] send_request: job_info
+2024-03-08 15:16:02,957 INFO    MainThread:43071 [wandb_run.py:_footer_history_summary_info():3554] rendering history
+2024-03-08 15:16:02,958 INFO    MainThread:43071 [wandb_run.py:_footer_history_summary_info():3586] rendering summary
+2024-03-08 15:16:02,958 INFO    MainThread:43071 [wandb_run.py:_footer_sync_info():3513] logging synced files
+2024-03-08 15:16:02,959 DEBUG   HandlerThread:43071 [handler.py:handle_request():144] handle_request: shutdown
+2024-03-08 15:16:02,959 INFO    HandlerThread:43071 [handler.py:finish():844] shutting down handler
+2024-03-08 15:16:03,806 INFO    WriterThread:43071 [datastore.py:close():294] close: /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240308_151529-t2xcwn9q/run-t2xcwn9q.wandb
+2024-03-08 15:16:03,958 INFO    SenderThread:43071 [sender.py:finish():1534] shutting down sender
+2024-03-08 15:16:03,958 INFO    SenderThread:43071 [file_pusher.py:finish():175] shutting down file pusher
+2024-03-08 15:16:03,958 INFO    SenderThread:43071 [file_pusher.py:join():181] waiting for file pusher

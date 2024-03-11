@@ -16,7 +16,8 @@ def run_svm(X_train,
            test_latitudes,
            test_longitudes,
            wandb_exp,
-           results_dir):
+           results_dir,
+            tuning):
     """
     Run svm model
     """
@@ -36,46 +37,65 @@ def run_svm(X_train,
     accuracy = clf.score(X_test, y_test)
     print(f'The hard predictions were right {100 * accuracy:5.2f}% of the time')
 
-    pre_tuned_scoring = cross_validate_scoring(clf, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
-                                               prefix_name='pretuned')
-    print('Pre-tuned CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy']))
-    print('Average pre-tuned CV accuracies: {}'.format(pre_tuned_scoring['test_accuracy'].mean()))
-    print('Averged pre-tuned F1 : {}'.format(pre_tuned_scoring['test_f1'].mean()))
+    if not eval(tuning):
+        print('No model hyperparameter tuning')
+        model_setup = 'non-tuned'
+        cv_scoring = cross_validate_scoring(clf, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
+                                                   prefix_name=model_setup)
+        # Save model using pickle
+        with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
+            pickle.dump(clf, f)
+        predictions = (probs[:, 1] >= 0.5)
+        predictions = predictions * 1
+        f1 = f1_score(y_test, predictions)
 
-    # -----------------
+        # Saving results for further plotting
+        results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
 
-    # Tune the model
-    param_grid = {
-        'C': [0.001, 0.01, 0.1, 1.0, 10.0],
-        'kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
-        'degree': [1, 2, 3, 4],
-        'gamma': ['scale', 'auto']
-    }
-    # grid search cv
-    grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=5, n_jobs=-1)
+        wandb_exp.log({
+            'roc': wandb.plot.roc_curve(y_test, probs)
+        })
 
-    # Fit the grid search to the data
-    print('Running grid search cv...')
-    grid_search.fit(X_train, y_train)
-    # grid_search.best_params_
-    best_clf = grid_search.best_estimator_
+    else:
+        model_setup = 'tuned'
+        # Tune the model
+        param_grid = {
+            'C': [0.001, 0.01, 0.1, 1.0, 10.0],
+            'kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
+            'degree': [1, 2, 3, 4],
+            'gamma': ['scale', 'auto']
+        }
+        # grid search cv
+        grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=5, n_jobs=-1)
 
-    tuned_probs = best_clf.predict_proba(X_test)
+        # Fit the grid search to the data
+        print('Running grid search cv...')
+        grid_search.fit(X_train, y_train)
+        # grid_search.best_params_
+        best_clf = grid_search.best_estimator_
 
-    # CV scoring
-    cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
-                                        prefix_name='tuned')
+        tuned_probs = best_clf.predict_proba(X_test)
 
-    # Saving results for further plotting
-    results_for_plotting(y_test, tuned_probs, test_latitudes, test_longitudes, results_dir, model_name)
+        # CV scoring
+        cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5,
+                                            results_dir=results_dir, prefix_name=model_setup)
 
-    # Save model using pickle
-    with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
-        pickle.dump(best_clf, f)
+        # Saving results for further plotting
+        results_for_plotting(y_test, tuned_probs, test_latitudes, test_longitudes, results_dir, model_name)
 
-    predictions = (tuned_probs[:, 1] >= 0.5)
-    predictions = predictions * 1
-    f1 = f1_score(y_test, predictions)
+        # Save model using pickle
+        with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
+            pickle.dump(best_clf, f)
+
+        predictions = (tuned_probs[:, 1] >= 0.5)
+        predictions = predictions * 1
+        f1 = f1_score(y_test, predictions)
+
+        wandb_exp.log({
+            'Best Model Params': grid_search.best_params_,
+            'roc': wandb.plot.roc_curve(y_test, tuned_probs)
+        })
+
 
     # Logging results to wandb
     # --- Logging metrics
@@ -84,11 +104,5 @@ def run_svm(X_train,
         'Average CV accuracy': cv_scoring['test_accuracy'].mean(),
         'Average CV F1': cv_scoring['test_f1'].mean(),
         'Test set F1': f1,
-        'Best Model Params': grid_search.best_params_,
         'Test set accuracy': accuracy_score(y_test, predictions)
-    })
-
-    # --- Logging plots
-    wandb_exp.log({
-        'roc': wandb.plot.roc_curve(y_test, tuned_probs)
     })

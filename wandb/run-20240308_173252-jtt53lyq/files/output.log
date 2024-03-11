@@ -1,0 +1,15 @@
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+Model accuracy is: 0.6886446886446886
+Pre-tuned CV accuracies: [0.7007874  0.66929134 0.70866142 0.66141732 0.6984127 ]
+Average pre-tuned CV accuracies: 0.6877140357455318
+Average pre-tuned F1 : 0.71174279837885
+True Positive is 107
+True Negative is 81
+False Positive is 43
+False Negative is 42
+False positive rate is 0.3467741935483871
+True positive rate is 0.7181208053691275
+False negative rate is 0.28187919463087246
+True negative rate is 0.6532258064516129

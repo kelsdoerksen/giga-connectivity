@@ -1,0 +1,6 @@
+Creating instance of GB model...
+Fitting data...
+The hard predictions were right 63.75% of the time
+Pre-tuned CV accuracies: [0.65744681 0.64042553 0.65319149 0.65458422 0.65245203]
+Average pre-tuned CV accuracies: 0.6516200154243977
+Averged pre-tuned F1 : 0.7112939776942289

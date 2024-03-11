@@ -1,0 +1,11 @@
+Scaling data...
+Creating instance of SVM model...
+Fitting data...
+The hard predictions were right 80.22% of the time
+No model hyperparameter tuning
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 272, in <module>
+    svm.run_svm(
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/svm.py", line 107, in run_svm
+    'roc': wandb.plot.roc_curve(y_test, tuned_probs)
+UnboundLocalError: local variable 'tuned_probs' referenced before assignment
