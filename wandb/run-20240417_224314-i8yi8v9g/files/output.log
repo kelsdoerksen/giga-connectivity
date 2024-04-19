@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 316, in <module>
+    train_data, test_data = load_data(aoi, buffer, features, label)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 203, in load_data
+    training_dataset = training_dataset.drop(columns=['Unnamed: 0', 'class.1', 'school_locations'])
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/pandas/util/_decorators.py", line 331, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/pandas/core/frame.py", line 5396, in drop
+    return super().drop(
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/pandas/util/_decorators.py", line 331, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/pandas/core/generic.py", line 4505, in drop
+    obj = obj._drop_axis(labels, axis, level=level, errors=errors)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/pandas/core/generic.py", line 4546, in _drop_axis
+    new_axis = axis.drop(labels, errors=errors)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/pandas/core/indexes/base.py", line 6977, in drop
+    raise KeyError(f"{list(labels[mask])} not found in axis")
+KeyError: "['Unnamed: 0', 'class.1', 'school_locations'] not found in axis"

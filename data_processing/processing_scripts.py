@@ -2,6 +2,7 @@ import pandas as pd
 import json
 import argparse
 import numpy as np
+import geopandas as gpd
 
 """
 Some scrap scripts/functions
@@ -10,7 +11,10 @@ Some scrap scripts/functions
 parser = argparse.ArgumentParser(description='Generating features for Random Forest',
                                  formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument("--aoi", help="Country of interest")
+parser.add_argument("--target", help="ML target, must be one of connectivity or schools")
 args = parser.parse_args()
+aoi = args.aoi
+target = args.target
 
 def get_lat_lon_list(df, country_name, save_dir):
     """
@@ -27,6 +31,28 @@ def get_lat_lon_list(df, country_name, save_dir):
     coords_dict = {
         'lats': df_unique['lat'].tolist(),
         'lons': df_unique['lon'].tolist()
+    }
+
+    with open("{}/{}_coordinates.json".format(save_dir, country_name), "w") as outfile:
+        json.dump(coords_dict, outfile)
+
+
+def get_lat_lon_list_from_gdp(df, country_name, save_dir):
+    """
+    Get lat lon list from geopandas dataframe
+    of clean school/non-schools
+    :return:
+    """
+
+    # change crs to EPSG:4326 for later data extraction
+    df_epsg = df.to_crs(crs='EPSG:4326')
+
+    # remove any repeating schools based on giga id
+    df_unique = df_epsg.drop_duplicates(subset=['UID'], keep='first')
+
+    coords_dict = {
+        'lats': df_unique['geometry'].y.tolist(),
+        'lons': df_unique['geometry'].x.tolist()
     }
 
     with open("{}/{}_coordinates.json".format(save_dir, country_name), "w") as outfile:
@@ -69,21 +95,41 @@ def eliminate_correlated_features(df, threshold):
     return df_filtered
 
 
+# Running uncorrelated feature selection
+buffer = 1000
 aois = ['GIN']
+target = 'schools'
 for aoi in aois:
-    root_dir = '/Users/kelseydoerksen/Desktop/Giga/{}/1000m_buffer'.format(aoi)
-    df = pd.read_csv('{}/full_feature_space_fixed.csv'.format(root_dir))
-    identity_cols = ['giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations']
+    print('Running for buffer: {}, aoi: {}'.format(buffer, aoi))
+    if target == 'connectivity':
+        root_dir = '/Users/kelseydoerksen/Desktop/Giga/Connectivity/{}/{}m_buffer'.format(aoi, buffer)
+        identity_cols = ['giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations']
+        cols_to_drop = ['Unnamed: 0', 'giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations']
+    if target == 'schools':
+        root_dir = '/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/{}/{}m_buffer'.format(aoi, buffer)
+        identity_cols = ['UID', 'lat', 'lon', 'class']
+        cols_to_drop = ['Unnamed: 0', 'UID', 'lat', 'lon', 'class']
+
+    df = pd.read_csv('{}/full_feature_space.csv'.format(root_dir))
+
     df_identity = df[identity_cols]
-    df = df.drop(columns=['Unnamed: 0', 'giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations'])
+    df = df.drop(columns=cols_to_drop)
     df_filt = eliminate_correlated_features(df, 0.9)
 
     combined_df = pd.concat([df_identity, df_filt], axis=1)
-    combined_df.to_csv('{}/uncorrelated_feature_space_fixed.csv'.format(root_dir))
-
+    combined_df.to_csv('{}/uncorrelated_feature_space.csv'.format(root_dir))
 
 '''
-# Scrap scripts for fixing the lon = lat value issue
+
+# Running lat, lon coordinate generation for airPy processing script
+aois = ['NAM', 'BIH', 'BLZ', 'CRB', 'GHA', 'GIN', 'MNG', 'RWA', 'SEN', 'SSD', 'ZWE']
+for aoi in aois:
+    gpd_df = gpd.read_file('/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/{}/{}_train.geojson'.format(aoi, aoi))
+    save_dir = '/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/{}'.format(aoi)
+    get_lat_lon_list_from_gdp(gpd_df, aoi, save_dir)
+
+
+# Scrap scripts for fixing a preivous lon = lat value issue
 # Aka, all I need to do is load in the coordinates for the country of interest, get the list of lon values from this
 # and for each of the data csvs I have, replace the lon column data with the correct lon values
 aois = ['BWA']

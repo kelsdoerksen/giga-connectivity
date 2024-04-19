@@ -1,0 +1,71 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(334)<module>()
+    333     # Run model
+--> 334     if model == 'rf':
+    335         rf.run_rf(
+      modis.LC_Type1.mode  modis.LC_Type1.var  modis.LC_Type1.evg_conif  modis.LC_Type1.evg_broad  modis.LC_Type1.dcd_needle  modis.LC_Type1.dcd_broad  ...       378       379       380       381       382       383
+18                   10.0              0.0000                       0.0                       0.0                        0.0                       0.0  ...  1.049403 -2.190672 -1.517379 -0.313666 -3.426284  2.217174
+1476                 10.0              0.3456                       0.0                       0.0                        0.0                       0.0  ...  2.538083 -2.252093  0.433024  0.488041 -4.767617  1.492514
+88                   13.0              0.0000                       0.0                       0.0                        0.0                       0.0  ...  2.406444 -1.824152 -1.585942  0.017262 -4.207018  3.339504
+1507                 10.0              0.0000                       0.0                       0.0                        0.0                       0.0  ... -0.283944 -3.242028  1.688992 -0.459107 -6.119037  1.295135
+1693                 10.0              0.0000                       0.0                       0.0                        0.0                       0.0  ...  1.429253 -2.549010  0.622063  0.088432 -5.484593  3.829203
+...                   ...                 ...                       ...                       ...                        ...                       ...  ...       ...       ...       ...       ...       ...       ...
+606                  13.0              2.1600                       0.0                       0.0                        0.0                       0.0  ...  0.229595 -2.010003  1.332969  1.100214 -4.882145  2.489171
+754                  13.0              1.4400                       0.0                       0.0                        0.0                       0.0  ...  0.558975 -3.622719  1.498988  1.195335 -6.679007  3.571484
+1453                  7.0              2.2464                       0.0                       0.0                        0.0                       0.0  ...  2.581898 -0.587842 -0.621172 -0.118536 -6.232674  2.152051
+424                  10.0              2.1600                       0.0                       0.0                        0.0                       0.0  ...  0.162526 -2.565018  0.000003  1.443247 -4.349923  3.868791
+1072                 10.0              0.9504                       0.0                       0.0                        0.0                       0.0  ...  2.583709 -2.277449 -1.596328  0.861236 -6.669126  2.353708
+[1824 rows x 440 columns]
+18      0
+1476    0
+88      1
+1507    1
+1693    0
+       ..
+606     1
+754     1
+1453    0
+424     0
+1072    0
+Name: label, Length: 1824, dtype: int64
+     modis.LC_Type1.mode  modis.LC_Type1.var  modis.LC_Type1.evg_conif  modis.LC_Type1.evg_broad  modis.LC_Type1.dcd_needle  modis.LC_Type1.dcd_broad  ...       378       379       380       381       382       383
+9                   10.0              0.3456                       0.0                       0.0                        0.0                       0.0  ...  3.074855 -1.194018 -1.704585 -1.719419 -5.746977  1.744981
+461                 10.0              0.0000                       0.0                       0.0                        0.0                       0.0  ...  1.418264 -2.805660  0.714389  0.792031 -4.716907  1.400269
+291                  7.0              1.4400                       0.0                       0.0                        0.0                       0.0  ...  3.638082 -2.231060 -2.694531  0.071323 -4.223351  2.233567
+229                 10.0              0.0000                       0.0                       0.0                        0.0                       0.0  ...  1.671751 -1.878232  0.235869  0.307400 -5.361563  2.746972
+205                 10.0              0.0000                       0.0                       0.0                        0.0                       0.0  ... -0.378798 -2.426439  0.164066 -0.581786 -7.183365  0.644356
+..                   ...                 ...                       ...                       ...                        ...                       ...  ...       ...       ...       ...       ...       ...       ...
+331                 10.0              0.0000                       0.0                       0.0                        0.0                       0.0  ...  0.715133 -3.092391 -0.614511 -1.389376 -6.841266  1.509613
+347                 13.0              0.2900                       0.0                       0.0                        0.0                       0.0  ...  2.372041 -2.113095  2.100959  1.851012 -6.318284  4.872628
+86                  10.0              1.7600                       0.0                       0.0                        0.0                       0.0  ...  0.767243 -1.550762  1.304564  0.369060 -5.072976  4.791062
+685                 13.0              0.0000                       0.0                       0.0                        0.0                       0.0  ...  1.413099 -2.419714 -0.561451 -0.086646 -4.911379  3.996729
+367                 10.0              0.0000                       0.0                       0.0                        0.0                       0.0  ...  1.541030 -2.371051 -1.857450 -1.314930 -6.127018  1.821081
+[782 rows x 440 columns]
+9      0
+461    1
+291    1
+229    0
+205    0
+      ..
+331    1
+347    0
+86     0
+685    0
+367    1
+Name: label, Length: 782, dtype: int64
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 334, in <module>
+    if model == 'rf':
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 334, in <module>
+    if model == 'rf':
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

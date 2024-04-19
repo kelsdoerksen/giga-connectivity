@@ -22,7 +22,7 @@ def add_pred(data):
 
 for m in models:
     print('Running for model: {}'.format(m))
-    df = pd.read_csv('{}/BWA_results_new_schools_{}_model.csv'.format(root_dir, m))
+    df = pd.read_csv('{}/BWA_results_new_schools_corrected_{}_model.csv'.format(root_dir, m))
     preds = add_pred(df)
     df['final_pred'] = preds
     print('Number of connected schools from {} model is: {}'.format(m, sum(df['final_pred'])))

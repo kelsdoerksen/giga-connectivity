@@ -204,7 +204,7 @@ test_emb_df.to_csv('/Users/kelseydoerksen/Desktop/Giga/{}/embeddings/{}_Test_esa
 					format(aoi, aoi, z))
 '''
 
-
+'''
 # Processing matching fid from Casper embeddings to giga_id correctly
 aoi = 'RWA'
 rwa_df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/RWA/embeddings/RWA_coordinates_v2-embeddings.csv')
@@ -220,4 +220,29 @@ result_df = fid_corrected_subset.drop_duplicates(subset=['giga_id_school'])
 rwa_subset = rwa_df[['giga_id_school', 'lat', 'lon', 'connectivity','school_locations','data_split']]
 combined = rwa_subset.merge(result_df, on='giga_id_school')
 combined.to_csv('/Users/kelseydoerksen/Desktop/Giga/RWA/embeddings/RWA_coordinates_for_embeddings_with_fid.csv')
+'''
+
+
+def clean_dataframes(df):
+	"""
+	Scrap function to remove extra columns from dataframes that were made when concatenating
+	:return:
+	"""
+	df = df.drop(columns=['connectivity.1', 'Unnamed: 0', 'Unnamed: 0.1'])
+	return df
+
+
+aois = ['BIH', 'BLZ', 'BWA', 'GIN', 'MNG', 'RWA', 'BRA']
+data_type = ['Training', 'Testing']
+for aoi in aois:
+	print('Cleaning dataframe for aoi: {}'.format(aoi))
+	for data in data_type:
+		df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/Connectivity/{}/1000m_buffer/{}Data_uncorrelated.csv'.
+						 format(aoi, data))
+		df_clean = clean_dataframes(df)
+		df_clean.to_csv('/Users/kelseydoerksen/Desktop/Giga/Connectivity/{}/1000m_buffer/{}Data_uncorrelated.csv'.
+						format(aoi, data))
+
+
+
 

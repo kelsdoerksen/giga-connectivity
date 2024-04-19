@@ -47,7 +47,7 @@ def calc_confusion_matrix(dataframe, savedir):
     cfm_plot = sn.heatmap(df_cfm, annot=True)
     cfm_plot.figure.savefig("{}/cfm.png".format(savedir))
 
-aoi = 'BWA'
+aoi = 'RWA'
 root_dir = '/Users/kelseydoerksen/Desktop/Giga/{}/results_1000m'.format(aoi)
 BWA_folders = ['frosty-vortex-524/lr_', 'earnest-night-525/svm_', 'floral-aardvark-526/rf_',
                'silver-dew-527/mlp_', 'apricot-music-528/gb_',
@@ -58,10 +58,9 @@ RWA_folders = ['sweet-snowflake-469/gb_', 'divine-eon-477/rf_', 'brisk-universe-
                'gentle-fog-537/svm_', 'comic-glade-531/lr_', 'sandy-smoke-532/svm_', 'effortless-night-533/rf_',
                'amber-yogurt-534/mlp_', 'balmy-bush-535/gb_']
 
-for folder in BWA_folders:
-    if folder == 'silvery_capybara-542/gb_':
-        import ipdb
-        ipdb.set_trace()
+IJCAI_folders = ['glamorous-smoke-513/mlp_']
+
+for folder in IJCAI_folders:
     df = pd.read_csv('{}/{}results_for_plotting.csv'.format(root_dir, folder))
     head, sep, tail = folder.partition('/')
     print('Running for folder: {}'.format(head))

@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 316, in <module>
+    train_data, test_data = load_data(aoi, buffer, features, label)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 120, in load_data
+    train_df = train_df.sort_values(by='UID')
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/pandas/util/_decorators.py", line 331, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/pandas/core/frame.py", line 6909, in sort_values
+    k = self._get_label_or_level_values(by, axis=axis)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/pandas/core/generic.py", line 1850, in _get_label_or_level_values
+    raise KeyError(key)
+KeyError: 'UID'

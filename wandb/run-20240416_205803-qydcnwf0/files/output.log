@@ -1,0 +1,35 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(259)<module>()
+    258     ipdb.set_trace()
+--> 259     ytrain = train_df['label']
+    260     ytest = test_df['label']
+*** NameError: name 'ytrain' is not defined
+            lat        lon  label  modis.LC_Type1.mode  ...  avg_lat_ms_fixed  tests_fixed  devices_fixed  ookla_distance_fixed
+1073 -22.510551  27.153946      0                 10.0  ...                56            3              1           1598.687617
+1291 -19.765559  23.669412      1                 10.0  ...                32            1              1          25288.803744
+1522 -24.673196  25.884699      0                 13.0  ...                16           31              8              0.000000
+415  -24.096016  25.017398      0                 10.0  ...               830            1              1          45529.377290
+1758 -20.588200  26.534497      0                 10.0  ...                54            5              2          34015.359887
+...         ...        ...    ...                  ...  ...               ...          ...            ...                   ...
+1211 -24.598181  25.836633      0                 10.0  ...                40            2              2            134.741440
+1365 -21.169326  27.514185      0                 13.0  ...                40            8              5              0.000000
+1270 -17.797069  25.213455      0                 10.0  ...                25            1              1             18.662365
+99   -22.724269  27.411185      1                 10.0  ...                62            1              1           7496.362086
+1039 -24.684769  25.899925      0                 13.0  ...                32            1              1            343.968645
+[1824 rows x 59 columns]
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 259, in <module>
+    Xtrain, Xtest = preprocess_samples(train_df, test_df, model, features)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 259, in <module>
+    Xtrain, Xtest = preprocess_samples(train_df, test_df, model, features)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

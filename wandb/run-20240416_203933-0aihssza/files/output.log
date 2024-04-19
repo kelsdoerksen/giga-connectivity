@@ -1,0 +1,85 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(50)load_data()
+     49         # Drop rows if lat or lon are NaN
+---> 50         training_data = train_df[train_df['lat'].notna()]
+     51         training_data = training_data[training_data['lon'].notna()]
+*** NameError: name 'training_data' is not defined
+      Unnamed: 0        lat        lon  class  ...  devices_fixed  ookla_distance_fixed                           school_locations  class.1
+0           2129 -24.629181  25.891906      0  ...             12              0.000000          (25.8919059, -24.629181400000007)        0
+1           1201 -21.417564  25.588441      0  ...              1             34.419372  (25.588441000000003, -21.417563999999995)        0
+2           1180 -21.169922  27.511714      0  ...              5              0.000000           (27.511713999999998, -21.169922)        0
+3           1905 -24.545000  26.035000      0  ...              1              0.000000              (26.035, -24.544999999999998)        0
+4            844 -22.121537  22.418478      1  ...              2          51979.130238   (22.418477999999993, -22.12153700000001)        1
+...          ...        ...        ...    ...  ...            ...                   ...                                        ...      ...
+1819        2401 -24.625715  25.860751      0  ...              2            118.645009          (25.8607506, -24.625715099999997)        0
+1820        1396 -21.438795  27.461982      0  ...              1              0.000000  (27.461981999999992, -21.438794999999992)        0
+1821         874 -21.295918  27.469454      1  ...              1            781.802671           (27.469454, -21.295918000000004)        1
+1822         623 -18.447303  21.896328      1  ...              2           1711.969673   (21.896328238100022, -18.44730265373236)        1
+1823        2412 -24.693523  25.880334      0  ...             12              0.000000          (25.8803344, -24.693522599999998)        0
+[1824 rows x 62 columns]
+Index(['Unnamed: 0', 'lat', 'lon', 'class', 'modis.LC_Type1.mode',
+       'modis.LC_Type1.var', 'modis.LC_Type1.evg_conif',
+       'modis.LC_Type1.evg_broad', 'modis.LC_Type1.dcd_needle',
+       'modis.LC_Type1.dcd_broad', 'modis.LC_Type1.mix_forest',
+       'modis.LC_Type1.cls_shrub', 'modis.LC_Type1.open_shrub',
+       'modis.LC_Type1.woody_savanna', 'modis.LC_Type1.savanna',
+       'modis.LC_Type1.grassland', 'modis.LC_Type1.perm_wetland',
+       'modis.LC_Type1.cropland', 'modis.LC_Type1.urban',
+       'modis.LC_Type1.crop_nat_veg', 'modis.LC_Type1.perm_snow',
+       'modis.LC_Type1.barren', 'modis.LC_Type1.water_bds',
+       'pop.population_density.var', 'pop.population_density.max',
+       'pop.population_density.min',
+       'human_settlement_layer_built_up.built_characteristics.mode',
+       'human_settlement_layer_built_up.built_characteristics.var',
+       'human_settlement_layer_built_up.built_characteristics.open_low_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_med_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_high_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_water',
+       'human_settlement_layer_built_up.built_characteristics.open_road',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3-6',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_6-15',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_15-30',
+       'human_settlement_layer_built_up.built_characteristics.build_non_res_30',
+       'human_settlement_layer_built_up.built_characteristics.built',
+       'global_human_modification.gHM.var',
+       'global_human_modification.gHM.min', 'transmission_line_distance',
+       'nightlight.avg_rad.var', 'nightlight.avg_rad.max',
+       'nightlight.avg_rad.min', 'nightlight.cf_cvg.var',
+       'nightlight.cf_cvg.max', 'nightlight.cf_cvg.min', 'avg_d_kbps_mobile',
+       'avg_u_kbps_mobile', 'avg_lat_ms_mobile', 'tests_mobile',
+       'devices_mobile', 'ookla_distance_mobile', 'avg_d_kbps_fixed',
+       'avg_u_kbps_fixed', 'avg_lat_ms_fixed', 'tests_fixed', 'devices_fixed',
+       'ookla_distance_fixed', 'school_locations', 'class.1'],
+      dtype='object')
+      Unnamed: 0        lat        lon  class  ...  devices_fixed  ookla_distance_fixed                           school_locations  class.1
+0           2129 -24.629181  25.891906      0  ...             12              0.000000          (25.8919059, -24.629181400000007)        0
+1           1201 -21.417564  25.588441      0  ...              1             34.419372  (25.588441000000003, -21.417563999999995)        0
+2           1180 -21.169922  27.511714      0  ...              5              0.000000           (27.511713999999998, -21.169922)        0
+3           1905 -24.545000  26.035000      0  ...              1              0.000000              (26.035, -24.544999999999998)        0
+4            844 -22.121537  22.418478      1  ...              2          51979.130238   (22.418477999999993, -22.12153700000001)        1
+...          ...        ...        ...    ...  ...            ...                   ...                                        ...      ...
+1819        2401 -24.625715  25.860751      0  ...              2            118.645009          (25.8607506, -24.625715099999997)        0
+1820        1396 -21.438795  27.461982      0  ...              1              0.000000  (27.461981999999992, -21.438794999999992)        0
+1821         874 -21.295918  27.469454      1  ...              1            781.802671           (27.469454, -21.295918000000004)        1
+1822         623 -18.447303  21.896328      1  ...              2           1711.969673   (21.896328238100022, -18.44730265373236)        1
+1823        2412 -24.693523  25.880334      0  ...             12              0.000000          (25.8803344, -24.693522599999998)        0
+[1824 rows x 62 columns]
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 246, in <module>
+    # Load data
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 50, in load_data
+    testing_data = test_df[test_df['lat'].notna()]
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 50, in load_data
+    testing_data = test_df[test_df['lat'].notna()]
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

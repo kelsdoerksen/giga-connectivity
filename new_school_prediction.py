@@ -16,12 +16,13 @@ old_model_dict = {
 }
 
 model_dict = {
-    'gb': 'legendary-galaxy-417',
-    'mlp': 'lyric-river-440',
-    'svm': 'jolly-morning-416',
-    'rf': 'colorful-river-413',
-    'lr': 'youthful-sun-415'
+    'gb': 'legendary-galaxy-417/gb_model.pkl',
+    'mlp': 'lyric-river-440/mlp_model.pkl',
+    'svm': 'jolly-morning-416/svm_model.pkl',
+    'rf': 'colorful-river-413/rf_model.pkl',
+    'lr': 'youthful-sun-415/lr_model.pkl'
 }
+
 
 for model_type in model_dict.keys():
     # load model
@@ -33,7 +34,7 @@ for model_type in model_dict.keys():
                               'full_feature_space.csv')
 
     # Drop features we didn't use that were highly correlated
-    corr_feats = ['global_human_modification.gHM.mean', 'nightlight.avg_rad.mean', 'human_settlement_layer_built_up.built_characteristics.built_res_6-15', 'human_settlement_layer_built_up.built_characteristics.built_res_3-6', 'global_human_modification.gHM.mode', 'human_settlement_layer_built_up.built_characteristics.built_res_15-30', 'global_human_modification.gHM.max', 'pop.population_density.mean', 'human_settlement_layer_built_up.built_characteristics.built_res_3', 'nightlight.cf_cvg.mean']
+    corr_feats = ['human_settlement_layer_built_up.built_characteristics.built_res_3-6', 'global_human_modification.gHM.max', 'global_human_modification.gHM.mode', 'human_settlement_layer_built_up.built_characteristics.built_res_15-30', 'nightlight.cf_cvg.mean', 'human_settlement_layer_built_up.built_characteristics.built_res_6-15', 'global_human_modification.gHM.mean', 'pop.population_density.mean', 'human_settlement_layer_built_up.built_characteristics.built_res_3', 'nightlight.avg_rad.mean']
     new_schools = new_schools.drop(columns=corr_feats)
 
     # If there are missing school location overlaps, let's add these features as 0s in the feature space

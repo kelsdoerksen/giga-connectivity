@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 244, in <module>
+    train_data, test_data = load_data(aoi, buffer, features, label)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 135, in load_data
+    training_dataset = training_dataset.rename(columns={'class': 'label'})
+AttributeError: 'NoneType' object has no attribute 'rename'

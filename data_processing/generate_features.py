@@ -7,12 +7,13 @@ import argparse
 import geopandas as gpd
 from sklearn.preprocessing import OneHotEncoder
 
-parser = argparse.ArgumentParser(description='Generating features for Random Forest',
+parser = argparse.ArgumentParser(description='Generating features for ML Classifiers',
                                  formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument("--aoi", help="Country of interest")
 parser.add_argument("--buffer", help="Buffer extent around school to extract data from")
 parser.add_argument("--data_source", help='Source of school location data. If unicef, can proceed as normal'
                                           ' if new_schools we are generating from the new school samples')
+parser.add_argument("--target", help='Specify is target is connectivity prediction or school prediction')
 args = parser.parse_args()
 
 months = ['jan', 'feb', 'mar', 'apr', 'may', 'june', 'july', 'aug', 'sept', 'oct', 'nov', 'dec']
@@ -94,10 +95,14 @@ def calc_nearest_point(target_df, school_df, target_name, data_source):
     """
 
     dist_df = gpd.sjoin_nearest(school_df, target_df, how='left', distance_col='{}_distance'.format(target_name))
-    if data_source == 'unicef':
-        dist_df = dist_df.drop_duplicates(subset=['giga_id_school'], keep='first')
-    if data_source == 'new_schools':
-        dist_df = dist_df.drop_duplicates(subset=['fid'], keep='first')
+
+    if 'connectivity' in school_df.columns:
+        if data_source == 'unicef':
+            dist_df = dist_df.drop_duplicates(subset=['giga_id_school'], keep='first')
+        if data_source == 'new_schools':
+            dist_df = dist_df.drop_duplicates(subset=['fid'], keep='first')
+        if data_source == 'combined':
+            dist_df = dist_df.drop_duplicates(subset=['UID'], keep='first')
 
     return dist_df
 
@@ -108,7 +113,10 @@ def get_ookla(aoi, ookla_type, base_filepath, school_df, data_source):
     :return:
     """
     # Load data
-    country_mask = gpd.read_file('{}/{}/{}_extent.geojson'.format(base_filepath, aoi, aoi))
+    if aoi == 'BWA':
+        country_mask = gpd.read_file('{}/{}/{}_extent.geojson'.format(base_filepath, aoi, aoi))
+    else:
+        country_mask = gpd.read_file('{}/{}/geoBoundaries-{}-ADM2.geojson'.format(base_filepath, aoi, aoi))
     ookla_df = gpd.read_file('/Users/kelseydoerksen/Desktop/Giga/Ookla/2023-10-01_performance_{}_tiles/'
                              'gps_{}_tiles.shp'.format(ookla_type, ookla_type), mask=country_mask)
 
@@ -132,7 +140,11 @@ def get_elec(aoi, school_df, base_filepath, data_source):
     :param aoi:
     :return:
     """
-    country_mask = gpd.read_file('{}/{}/{}_extent.geojson'.format(base_filepath, aoi, aoi))
+    if aoi == 'BWA':
+        country_mask = gpd.read_file('{}/{}/{}_extent.geojson'.format(base_filepath, aoi, aoi))
+    else:
+        country_mask = gpd.read_file('{}/{}/geoBoundaries-{}-ADM2.geojson'.format(base_filepath, aoi, aoi))
+
     elec_df = gpd.read_file('/Users/kelseydoerksen/Desktop/Giga/PowerGrid/grid.gpkg', mask=country_mask)
 
     # Transform crs to 3857 for distance calculation
@@ -204,7 +216,6 @@ def get_boundary(aoi, school_df, base_filepath, data_source):
             polygon_index = aoi_boundaries_for_dist.distance(school_gdf.loc[i]['geometry']).sort_values().index[0]
             district_list.append(aoi_boundaries.loc[polygon_index]['shapeName'])
 
-
     school_gdf['boundary'] = district_list
 
     # Now let's one-hot encode the categorical
@@ -215,19 +226,29 @@ def get_boundary(aoi, school_df, base_filepath, data_source):
     return encoder_df
 
 
-def get_feature_space(aoi, buffer, data_source):
+def get_feature_space(aoi, buffer, data_source, target):
     '''
     Grab relevant data and aggregate together
     to return final df of feature space for location
     Grabs modis, population and nightlight features
     :return: df of features for aoi specified
     '''
-    if data_source == 'unicef':
-        base_filepath = '/Users/kelseydoerksen/Desktop/Giga'
-        df_schools = pd.read_csv('{}/{}/{}_school_geolocation_coverage_master.csv'.format(base_filepath, aoi, aoi))
-    if data_source == 'new_schools':
-        base_filepath = '/Users/kelseydoerksen/Desktop/Giga/isa_new_schools'
-        df_schools = gpd.read_file('{}/{}/{}_schools.geojson'.format(base_filepath, aoi, aoi))
+    if target == 'connectivity':
+        if data_source == 'unicef':
+            base_filepath = '/Users/kelseydoerksen/Desktop/Giga'
+            df_schools = pd.read_csv('{}/{}/{}_school_geolocation_coverage_master.csv'.format(base_filepath, aoi, aoi))
+            school_locs_df = gpd.read_file('{}/{}/{}_school_geolocation.geojson'.format(base_filepath, aoi, aoi))
+        if data_source == 'new_schools':
+            base_filepath = '/Users/kelseydoerksen/Desktop/Giga/isa_new_schools'
+            df_schools = gpd.read_file('{}/{}/{}_schools.geojson'.format(base_filepath, aoi, aoi))
+
+    if target == 'school':
+        base_filepath = '/Users/kelseydoerksen/Desktop/Giga/SchoolMapping'
+        df_schools = gpd.read_file('{}/{}/{}_train.geojson'.format(base_filepath, aoi, aoi))
+        df_schools = df_schools.to_crs(crs='EPSG:4326')
+        df_schools['lat'] = df_schools['geometry'].y
+        df_schools['lon'] = df_schools['geometry'].x
+        school_locs_df = df_schools
 
     print('Getting one-hot encoded regional indicators...')
     df_locations = get_boundary(aoi, df_schools, base_filepath, data_source)
@@ -249,10 +270,8 @@ def get_feature_space(aoi, buffer, data_source):
                          '_custom_buffersize_{}_with_time.csv'.format(base_filepath, aoi, buffer, buffer))
 
     print('Getting elec distance features...')
-    if data_source == 'unicef':
-        school_locs_df = gpd.read_file('{}/{}/{}_school_geolocation.geojson'.format(base_filepath, aoi, aoi))
     if data_source == 'new_schools':
-        school_locs_df = gpd.read_file('{}/{}/{}_schools.geojson'.format(base_filepath, aoi, aoi))
+        school_locs_df = df_schools
     df_distance = get_elec(aoi, school_locs_df, base_filepath, data_source)
 
     print('Getting nightlight features...')
@@ -263,23 +282,29 @@ def get_feature_space(aoi, buffer, data_source):
     df_ookla_mobile = get_ookla(aoi, 'mobile', base_filepath, school_locs_df, data_source)
     df_ookla_fixed = get_ookla(aoi, 'fixed', base_filepath, school_locs_df, data_source)
 
-    if data_source == 'unicef':
+    if target == 'connectivity':
         print('Getting label...')
-        df_schools['connectivity'] = df_schools['connectivity'].map({'Yes': 1, 'No': 0})
-        df_school_id = df_schools[['giga_id_school', 'lat','lon', 'connectivity']]
-    else:
-        df_school_id = df_schools['fid']
+        if data_source == 'unicef':
+            df_schools['connectivity'] = df_schools['connectivity'].map({'Yes': 1, 'No': 0})
+            df_school_id = df_schools[['giga_id_school', 'lat','lon', 'connectivity']]
+        else:
+            df_school_id = df_schools['fid']
+    if target == 'school':
+        df_schools['class'] = df_schools['class'].map({'school': 1, 'non_school': 0})
+        df_school_id = df_schools[['UID', 'lat', 'lon', 'class']]
 
     feature_space = pd.concat([df_school_id, df_modis, df_pop, df_ghsl, df_ghm, df_distance,
-                               df_avg_rad, df_cf_cvg, df_ookla_mobile, df_ookla_fixed, df_locations], axis=1)
+                               df_avg_rad, df_cf_cvg, df_ookla_mobile, df_ookla_fixed], axis=1)
 
-
-    if data_source == 'unicef':
-        # Filter out schools from Isabelle's methodology
-        filtered = filter_schools(aoi, feature_space, base_filepath)
-        final_feature_space = filtered.drop(['Unnamed: 0'], axis=1)
-        # Drop nans that exist in the label -> we can't validate if there is/is not connectivity
-        final_feature_space = final_feature_space[final_feature_space['connectivity'].notna()]
+    if target == 'connectivity':
+        if data_source == 'unicef':
+            # Filter out schools from Isabelle's methodology
+            filtered = filter_schools(aoi, feature_space, base_filepath)
+            final_feature_space = filtered.drop(['Unnamed: 0'], axis=1)
+            # Drop nans that exist in the label -> we can't validate if there is/is not connectivity
+            final_feature_space = final_feature_space[final_feature_space['connectivity'].notna()]
+        else:
+            final_feature_space = feature_space.drop(['Unnamed: 0'], axis=1)
     else:
         final_feature_space = feature_space.drop(['Unnamed: 0'], axis=1)
 
@@ -289,12 +314,10 @@ def get_feature_space(aoi, buffer, data_source):
     # Remove duplicated column names from concatenating
     unique_df = unique_df.loc[:, ~unique_df.columns.duplicated()]
 
-    unique_df.to_csv('{}/{}/{}m_buffer/full_feature_space_fixed.csv'.format(base_filepath, aoi, buffer))
-
-
+    unique_df.to_csv('{}/{}/{}m_buffer/full_feature_space.csv'.format(base_filepath, aoi, buffer))
 
 # Calling function to generate features
-get_feature_space(args.aoi, args.buffer, args.data_source)
+get_feature_space(args.aoi, args.buffer, args.data_source, args.target)
 
 
 

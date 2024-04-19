@@ -1,0 +1,37 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(210)load_data()
+    209
+--> 210     return training_dataset, testing_dataset
+    211
+*** SyntaxError: invalid syntax
+             0         1         2         3         4         5         6  ...       381       382       383       class        lat        lon  label
+394  -0.616862 -0.627003  3.164531 -2.137591  1.583588 -0.232137 -1.908134  ...  1.257647 -5.292361  4.316515      school -23.100790  26.828550    0.0
+1355 -1.872429  0.747703  3.933235 -0.897854  1.986952 -0.500156 -3.817912  ...  0.327558 -5.648292  4.758091  non_school -22.541787  27.089799    0.0
+1499 -2.304800  0.112929  2.488691 -3.869435  1.937506 -0.675770 -2.830794  ...  0.199738 -5.171861  1.447627  non_school -24.647689  25.898759    1.0
+675  -1.164834  0.346017  2.844746 -1.890865  1.395150 -0.624637 -1.876658  ... -0.121088 -6.652223  2.446932      school -19.952273  23.477483    0.0
+1574  0.040599  0.315514  3.880053 -3.485708  3.103862  0.147264 -1.896971  ... -2.429736 -5.546560  2.261329  non_school -21.280974  27.473009    0.0
+...        ...       ...       ...       ...       ...       ...       ...  ...       ...       ...       ...         ...        ...        ...    ...
+1316 -3.573760  0.252143  3.236238 -1.242206  1.315608 -0.554363 -1.127874  ...  0.793030 -5.071890  2.403815  non_school -24.981278  25.340350    0.0
+214  -3.165755  0.229492  2.548498 -2.451905  1.175402 -0.851278 -0.846236  ...  0.142118 -6.551430  3.033897      school -24.026104  21.868103    1.0
+492  -1.666800  0.164415  2.587978 -2.825503  2.749463 -0.683701 -2.212417  ...  1.032939 -6.770872  0.639172      school -24.998262  25.339483    1.0
+655  -1.484510 -0.131618  3.753892 -3.132987  2.335001 -0.289479 -2.736890  ... -0.103226 -5.983402  1.477238      school -20.632434  27.450884    0.0
+1306 -2.702779 -0.242732  3.294837 -3.831617  2.655203  0.040531 -0.808574  ...  0.129395 -4.980835  3.098464  non_school -23.030300  26.516040    0.0
+[1284 rows x 388 columns]
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 319, in <module>
+    train_data, test_data = load_data(aoi, buffer, features, label)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 210, in load_data
+    return training_dataset, testing_dataset
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 210, in load_data
+    return training_dataset, testing_dataset
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

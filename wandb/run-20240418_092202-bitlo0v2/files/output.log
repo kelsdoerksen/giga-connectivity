@@ -1,0 +1,27 @@
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+Model accuracy is: 0.9224137931034483
+Running grid search cv...
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 335, in <module>
+    rf.run_rf(
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/rf.py", line 150, in run_rf
+    grid_search.fit(X_train, y_train)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/model_selection/_search.py", line 875, in fit
+    self._run_search(evaluate_candidates)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/model_selection/_search.py", line 1389, in _run_search
+    evaluate_candidates(ParameterGrid(self.param_grid))
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/model_selection/_search.py", line 822, in evaluate_candidates
+    out = parallel(
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/joblib/parallel.py", line 1061, in __call__
+    self.retrieve()
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/joblib/parallel.py", line 938, in retrieve
+    self._output.extend(job.get(timeout=self.timeout))
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/joblib/_parallel_backends.py", line 542, in wrap_future_result
+    return future.result(timeout=timeout)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/concurrent/futures/_base.py", line 453, in result
+    self._condition.wait(timeout)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/threading.py", line 320, in wait
+    waiter.acquire()
+KeyboardInterrupt

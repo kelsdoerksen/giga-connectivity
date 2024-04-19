@@ -1,0 +1,48 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(124)load_data()
+    123
+--> 124         train_df = train_df.drop(columns=['UID', 'dataset', 'iso', 'rurban'])
+    125         test_df = test_df.drop(columns=['UID', 'dataset', 'iso', 'rurban'])
+                             UID         0         1         2         3         4  ...  iso  rurban  dataset       class        lat        lon
+939  OSM-BWA-NON_SCHOOL-00000000 -0.783006 -1.254890  2.145316 -2.937579  2.373357  ...  BWA   rural    train  non_school -19.358036  22.283601
+940  OSM-BWA-NON_SCHOOL-00000002 -0.284500  0.912821  3.945184 -2.726211  1.134687  ...  BWA   rural    train  non_school -21.310819  27.884534
+941  OSM-BWA-NON_SCHOOL-00000004 -2.249631  0.256608  4.408010  0.759232  0.975197  ...  BWA   urban    train  non_school -23.991596  21.766948
+942  OSM-BWA-NON_SCHOOL-00000005  0.402704 -0.180899  1.332387  0.440944  2.231632  ...  BWA   urban     test  non_school -24.673852  25.906024
+943  OSM-BWA-NON_SCHOOL-00000006 -0.035853 -0.010430  1.841088 -2.559264 -0.377759  ...  BWA   urban    train  non_school -24.625240  25.891490
+..                           ...       ...       ...       ...       ...       ...  ...  ...     ...      ...         ...        ...        ...
+813   UNICEF-BWA-SCHOOL-00001003 -1.976857  0.079313  2.227766 -1.727623  1.798960  ...  BWA   urban    train      school -21.023888  24.397874
+814   UNICEF-BWA-SCHOOL-00001010 -2.831520  0.410532  3.726540 -1.196005  0.810316  ...  BWA   urban    train      school -23.026814  27.529876
+816   UNICEF-BWA-SCHOOL-00001020 -0.809201  0.258795  3.733155 -3.835421  2.444275  ...  BWA   urban    train      school -23.414115  27.141639
+817   UNICEF-BWA-SCHOOL-00001022 -2.106306  0.795590  1.090872 -2.567173  1.299393  ...  BWA   urban    train      school -21.160964  27.503081
+818   UNICEF-BWA-SCHOOL-00001024 -1.294991  0.847931  4.761569 -3.861133  2.571819  ...  BWA   urban    train      school -24.677933  25.566383
+[1824 rows x 391 columns]
+      Unnamed: 0                               UID        lat  ...  ookla_distance_fixed                           school_locations  class.1
+0            670        UNICEF-BWA-SCHOOL-00000765 -21.967410  ...            133.147146  (27.825319211891827, -21.967410093589923)        1
+1            950       OSM-BWA-NON_SCHOOL-00000014 -24.624149  ...            256.892000           (25.935901, -24.624148999999992)        0
+2           2228  OVERTURE-BWA-NON_SCHOOL-00001304 -21.166398  ...              0.000000   (27.495528000000004, -21.16639809999999)        0
+3           2423  OVERTURE-BWA-NON_SCHOOL-00001653 -24.401690  ...             54.514572                  (25.5332136, -24.4016896)        0
+4           1303       OSM-BWA-NON_SCHOOL-00000621 -24.096953  ...          44282.913944  (25.030085999999994, -24.096952999999996)        0
+...          ...                               ...        ...  ...                   ...                                        ...      ...
+1819        1978  OVERTURE-BWA-NON_SCHOOL-00000857 -21.412800  ...            262.090957                  (25.5848038, -21.4127998)        0
+1820        1620  OVERTURE-BWA-NON_SCHOOL-00000204 -24.861315  ...            600.891223  (25.873978000000005, -24.861314600000007)        0
+1821         787        UNICEF-BWA-SCHOOL-00000942 -24.359691  ...           1539.059521          (25.5289811, -24.359690699999994)        1
+1822        1353       OSM-BWA-NON_SCHOOL-00000684 -24.985682  ...              0.000000  (25.348307999999996, -24.985681999999997)        0
+1823         809        UNICEF-BWA-SCHOOL-00000994 -19.990669  ...              0.000000   (23.451964015918463, -19.99066910587082)        1
+[1824 rows x 60 columns]
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 320, in <module>
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 124, in load_data
+    train_df['label'] = eng_train_df['class']
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 124, in load_data
+    train_df['label'] = eng_train_df['class']
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

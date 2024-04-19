@@ -1,0 +1,27 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(137)load_data()
+    136
+--> 137     if feature_space == 'combined':
+    138         eng_train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
+Index(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+       ...
+       '377', '378', '379', '380', '381', '382', '383', 'label', 'lat', 'lon'],
+      dtype='object', length=387)
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 319, in <module>
+    # Save data class balance breakdown
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 137, in load_data
+    emb_train_df = pd.read_csv('{}/{}/embeddings/TrainingData_embeddings_precursor-geofoundation_v04_e008_z18_embeddings.csv'.
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 137, in load_data
+    emb_train_df = pd.read_csv('{}/{}/embeddings/TrainingData_embeddings_precursor-geofoundation_v04_e008_z18_embeddings.csv'.
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

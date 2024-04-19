@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 242, in <module>
+    os.mkdir(results)
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/BWA/results_1000m/dutiful-field-544'
