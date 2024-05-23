@@ -38,12 +38,15 @@ To run the pipeline, the following command is used:
 python run_pipeline.py --model <MODEL> --aoi <COUNTRY> --buffer <BUFFER_EXTENT> --root_dir <DIRECTORY OF DATA> --experiment_type <ONLINE/OFFLINE> --features <FEATURES_SPACE> --parameter_tuning <TRUE/FALSE> --target <SCHOOL/CONNECTIVITY> --data_split <PERCENTAGE OR SPATIAL CV>
 ```
 The available configurable parameters are:
-* `--gee_data`: Model
-    *   `rf`:
+* `--model`: Model
+    *   `rf`: random forest
+    *   `gb`: gradient boosted
+    *   `mlp`: multi-layer perceptron
+    *   `svm`: support vector machine
+    *   `lr`: logistic regression
 * `--aoi`: Country
-* `--buffer`: Buffer extent surrounding school/non-school
+* `--buffer`: Buffer extent surrounding school/non-school. Currently supports 300, 500, 1000m extents
 * `--root_dir`: Directory of data
-* `--buffer_size`: Specify region of interest (ROI) buffer extent. Units in metres.
 * `--experiment_type`: Wandb experiment type. Online or Offline to save and push run directly to Wandb project.
 * `--features`: Feature space to use to train/test model
 * `--parameter_tuning`: Specify if you would like to hyperparamter tune model
