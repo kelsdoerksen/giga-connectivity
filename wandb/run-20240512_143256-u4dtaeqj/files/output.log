@@ -1,0 +1,71 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(246)load_data()
+    245
+--> 246         if country == 'BWA':
+    247             train_df = train_df.drop(columns=['UID'])
+      Unnamed: 0                               UID        lat  ...  devices_fixed  ookla_distance_fixed                           school_locations
+0              0      OVERTURE-BWA-SCHOOL-00000000 -21.919780  ...              1             81.863310  (27.300289999999997, -21.919780000000006)
+1              1      OVERTURE-BWA-SCHOOL-00000001 -23.668552  ...              2           2597.668990          (22.789044900000004, -23.6685521)
+2              2      OVERTURE-BWA-SCHOOL-00000003 -21.703174  ...              1            588.120133  (21.643265274253753, -21.703174240463877)
+3              3      OVERTURE-BWA-SCHOOL-00000004 -24.983361  ...              1              0.000000   (25.354199534953523, -24.98336079210945)
+4              4      OVERTURE-BWA-SCHOOL-00000007 -24.663519  ...              1              0.000000   (25.87479647696638, -24.663518722260825)
+...          ...                               ...        ...  ...            ...                   ...                                        ...
+2262        2601  OVERTURE-BWA-NON_SCHOOL-00001947 -22.867643  ...              1          19733.304437  (27.428793300000002, -22.867643299999994)
+2263        2602  OVERTURE-BWA-NON_SCHOOL-00001949 -23.123638  ...              1            154.197671          (26.827228099999996, -23.1236383)
+2264        2603  OVERTURE-BWA-NON_SCHOOL-00001950 -24.650031  ...              6              0.000000   (25.888287200000004, -24.65003129999999)
+2265        2604  OVERTURE-BWA-NON_SCHOOL-00001952 -24.610706  ...              2              0.000000  (25.890031499999996, -24.610706399999998)
+2266        2605  OVERTURE-BWA-NON_SCHOOL-00001955 -24.549725  ...              3              0.000000  (25.986875999999995, -24.549724999999995)
+[2267 rows x 62 columns]
+Index(['Unnamed: 0', 'UID', 'lat', 'lon', 'class', 'modis.LC_Type1.mode',
+       'modis.LC_Type1.var', 'modis.LC_Type1.evg_conif',
+       'modis.LC_Type1.evg_broad', 'modis.LC_Type1.dcd_needle',
+       'modis.LC_Type1.dcd_broad', 'modis.LC_Type1.mix_forest',
+       'modis.LC_Type1.cls_shrub', 'modis.LC_Type1.open_shrub',
+       'modis.LC_Type1.woody_savanna', 'modis.LC_Type1.savanna',
+       'modis.LC_Type1.grassland', 'modis.LC_Type1.perm_wetland',
+       'modis.LC_Type1.cropland', 'modis.LC_Type1.urban',
+       'modis.LC_Type1.crop_nat_veg', 'modis.LC_Type1.perm_snow',
+       'modis.LC_Type1.barren', 'modis.LC_Type1.water_bds',
+       'pop.population_density.var', 'pop.population_density.max',
+       'pop.population_density.min',
+       'human_settlement_layer_built_up.built_characteristics.mode',
+       'human_settlement_layer_built_up.built_characteristics.var',
+       'human_settlement_layer_built_up.built_characteristics.open_low_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_med_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_high_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_water',
+       'human_settlement_layer_built_up.built_characteristics.open_road',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3-6',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_6-15',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_15-30',
+       'human_settlement_layer_built_up.built_characteristics.build_non_res_30',
+       'human_settlement_layer_built_up.built_characteristics.built',
+       'global_human_modification.gHM.var',
+       'global_human_modification.gHM.min', 'transmission_line_distance',
+       'nightlight.avg_rad.var', 'nightlight.avg_rad.max',
+       'nightlight.avg_rad.min', 'nightlight.cf_cvg.var',
+       'nightlight.cf_cvg.max', 'nightlight.cf_cvg.min', 'avg_d_kbps_mobile',
+       'avg_u_kbps_mobile', 'avg_lat_ms_mobile', 'tests_mobile',
+       'devices_mobile', 'ookla_distance_mobile', 'avg_d_kbps_fixed',
+       'avg_u_kbps_fixed', 'avg_lat_ms_fixed', 'tests_fixed', 'devices_fixed',
+       'ookla_distance_fixed', 'school_locations'],
+      dtype='object')
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 385, in <module>
+    train_data, test_data = load_data(aoi, buffer, features, label, split_type)
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 246, in load_data
+    if country == 'BWA':
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 246, in load_data
+    if country == 'BWA':
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

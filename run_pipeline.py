@@ -10,8 +10,8 @@ import pandas as pd
 from sklearn.utils import shuffle
 import os
 from sklearn.preprocessing import MinMaxScaler
-import ast
-
+from datetime import datetime
+import geopandas as gpd
 
 def get_args():
     parser = argparse.ArgumentParser(description='Running ML Pipeline for Connectivity or School Prediction')
@@ -22,81 +22,58 @@ def get_args():
     parser.add_argument('--experiment_type', help='Experiment type')
     parser.add_argument('--features', help='Type of feature space. Must be one of engineer (hand crafted features),'
                                            'satclip-resnet18-l10, satclip-resnet18-l40, satclip-resnet50-l10,'
-                                           'satclip-resnet50-l40, satclip-vit16-l10, satclip-vit16-l40,'
+                                           'satclip-resnet50-l40, satclip-vit16-l10, satclip-vit16-l40, '
                                            'precursor-geofoundation_e011, combined, dino-vitb14, dino-vitl14,'
-                                           'dino-vits14')
+                                           'dino-vits14, mobility_combo, mobility_only, mobility_subset')
     parser.add_argument('--parameter_tuning', help='Specify if parameter tuning. True or False.')
     parser.add_argument('--target', help='Specify model target. Must be one of connectivity or school')
+    parser.add_argument('--data_split', help='Data split for the model. Either percentage (standard 70/30) or'
+                                             'defined geography by user. Currently supports split of BWA admin'
+                                             'zone 2 division')
 
     return parser.parse_args()
 
 
-def load_data(country, buffer_extent, feature_space, model_label):
+def load_connectivity_data(country, buffer_extent, feature_space):
     """
-    Loading data
-    :param aoi:
-    :param buffer_extent:
-    :param feature_space: refers to the features to be loaded, engineered or embeddings
-    :param model_label: target of ML classifier, connectivity or school-non-school
+    Connectivity data processing for ML classifier
     :return:
     """
-
     if feature_space == 'engineer':
-        train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
+        train_df = pd.read_csv(
+            '{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
         test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
 
         if country == 'BWA':
             train_df = train_df.drop(columns=['UID'])
             test_df = test_df.drop(columns=['UID'])
 
-        # Drop rows if lat or lon are NaN
-        training_data = train_df[train_df['lat'].notna()]
-        training_data = training_data[training_data['lon'].notna()]
-        testing_data = test_df[test_df['lat'].notna()]
-        testing_data = testing_data[testing_data['lon'].notna()]
-
     if feature_space == 'engineer_with_aux':
-        train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
-        test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
-
-        training_data = train_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1', 'connectivity.1', 'Unnamed: 0.2'])
-        testing_data = test_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1', 'connectivity.1', 'Unnamed: 0.2'])
-
-        # Drop rows if lat or lon are NaN
-        training_data = training_data[training_data['lat'].notna()]
-        training_data = training_data[training_data['lon'].notna()]
-        testing_data = testing_data[testing_data['lat'].notna()]
-        testing_data = testing_data[testing_data['lon'].notna()]
+        train_df = pd.read_csv(
+            '{}/{}/{}m_buffer/TrainingData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
+        test_df = pd.read_csv(
+            '{}/{}/{}m_buffer/TestingData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
 
     if feature_space in ['dinov2_vits14', 'dinov2_vitb14', 'dinov2_vitl14']:
         # Read in dino embeddings and append
         eng_train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country,
                                                                                            buffer_extent))
         eng_test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country,
-                                                                                           buffer_extent))
+                                                                                         buffer_extent))
         dino_emb = pd.read_csv('{}/{}/Embeddings/BWA_{}_embeds.csv'.format(root_dir, country, feature_space))
 
         merge_train = pd.merge(eng_train_df, dino_emb, on='UID')
         merge_test = pd.merge(eng_test_df, dino_emb, on='UID')
 
-        train_df = merge_train.drop(columns=['UID', 'class_y', 'dataset', 'iso', 'rurban'])
-        test_df = merge_test.drop(columns=['UID', 'class_y', 'dataset', 'iso', 'rurban'])
-
         train_df = train_df.rename(columns={'class_x': 'label'})
         test_df = test_df.rename(columns={'class_x': 'label'})
-
-        # Drop rows if lat or lon are NaN
-        training_data = train_df[train_df['lat'].notna()]
-        training_data = training_data[training_data['lon'].notna()]
-        testing_data = test_df[test_df['lat'].notna()]
-        testing_data = testing_data[testing_data['lon'].notna()]
 
     if feature_space in ['dinov2_vits14_o', 'dinov2_vitb14_o', 'dinov2_vitl14_o']:
         # Read in dino embeddings and append
         eng_train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country,
                                                                                            buffer_extent))
         eng_test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country,
-                                                                                           buffer_extent))
+                                                                                         buffer_extent))
         dino_emb = pd.read_csv('{}/{}/Embeddings/BWA_{}_embeds.csv'.format(root_dir, country, feature_space[0:13]))
         dino_emb['label'] = dino_emb['class'].map({'school': 1, 'non_school': 0})
 
@@ -123,32 +100,25 @@ def load_data(country, buffer_extent, feature_space, model_label):
         test_df['lat'] = test_lats.values
         test_df['lon'] = test_lons.values
 
-        training_data = train_df.drop(columns=['UID', 'dataset', 'iso', 'rurban', 'class'])
-        testing_data = test_df.drop(columns=['UID', 'dataset', 'iso', 'rurban', 'class'])
-
-
     if feature_space == 'combined':
-        eng_train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
-        eng_test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
-        emb_train_df = pd.read_csv('{}/{}/embeddings/TrainingData_embeddings_precursor-geofoundation_v04_e008_z18_embeddings.csv'.
-                                   format(root_dir, country))
-        emb_test_df = pd.read_csv('{}/{}/embeddings/TestingData_embeddings_precursor-geofoundation_v04_e008_z18_embeddings.csv'.
-                                   format(root_dir, country))
+        eng_train_df = pd.read_csv(
+            '{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
+        eng_test_df = pd.read_csv(
+            '{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
+        emb_train_df = pd.read_csv(
+            '{}/{}/embeddings/TrainingData_embeddings_precursor-geofoundation_v04_e008_z18_embeddings.csv'.
+            format(root_dir, country))
+        emb_test_df = pd.read_csv(
+            '{}/{}/embeddings/TestingData_embeddings_precursor-geofoundation_v04_e008_z18_embeddings.csv'.
+            format(root_dir, country))
 
-        emb_test_df = emb_test_df.drop(columns=['Unnamed: 0', 'fid', 'location', 'connectivity', 'lat', 'lon'])
-        emb_train_df = emb_train_df.drop(columns=['Unnamed: 0', 'fid', 'location', 'connectivity', 'lat', 'lon'])
-        eng_train_df = eng_train_df.drop(columns=['Unnamed: 0', 'Unnamed: 0', 'connectivity.1'])
-        eng_test_df = eng_test_df.drop(columns=['Unnamed: 0', 'Unnamed: 0', 'connectivity.1'])
         eng_train_df = eng_train_df.sort_values(by='giga_id_school')
         eng_test_df = eng_test_df.sort_values(by='giga_id_school')
         emb_train_df = emb_train_df.sort_values(by='giga_id_school')
         emb_test_df = emb_test_df.sort_values(by='giga_id_school')
 
-        combined_train = pd.concat([eng_train_df, emb_train_df],axis=1)
-        combined_test = pd.concat([eng_test_df, emb_test_df],axis=1)
-
-        combined_train = combined_train.drop(columns=['Unnamed: 0.1', 'giga_id_school', 'school_locations'])
-        combined_test = combined_test.drop(columns=['Unnamed: 0.1', 'giga_id_school', 'school_locations'])
+        combined_train = pd.concat([eng_train_df, emb_train_df], axis=1)
+        combined_test = pd.concat([eng_test_df, emb_test_df], axis=1)
 
         training_data = combined_train
         testing_data = combined_test
@@ -156,14 +126,10 @@ def load_data(country, buffer_extent, feature_space, model_label):
     if feature_space in ['GeoCLIP',
                          'CSPfMoW', 'satclip-resnet18-l10', 'satclip-resnet18-l40', 'satclip-resnet50-l10',
                          'satclip-resnet50-l40', 'satclip-vit16-l10', 'satclip-vit16-l40']:
-
         training_data = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_Training.csv'.format(root_dir, country, country,
-                                                                                             feature_space))
+                                                                                            feature_space))
         testing_data = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_Testing.csv'.format(root_dir, country, country,
-                                                                                             feature_space))
-
-        training_data = training_data.drop(columns=['Unnamed: 0', 'data_split'])
-        testing_data = testing_data.drop(columns=['Unnamed: 0', 'data_split'])
+                                                                                          feature_space))
 
     if feature_space in ['embeddings_precursor-geofoundation_v04_e025_z17',
                          'embeddings_precursor-geofoundation_v04_e025_z18',
@@ -175,31 +141,75 @@ def load_data(country, buffer_extent, feature_space, model_label):
                                                                                              feature_space))
         testing_data = pd.read_csv('{}/{}/embeddings/TestingData_{}_embeddings.csv'.format(root_dir, country,
                                                                                            feature_space))
-
-        training_data = training_data.drop(columns=['Unnamed: 0', 'giga_id_school', 'fid'])
-        testing_data = testing_data.drop(columns=['Unnamed: 0', 'giga_id_school', 'fid'])
-
     if feature_space in ['esa_z18_v2-embeddings', "esa_z17_v2-embeddings"]:
         training_data = pd.read_csv('{}/{}/embeddings/{}_Train_{}.csv'.format(root_dir, country, country,
-                                                                                             feature_space))
-        testing_data = pd.read_csv('{}/{}/embeddings/{}_Test_{}.csv'.format(root_dir, country, country,
                                                                               feature_space))
-        training_data = training_data.drop(columns=['Unnamed: 0'])
-        testing_data = testing_data.drop(columns=['Unnamed: 0'])
+        testing_data = pd.read_csv('{}/{}/embeddings/{}_Test_{}.csv'.format(root_dir, country, country,
+                                                                            feature_space))
+
+    training_dataset = training_data.rename(columns={'connectivity': 'label'})
+    testing_dataset = testing_data.rename(columns={'connectivity': 'label'})
+
+    return training_dataset, testing_dataset
+
+
+def load_schoolmapping_data(country, buffer_extent, feature_space, data_split_type):
+    """
+    School Mapping data processing for ML classifier
+    :return:
+    """
+    if feature_space == 'engineer':
+        if data_split_type == 'unicef':
+            training_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+                                                                                                       buffer_extent))
+            test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+                                                                                                       buffer_extent))
+            validation_df = pd.read_csv('{}/{}/{}m_buffer/ValData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+                                                                                                       buffer_extent))
+            # Combine train and val and split later when hyp tuning
+            train_df = pd.concat([training_df, validation_df])
+        if data_split_type == 'percentage':
+            train_df = pd.read_csv(
+                '{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country,
+                                                                                    buffer_extent))
+            test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country,
+                                                                                                     buffer_extent))
+        if data_split_type == 'geo':
+            # Geo split
+            train_df = pd.read_csv(
+                '{}/{}/{}m_buffer_combined/TrainingData_uncorrelated_{}_split.csv'.format(root_dir, country, buffer_extent,
+                                                                                          data_split_type))
+            test_df = pd.read_csv('{}/{}/{}m_buffer_combined/TestingData_uncorrelated_{}_split.csv'.format(root_dir, country,
+                                                                                                           buffer_extent,
+                                                                                                           data_split_type))
+            # Removing boundary features since we are geospatial cross-validating?
+            train_df.loc[:, ~train_df.columns.str.startswith('boundary')]
+            test_df.loc[:, ~test_df.columns.str.startswith('boundary')]
+    if feature_space == 'mobility_300':
+        train_df = ''
+        test_df = ''
+    if feature_space == 'mobility_inter':
+        train_df = ''
+        test_df = ''
+    if feature_space == 'mobility_nearest':
+        train_df = ''
+        test_df = ''
+
+    if country == 'BWA':
+        train_df = train_df.drop(columns=['UID'])
+        test_df = test_df.drop(columns=['UID'])
+
+    # Drop rows if lat or lon are NaN
+    training_data = train_df[train_df['lat'].notna()]
+    training_data = training_data[training_data['lon'].notna()]
+    testing_data = test_df[test_df['lat'].notna()]
+    testing_data = testing_data[testing_data['lon'].notna()]
 
     training_dataset = shuffle(training_data)
     testing_dataset = shuffle(testing_data)
 
-    # Rename column to label for ease
-    if model_label == 'connectivity':
-        training_dataset = training_dataset.rename(columns={'connectivity': 'label'})
-        testing_dataset = testing_dataset.rename(columns={'connectivity': 'label'})
-    if model_label == 'class':
-        if 'school_locations' in training_dataset.columns:
-            training_dataset = training_dataset.rename(columns={'class': 'label'})
-            training_dataset = training_dataset.drop(columns=['Unnamed: 0', 'class.1', 'school_locations'])
-            testing_dataset = testing_dataset.rename(columns={'class': 'label'})
-            testing_dataset = testing_dataset.drop(columns=['Unnamed: 0', 'class.1', 'school_locations'])
+    training_dataset = training_dataset.rename(columns={'class': 'label'})
+    testing_dataset = testing_dataset.rename(columns={'class': 'label'})
 
     return training_dataset, testing_dataset
 
@@ -224,38 +234,16 @@ def get_class_balance(train_df, test_df, savedir):
         f.write('Number of positive testing samples is: {}'.format(sum(test_df['label'])))
         f.write('Number of negative testing samples is: {}'.format(len(test_df) - sum(test_df['label'])))
 
-
-def preprocess_samples(train_df, test_df, model_type, feature_set, target_type):
+def preprocess_samples(train_df, test_df, model_type):
     """
     Light preprocessing to data before running through models
     """
-    cols_to_drop = []
-    if target_type == 'school':
-        cols_to_drop = ['lat', 'lon', 'label']
+    cols_to_drop = ['connectivity', 'lat', 'lon', 'giga_id_school', 'location', 'data_split', 'label', 'Unnamed: 0',
+                    'school_locations', 'class.1', 'fid', 'UID', 'dataset', 'iso', 'rurban', 'class',
+                    'UID', 'class_y', 'Unnamed: 0.1', 'connectivity.1', 'Unnamed: 0.2', ]
 
-    if target_type == 'connectivity':
-        if feature_set == 'engineer':
-            cols_to_drop = ['connectivity', 'lat', 'lon', 'school_locations', 'giga_id_school']
-        elif feature_set == 'engineer_with_aux':
-            cols_to_drop = ['connectivity', 'lat', 'lon', 'school_locations', 'giga_id_school']
-        elif feature_set == 'combined':
-            cols_to_drop = ['connectivity', 'lat', 'lon']
-        elif feature_set in ['esa_z18_v2-embeddings', "esa_z17_v2-embeddings"]:
-            cols_to_drop = ['connectivity', 'lat', 'lon', 'data_split', 'giga_id_school']
-        elif feature_set in ['embeddings_precursor-geofoundation_v04_e025_z17',
-                             'embeddings_precursor-geofoundation_v04_e025_z18',
-                             'embeddings_school-predictor_v01_e025_z17',
-                             'embeddings_school-predictor_v01_e025_z18',
-                             'embeddings_precursor-geofoundation_v04_e008_z18',
-                             'embeddings_precursor-geofoundation_v04_e008_z17']:
-
-            cols_to_drop = ['location', 'connectivity', 'lat', 'lon']
-        elif feature_set == 'combined':
-            cols_to_drop = ['lat', 'lon', 'connectivity']
-        else:
-            cols_to_drop = ['connectivity', 'lat', 'lon', 'giga_id_school']
-    X_test = test_df.drop(columns=cols_to_drop)
-    X_train = train_df.drop(columns=cols_to_drop)
+    X_test = test_df.drop(columns=cols_to_drop, errors='ignore')
+    X_train = train_df.drop(columns=cols_to_drop, errors='ignore')
 
     models_with_scaling = ['svm', 'lr', 'mlp']
     if model_type in models_with_scaling:
@@ -279,6 +267,7 @@ def preprocess_samples(train_df, test_df, model_type, feature_set, target_type):
 
 
 if __name__ == '__main__':
+    print('Starting run at: {}'.format(datetime.now()))
     args = get_args()
     model = args.model
     aoi = args.aoi
@@ -288,18 +277,22 @@ if __name__ == '__main__':
     features = args.features
     hyper_tuning = args.parameter_tuning
     model_target = args.target
+    data_split = args.data_split
 
     # Set up experiment
     experiment = wandb.init(project='giga-research',
                             resume='allow', anonymous='must')
     experiment.config.update(
-        dict(aoi=aoi, buffer=buffer, model=model, target=model_target)
+        dict(aoi=aoi, buffer=buffer, model=model, target=model_target,
+             data_split=data_split)
     )
 
     if model_target == 'connectivity':
         label = 'connectivity'
+        train_data, test_data = load_connectivity_data(aoi, buffer, features)
     if model_target == 'school':
         label = 'class'
+        train_data, test_data = load_schoolmapping_data(aoi, buffer, features, data_split)
 
     # Make results directory
     if experiment_type == 'offline':
@@ -307,10 +300,8 @@ if __name__ == '__main__':
     else:
         if not os.path.exists('{}/{}/results_{}m/{}'.format(root_dir, aoi, buffer, experiment.name)):
             results = '{}/{}/results_{}m/{}'.format(root_dir, aoi, buffer, experiment.name)
-            os.mkdir(results)
 
-    # Load data
-    train_data, test_data = load_data(aoi, buffer, features, label)
+    os.mkdir(results)
 
     # Save data class balance breakdown
     get_class_balance(train_data, test_data, results)
@@ -325,7 +316,7 @@ if __name__ == '__main__':
 
     ytrain = train_df['label']
     ytest = test_df['label']
-    Xtrain, Xtest = preprocess_samples(train_df, test_df, model, features, model_target)
+    Xtrain, Xtest = preprocess_samples(train_df, test_df, model)
 
     # Run model
     if model == 'rf':

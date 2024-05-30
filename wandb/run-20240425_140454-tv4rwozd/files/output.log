@@ -1,0 +1,72 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(350)<module>()
+    349     # Run model
+--> 350     if model == 'rf':
+    351         rf.run_rf(
+      modis.LC_Type1.mode  modis.LC_Type1.var  modis.LC_Type1.evg_conif  ...  weekend_var  weekday_max  weekend_max
+566                  13.0              0.3456                       0.0  ...     0.000020          9.0          5.0
+441                  10.0              0.0000                       0.0  ...     0.000020          9.0          5.0
+1576                  7.0              2.2464                       0.0  ...     0.001322          6.0         16.0
+1483                 10.0              0.0000                       0.0  ...     0.008597         20.0         18.0
+1563                 13.0              1.2500                       0.0  ...     0.002892          5.0          1.0
+...                   ...                 ...                       ...  ...          ...          ...          ...
+209                  13.0              2.0900                       0.0  ...     0.005969         23.0          9.0
+638                  10.0              0.0000                       0.0  ...     0.001172          6.0         19.0
+13                    7.0              0.0000                       0.0  ...     0.000020          9.0          5.0
+927                  13.0              0.0000                       0.0  ...     0.002892          5.0          1.0
+618                  10.0              2.2464                       0.0  ...     0.001269         13.0         19.0
+[1751 rows x 60 columns]
+566     1
+441     1
+1576    0
+1483    0
+1563    0
+       ..
+209     1
+638     1
+13      1
+927     0
+618     1
+Name: label, Length: 1751, dtype: int64
+     modis.LC_Type1.mode  modis.LC_Type1.var  modis.LC_Type1.evg_conif  ...  weekend_var  weekday_max  weekend_max
+736                 10.0              0.0000                       0.0  ...     0.000411         12.0          5.0
+531                 13.0              0.0000                       0.0  ...     0.002892          5.0          1.0
+544                 13.0              0.0000                       0.0  ...     0.002892          5.0          1.0
+271                 10.0              0.8100                       0.0  ...     0.000019          0.0         12.0
+276                 10.0              0.0000                       0.0  ...     0.002609         12.0         17.0
+..                   ...                 ...                       ...  ...          ...          ...          ...
+176                  7.0              0.8100                       0.0  ...     0.000508         14.0         17.0
+777                 10.0              0.0000                       0.0  ...     0.001075         14.0         18.0
+320                 10.0              0.9504                       0.0  ...     0.002568         20.0          1.0
+573                 10.0              0.0000                       0.0  ...     0.000411         12.0          5.0
+746                 13.0              0.0000                       0.0  ...     0.002892          5.0          1.0
+[746 rows x 60 columns]
+736    0
+531    0
+544    0
+271    1
+276    1
+      ..
+176    1
+777    0
+320    0
+573    0
+746    0
+Name: label, Length: 746, dtype: int64
+*** NameError: name 'school_class' is not defined
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 350, in <module>
+    if model == 'rf':
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 350, in <module>
+    if model == 'rf':
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

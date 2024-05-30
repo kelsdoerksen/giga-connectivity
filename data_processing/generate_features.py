@@ -14,6 +14,7 @@ parser.add_argument("--buffer", help="Buffer extent around school to extract dat
 parser.add_argument("--data_source", help='Source of school location data. If unicef, can proceed as normal'
                                           ' if new_schools we are generating from the new school samples')
 parser.add_argument("--target", help='Specify is target is connectivity prediction or school prediction')
+parser.add_argument("--class_type", help='Class type. school or non_school')
 args = parser.parse_args()
 
 months = ['jan', 'feb', 'mar', 'apr', 'may', 'june', 'july', 'aug', 'sept', 'oct', 'nov', 'dec']
@@ -37,17 +38,16 @@ def filter_schools(aoi, giga_df, base_filepath):
     return cleaned_giga_df
 
 
-def get_avg_nightlight(location, rad_band, buffer, base_filepath):
+def get_avg_nightlight(location, rad_band, buffer, b_fp, class_type):
     '''
     Get average of monthly radiance
     :return: df of average rad
     '''
-
-    root_dir = '{}/{}'.format(base_filepath, location)
+    root_dir = '{}/{}'.format(b_fp, location)
     df_list = []
     for month in months:
-        df_list.append(pd.read_csv('{}/{}m_buffer/nightlight_{}_{}_2022_custom_buffersize_{}_with_time.csv'.
-                                   format(root_dir, buffer, rad_band, month, buffer)))
+        df_list.append(pd.read_csv('{}/{}m_buffer_{}/nightlight_{}_{}_2022_custom_buffersize_{}_with_time.csv'.
+                                   format(root_dir, buffer, class_type, rad_band, month, buffer)))
 
     df_total = pd.concat(df_list)
     by_row_index = df_total.groupby(df_total.index)
@@ -103,6 +103,9 @@ def calc_nearest_point(target_df, school_df, target_name, data_source):
             dist_df = dist_df.drop_duplicates(subset=['fid'], keep='first')
         if data_source == 'combined':
             dist_df = dist_df.drop_duplicates(subset=['UID'], keep='first')
+
+    if 'UID' in school_df.columns:
+        dist_df = dist_df.drop_duplicates(subset=['UID'], keep='first')
 
     return dist_df
 
@@ -182,6 +185,7 @@ def get_education_level(df):
 
     return df['education_level']
 
+
 def get_boundary(aoi, school_df, base_filepath, data_source):
     """
     Get the administrative adm2 boundary that the school is
@@ -223,14 +227,19 @@ def get_boundary(aoi, school_df, base_filepath, data_source):
     encoder_df = pd.DataFrame(encoder.fit_transform(school_gdf[['boundary']]).toarray(),
                               columns=encoder.get_feature_names_out())
 
+    encoder_df['class'] = school_gdf['class']
+    encoder_df['UID'] = school_gdf['UID']
+    encoder_df = encoder_df.reset_index().drop(columns='index')
+
     return encoder_df
 
 
-def get_feature_space(aoi, buffer, data_source, target):
+def get_feature_space(aoi, buffer, data_source, target, class_category):
     '''
     Grab relevant data and aggregate together
     to return final df of feature space for location
     Grabs modis, population and nightlight features
+    :param: class_category: class to subset school dataframe
     :return: df of features for aoi specified
     '''
     if target == 'connectivity':
@@ -242,45 +251,52 @@ def get_feature_space(aoi, buffer, data_source, target):
             base_filepath = '/Users/kelseydoerksen/Desktop/Giga/isa_new_schools'
             df_schools = gpd.read_file('{}/{}/{}_schools.geojson'.format(base_filepath, aoi, aoi))
 
+        print('Getting one-hot encoded regional indicators...')
+        df_locations = get_boundary(aoi, df_schools, base_filepath, data_source)
+
     if target == 'school':
         base_filepath = '/Users/kelseydoerksen/Desktop/Giga/SchoolMapping'
-        df_schools = gpd.read_file('{}/{}/{}_train.geojson'.format(base_filepath, aoi, aoi))
-        df_schools = df_schools.to_crs(crs='EPSG:4326')
-        df_schools['lat'] = df_schools['geometry'].y
-        df_schools['lon'] = df_schools['geometry'].x
-        school_locs_df = df_schools
+        df_samples = gpd.read_file('{}/{}/{}_train.geojson'.format(base_filepath, aoi, aoi))
+        df_samples = df_samples.to_crs(crs='EPSG:4326')
 
-    print('Getting one-hot encoded regional indicators...')
-    df_locations = get_boundary(aoi, df_schools, base_filepath, data_source)
+        df_samples['lat'] = df_samples['geometry'].y
+        df_samples['lon'] = df_samples['geometry'].x
+        print('Getting one-hot encoded regional indicators...')
+        df_locations_full = get_boundary(aoi, df_samples, base_filepath, data_source)
+
+        df_schools = df_samples[df_samples['class'] == class_category]
+        df_locations = df_locations_full[df_locations_full['class'] == class_category]
 
     print('Getting modis features...')
-    df_modis = pd.read_csv('{}/{}/{}m_buffer/modis_LC_Type1_2020_custom_buffersize_{}_with_time.csv'.format(base_filepath, aoi,
-                                                                                                    buffer, buffer))
+    df_modis = pd.read_csv('{}/{}/{}m_buffer_{}/modis_LC_Type1_2020_custom_buffersize_{}_with_time.csv'.
+                           format(base_filepath, aoi, buffer, class_category, buffer))
 
     print('Getting pop features...')
-    df_pop = pd.read_csv('{}/{}/{}m_buffer/pop_population_density_2020_custom_buffersize_{}_with_time.csv'.format
-                         (base_filepath, aoi, buffer, buffer))
+    df_pop = pd.read_csv('{}/{}/{}m_buffer_{}/pop_population_density_2020_custom_buffersize_{}_with_time.csv'.format
+                         (base_filepath, aoi, buffer, class_category, buffer))
 
     print('Getting ghsl features...')
-    df_ghsl = pd.read_csv('{}/{}/{}m_buffer/human_settlement_layer_built_up_built_characteristics_2018'
-                          '_custom_buffersize_{}_with_time.csv'.format(base_filepath, aoi, buffer, buffer))
+    df_ghsl = pd.read_csv('{}/{}/{}m_buffer_{}/human_settlement_layer_built_up_built_characteristics_2018'
+                          '_custom_buffersize_{}_with_time.csv'.
+                          format(base_filepath, aoi, buffer, class_category, buffer))
 
     print('Getting ghm features...')
-    df_ghm = pd.read_csv('{}/{}/{}m_buffer/global_human_modification_gHM_2016'
-                         '_custom_buffersize_{}_with_time.csv'.format(base_filepath, aoi, buffer, buffer))
+    df_ghm = pd.read_csv('{}/{}/{}m_buffer_{}/global_human_modification_gHM_2016'
+                         '_custom_buffersize_{}_with_time.csv'.
+                         format(base_filepath, aoi, buffer, class_category,  buffer))
 
     print('Getting elec distance features...')
     if data_source == 'new_schools':
         school_locs_df = df_schools
-    df_distance = get_elec(aoi, school_locs_df, base_filepath, data_source)
+    df_distance = get_elec(aoi, df_schools, base_filepath, data_source)
 
     print('Getting nightlight features...')
-    df_avg_rad = get_avg_nightlight(aoi, 'avg_rad', buffer, base_filepath)
-    df_cf_cvg = get_avg_nightlight(aoi, 'cf_cvg', buffer, base_filepath)
+    df_avg_rad = get_avg_nightlight(aoi, 'avg_rad', buffer, base_filepath, class_category)
+    df_cf_cvg = get_avg_nightlight(aoi, 'cf_cvg', buffer, base_filepath, class_category)
 
     print('Getting ookla features...')
-    df_ookla_mobile = get_ookla(aoi, 'mobile', base_filepath, school_locs_df, data_source)
-    df_ookla_fixed = get_ookla(aoi, 'fixed', base_filepath, school_locs_df, data_source)
+    df_ookla_mobile = get_ookla(aoi, 'mobile', base_filepath, df_schools, data_source)
+    df_ookla_fixed = get_ookla(aoi, 'fixed', base_filepath, df_schools, data_source)
 
     if target == 'connectivity':
         print('Getting label...')
@@ -294,7 +310,7 @@ def get_feature_space(aoi, buffer, data_source, target):
         df_school_id = df_schools[['UID', 'lat', 'lon', 'class']]
 
     feature_space = pd.concat([df_school_id, df_modis, df_pop, df_ghsl, df_ghm, df_distance,
-                               df_avg_rad, df_cf_cvg, df_ookla_mobile, df_ookla_fixed], axis=1)
+                               df_avg_rad, df_cf_cvg, df_ookla_mobile, df_ookla_fixed, df_locations], axis=1)
 
     if target == 'connectivity':
         if data_source == 'unicef':
@@ -314,10 +330,14 @@ def get_feature_space(aoi, buffer, data_source, target):
     # Remove duplicated column names from concatenating
     unique_df = unique_df.loc[:, ~unique_df.columns.duplicated()]
 
-    unique_df.to_csv('{}/{}/{}m_buffer/full_feature_space.csv'.format(base_filepath, aoi, buffer))
+    if class_category in ['school', 'nonschool']:
+        unique_df.to_csv('{}/{}/{}m_buffer_{}/full_feature_space.csv'.format(base_filepath, aoi, buffer,
+                                                                             class_category))
+    else:
+        unique_df.to_csv('{}/{}/{}m_buffer/full_feature_space.csv'.format(base_filepath, aoi, buffer))
 
 # Calling function to generate features
-get_feature_space(args.aoi, args.buffer, args.data_source, args.target)
+get_feature_space(args.aoi, args.buffer, args.data_source, args.target, args.class_type)
 
 
 

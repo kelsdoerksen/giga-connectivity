@@ -1,0 +1,30 @@
+2024-05-28 14:24:22,605 INFO    MainThread:17713 [wandb_setup.py:_flush():76] Current SDK version is 0.15.11
+2024-05-28 14:24:22,606 INFO    MainThread:17713 [wandb_setup.py:_flush():76] Configure stats pid to 17713
+2024-05-28 14:24:22,606 INFO    MainThread:17713 [wandb_setup.py:_flush():76] Loading settings from /Users/kelseydoerksen/.config/wandb/settings
+2024-05-28 14:24:22,606 INFO    MainThread:17713 [wandb_setup.py:_flush():76] Loading settings from /Users/kelseydoerksen/code/giga-connectivity/wandb/settings
+2024-05-28 14:24:22,606 INFO    MainThread:17713 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-05-28 14:24:22,606 INFO    MainThread:17713 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-05-28 14:24:22,606 INFO    MainThread:17713 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'run_pipeline.py', 'program_abspath': '/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py', 'program': '/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py'}
+2024-05-28 14:24:22,606 INFO    MainThread:17713 [wandb_setup.py:_flush():76] Applying login settings: {'anonymous': 'must'}
+2024-05-28 14:24:22,606 INFO    MainThread:17713 [wandb_init.py:_log_setup():528] Logging user logs to /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240528_142422-fu2xqf5s/logs/debug.log
+2024-05-28 14:24:22,607 INFO    MainThread:17713 [wandb_init.py:_log_setup():529] Logging internal logs to /Users/kelseydoerksen/code/giga-connectivity/wandb/run-20240528_142422-fu2xqf5s/logs/debug-internal.log
+2024-05-28 14:24:22,607 INFO    MainThread:17713 [wandb_init.py:init():568] calling init triggers
+2024-05-28 14:24:22,607 INFO    MainThread:17713 [wandb_init.py:init():575] wandb.init called with sweep_config: {}
+config: {}
+2024-05-28 14:24:22,607 INFO    MainThread:17713 [wandb_init.py:init():618] starting backend
+2024-05-28 14:24:22,607 INFO    MainThread:17713 [wandb_init.py:init():622] setting up manager
+2024-05-28 14:24:22,610 INFO    MainThread:17713 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=spawn,fork,forkserver, using: spawn
+2024-05-28 14:24:22,611 INFO    MainThread:17713 [wandb_init.py:init():628] backend started and connected
+2024-05-28 14:24:22,617 INFO    MainThread:17713 [wandb_init.py:init():720] updated telemetry
+2024-05-28 14:24:22,648 INFO    MainThread:17713 [wandb_init.py:init():753] communicating run to backend with 90.0 second timeout
+2024-05-28 14:24:23,256 INFO    MainThread:17713 [wandb_run.py:_on_init():2220] communicating current version
+2024-05-28 14:24:24,410 INFO    MainThread:17713 [wandb_run.py:_on_init():2229] got version response upgrade_message: "wandb version 0.17.0 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2024-05-28 14:24:24,410 INFO    MainThread:17713 [wandb_init.py:init():804] starting run threads in backend
+2024-05-28 14:24:30,819 INFO    MainThread:17713 [wandb_run.py:_console_start():2199] atexit reg
+2024-05-28 14:24:30,819 INFO    MainThread:17713 [wandb_run.py:_redirect():2054] redirect: wrap_raw
+2024-05-28 14:24:30,819 INFO    MainThread:17713 [wandb_run.py:_redirect():2119] Wrapping output streams.
+2024-05-28 14:24:30,820 INFO    MainThread:17713 [wandb_run.py:_redirect():2144] Redirects installed.
+2024-05-28 14:24:30,820 INFO    MainThread:17713 [wandb_init.py:init():845] run started, returning control to user process
+2024-05-28 14:24:30,820 INFO    MainThread:17713 [wandb_run.py:_config_callback():1324] config_cb None None {'aoi': 'BWA', 'buffer': '300', 'model': 'rf', 'target': 'school', 'data_split': 'Central'}
+2024-05-28 14:42:43,891 WARNING MsgRouterThr:17713 [router.py:message_loop():77] message_loop has been closed

@@ -1,0 +1,31 @@
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+Model accuracy before any fine-tuning is: 0.7684674751929438
+Running grid search cv...
+True Positive is 554
+True Negative is 145
+False Positive is 172
+False Negative is 36
+False positive rate is 0.5425867507886435
+True positive rate is 0.9389830508474576
+False negative rate is 0.061016949152542375
+True negative rate is 0.45741324921135645
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 416, in <module>
+    results,
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/rf.py", line 171, in run_rf
+    'roc': wandb.plot.roc_curve(y_test, predictions),
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/wandb/plot/roc_curve.py", line 71, in roc_curve
+    fpr[class_label], tpr[class_label], _ = sklearn_metrics.roc_curve(
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/metrics/_ranking.py", line 992, in roc_curve
+    fps, tps, thresholds = _binary_clf_curve(
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/metrics/_ranking.py", line 751, in _binary_clf_curve
+    check_consistent_length(y_true, y_score, sample_weight)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/utils/validation.py", line 394, in check_consistent_length
+    lengths = [_num_samples(X) for X in arrays if X is not None]
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/utils/validation.py", line 394, in <listcomp>
+    lengths = [_num_samples(X) for X in arrays if X is not None]
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/site-packages/sklearn/utils/validation.py", line 335, in _num_samples
+    raise TypeError(
+TypeError: Singleton array array(1) cannot be considered a valid collection.

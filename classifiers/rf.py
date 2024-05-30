@@ -6,12 +6,14 @@ Random Forest ML call for pipeline
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, roc_auc_score, roc_curve, ConfusionMatrixDisplay, make_scorer, accuracy_score, f1_score
-from sklearn.model_selection import cross_validate, GridSearchCV
+from sklearn.metrics import (confusion_matrix, accuracy_score, f1_score,
+                             fbeta_score, classification_report, precision_recall_curve, auc,
+                             roc_auc_score, recall_score, precision_score)
+from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 import wandb
 import pickle
-from analysis.generating_results import cross_validate_scoring, results_for_plotting
+from analysis.generating_results import results_for_plotting
 import seaborn as sn
 
 
@@ -102,13 +104,10 @@ def run_rf(X_train,
     probs = forest.predict_proba(X_test)
 
     model_score = forest.score(X_test, y_test)
-    print('Model accuracy is: {}'.format(model_score))
+    print('Model accuracy before any fine-tuning is: {}'.format(model_score))
 
     if not eval(tuning):
         print('No model hyperparameter tuning')
-        model_setup = 'non-tuned'
-        cv_scoring = cross_validate_scoring(forest, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
-                                                   prefix_name=model_setup)
 
         with open('{}/{}_model.pkl'.format(results_dir, model_name), 'wb') as f:
             pickle.dump(forest, f)
@@ -123,7 +122,12 @@ def run_rf(X_train,
         calc_confusion_matrix(y_test, probs[:, 1], results_dir)
 
         wandb_exp.log({
-            'roc': wandb.plot.roc_curve(y_test, probs)
+            'roc': wandb.plot.roc_curve(y_test, probs),
+            'accuracy': accuracy_score(y_test, predictions),
+            'f1': f1,
+            'recall': recall_score(y_test, predictions, zero_division=0),
+            'precision': precision_score(y_test, predictions, zero_division=0),
+            'fbeta': fbeta_score(y_test, predictions, beta=0.5, zero_division=0)
         })
 
     else:
@@ -138,23 +142,20 @@ def run_rf(X_train,
             'n_estimators': [100, 200, 300, 500]
         }
         # grid search cv
-        grid_search = GridSearchCV(estimator=forest,
+        rf_cv = GridSearchCV(estimator=forest,
                                    param_grid=param_grid,
-                                   scoring={"Accuracy": make_scorer(accuracy_score)},
-                                   refit='Accuracy',
+                                   scoring={'accuracy', 'f1'},
+                                   refit='f1',
                                    cv=5,
-                                   n_jobs=-1)
+                                   n_jobs=-1,
+                             )
 
         # Fit the grid search to the data
         print('Running grid search cv...')
-        grid_search.fit(X_train, y_train)
+        rf_cv.fit(X_train, y_train)
 
-        #grid_search.best_params_
-        best_forest = grid_search.best_estimator_
-
-        # CV scoring
-        cv_scoring = cross_validate_scoring(best_forest, X_train, y_train, ['accuracy', 'f1'], cv=5,
-                                            results_dir=results_dir, prefix_name=model_setup)
+        # Set model to best estimator from grid search
+        best_forest = rf_cv.best_estimator_
 
         # Prediction with best forest
         tuned_probs = best_forest.predict_proba(X_test)
@@ -165,47 +166,18 @@ def run_rf(X_train,
         # Saving results for further plotting
         results_for_plotting(y_test, tuned_probs, test_latitudes, test_longitudes, results_dir, model_name)
 
-        predictions = (tuned_probs[:, 1] >= 0.5)
-        predictions = predictions*1
-        f1 = f1_score(y_test, predictions)
+        predictions = (tuned_probs[:, 1] >= 0.5)*1
+        predictions = predictions.tolist()
+        f1 = f1_score(y_test, predictions, zero_division=0)
         calc_importance(best_forest, X_test, results_dir)
         calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
 
         wandb_exp.log({
-            'Best Model Params': grid_search.best_params_,
-            'roc': wandb.plot.roc_curve(y_test, tuned_probs)
+            'Best Model Params': rf_cv.best_params_,
+            'roc': wandb.plot.roc_curve(y_test, tuned_probs),
+            'accuracy': accuracy_score(y_test, predictions),
+            'f1': f1,
+            'recall': recall_score(y_test, predictions, zero_division=0),
+            'precision': precision_score(y_test, predictions, zero_division=0),
+            'fbeta': fbeta_score(y_test, predictions, beta=0.5, zero_division=0)
         })
-
-
-    '''
-    # Old - Wandb will generate
-    # generate a no skill prediction (majority class)
-    ns_probs = [0 for _ in range(len(y_test))]
-    # calculate scores
-    ns_auc = roc_auc_score(y_test, ns_probs)
-    rfc_auc = roc_auc_score(y_test, probs[:,1])
-    # summarize scores
-    print('No Skill: ROC AUC=%.3f' % (ns_auc))
-    print('RFC: ROC AUC=%.3f' % rfc_auc)
-    # calculate roc curves
-    ns_fpr, ns_tpr, _ = roc_curve(y_test, ns_probs)
-    rfc_fpr, rfc_tpr, _ = roc_curve(y_test, probs[:,1])
-    # plot the roc curve for the model
-    plt.plot(ns_fpr, ns_tpr, linestyle='--', label='No Skill')
-    plt.plot(rfc_fpr, rfc_tpr, marker='.', label='RFC')
-    # axis labels
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.legend()
-    plt.savefig('{}/roc_auc_curve.png'.format(results_dir))
-    '''
-
-    # Logging results to wandb
-    # --- Logging metrics
-    wandb_exp.log({
-        'CV accuracies': cv_scoring['test_accuracy'],
-        'Average CV accuracy': cv_scoring['test_accuracy'].mean(),
-        'Average CV F1': cv_scoring['test_f1'].mean(),
-        'Test set F1': f1,
-        'Test set accuracy': accuracy_score(y_test, predictions)
-    })

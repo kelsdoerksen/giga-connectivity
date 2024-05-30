@@ -1,0 +1,83 @@
+Index(['modis.LC_Type1.mode', 'modis.LC_Type1.var', 'modis.LC_Type1.evg_conif',
+       'modis.LC_Type1.evg_broad', 'modis.LC_Type1.dcd_needle',
+       'modis.LC_Type1.dcd_broad', 'modis.LC_Type1.mix_forest',
+       'modis.LC_Type1.cls_shrub', 'modis.LC_Type1.open_shrub',
+       'modis.LC_Type1.woody_savanna', 'modis.LC_Type1.savanna',
+       'modis.LC_Type1.grassland', 'modis.LC_Type1.perm_wetland',
+       'modis.LC_Type1.cropland', 'modis.LC_Type1.urban',
+       'modis.LC_Type1.crop_nat_veg', 'modis.LC_Type1.perm_snow',
+       'modis.LC_Type1.barren', 'modis.LC_Type1.water_bds',
+       'pop.population_density.var', 'pop.population_density.max',
+       'pop.population_density.min',
+       'human_settlement_layer_built_up.built_characteristics.mode',
+       'human_settlement_layer_built_up.built_characteristics.var',
+       'human_settlement_layer_built_up.built_characteristics.open_low_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_med_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_high_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_water',
+       'human_settlement_layer_built_up.built_characteristics.open_road',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3-6',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_6-15',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_15-30',
+       'human_settlement_layer_built_up.built_characteristics.build_non_res_30',
+       'human_settlement_layer_built_up.built_characteristics.built',
+       'global_human_modification.gHM.var',
+       'global_human_modification.gHM.min', 'transmission_line_distance',
+       'nightlight.avg_rad.var', 'nightlight.avg_rad.max',
+       'nightlight.avg_rad.min', 'nightlight.cf_cvg.var',
+       'nightlight.cf_cvg.max', 'nightlight.cf_cvg.min', 'avg_d_kbps_mobile',
+       'avg_u_kbps_mobile', 'avg_lat_ms_mobile', 'tests_mobile',
+       'devices_mobile', 'ookla_distance_mobile', 'avg_d_kbps_fixed',
+       'avg_u_kbps_fixed', 'avg_lat_ms_fixed', 'tests_fixed', 'devices_fixed',
+       'ookla_distance_fixed', 'weekday_var', 'weekend_var', 'weekday_max',
+       'weekend_max'],
+      dtype='object')
+Index(['modis.LC_Type1.mode', 'modis.LC_Type1.var', 'modis.LC_Type1.evg_conif',
+       'modis.LC_Type1.evg_broad', 'modis.LC_Type1.dcd_needle',
+       'modis.LC_Type1.dcd_broad', 'modis.LC_Type1.mix_forest',
+       'modis.LC_Type1.cls_shrub', 'modis.LC_Type1.open_shrub',
+       'modis.LC_Type1.woody_savanna', 'modis.LC_Type1.savanna',
+       'modis.LC_Type1.grassland', 'modis.LC_Type1.perm_wetland',
+       'modis.LC_Type1.cropland', 'modis.LC_Type1.urban',
+       'modis.LC_Type1.crop_nat_veg', 'modis.LC_Type1.perm_snow',
+       'modis.LC_Type1.barren', 'modis.LC_Type1.water_bds',
+       'pop.population_density.var', 'pop.population_density.max',
+       'pop.population_density.min',
+       'human_settlement_layer_built_up.built_characteristics.mode',
+       'human_settlement_layer_built_up.built_characteristics.var',
+       'human_settlement_layer_built_up.built_characteristics.open_low_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_med_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_high_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_water',
+       'human_settlement_layer_built_up.built_characteristics.open_road',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3-6',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_6-15',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_15-30',
+       'human_settlement_layer_built_up.built_characteristics.build_non_res_30',
+       'human_settlement_layer_built_up.built_characteristics.built',
+       'global_human_modification.gHM.var',
+       'global_human_modification.gHM.min', 'transmission_line_distance',
+       'nightlight.avg_rad.var', 'nightlight.avg_rad.max',
+       'nightlight.avg_rad.min', 'nightlight.cf_cvg.var',
+       'nightlight.cf_cvg.max', 'nightlight.cf_cvg.min', 'avg_d_kbps_mobile',
+       'avg_u_kbps_mobile', 'avg_lat_ms_mobile', 'tests_mobile',
+       'devices_mobile', 'ookla_distance_mobile', 'avg_d_kbps_fixed',
+       'avg_u_kbps_fixed', 'avg_lat_ms_fixed', 'tests_fixed', 'devices_fixed',
+       'ookla_distance_fixed', 'weekday_var', 'weekend_var', 'weekday_max',
+       'weekend_max'],
+      dtype='object')
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+Model accuracy is: 0.9973190348525469
+No model hyperparameter tuning
+True Positive is 256
+True Negative is 488
+False Positive is 1
+False Negative is 1
+False positive rate is 0.002044989775051125
+True positive rate is 0.9961089494163424
+False negative rate is 0.0038910505836575876
+True negative rate is 0.9979550102249489

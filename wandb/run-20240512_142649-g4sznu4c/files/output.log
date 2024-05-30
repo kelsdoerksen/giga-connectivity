@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 383, in <module>
+    train_data, test_data = load_data(aoi, buffer, features, label, data_split)
+NameError: name 'data_split' is not defined

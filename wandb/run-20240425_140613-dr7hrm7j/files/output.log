@@ -1,0 +1,191 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(350)<module>()
+    349     # Run model
+--> 350     if model == 'rf':
+    351         rf.run_rf(
+Index(['modis.LC_Type1.mode', 'modis.LC_Type1.var', 'modis.LC_Type1.evg_conif',
+       'modis.LC_Type1.evg_broad', 'modis.LC_Type1.dcd_needle',
+       'modis.LC_Type1.dcd_broad', 'modis.LC_Type1.mix_forest',
+       'modis.LC_Type1.cls_shrub', 'modis.LC_Type1.open_shrub',
+       'modis.LC_Type1.woody_savanna', 'modis.LC_Type1.savanna',
+       'modis.LC_Type1.grassland', 'modis.LC_Type1.perm_wetland',
+       'modis.LC_Type1.cropland', 'modis.LC_Type1.urban',
+       'modis.LC_Type1.crop_nat_veg', 'modis.LC_Type1.perm_snow',
+       'modis.LC_Type1.barren', 'modis.LC_Type1.water_bds',
+       'pop.population_density.var', 'pop.population_density.max',
+       'pop.population_density.min',
+       'human_settlement_layer_built_up.built_characteristics.mode',
+       'human_settlement_layer_built_up.built_characteristics.var',
+       'human_settlement_layer_built_up.built_characteristics.open_low_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_med_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_high_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_water',
+       'human_settlement_layer_built_up.built_characteristics.open_road',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3-6',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_6-15',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_15-30',
+       'human_settlement_layer_built_up.built_characteristics.build_non_res_30',
+       'human_settlement_layer_built_up.built_characteristics.built',
+       'global_human_modification.gHM.var',
+       'global_human_modification.gHM.min', 'transmission_line_distance',
+       'nightlight.avg_rad.var', 'nightlight.avg_rad.max',
+       'nightlight.avg_rad.min', 'nightlight.cf_cvg.var',
+       'nightlight.cf_cvg.max', 'nightlight.cf_cvg.min', 'avg_d_kbps_mobile',
+       'avg_u_kbps_mobile', 'avg_lat_ms_mobile', 'tests_mobile',
+       'devices_mobile', 'ookla_distance_mobile', 'avg_d_kbps_fixed',
+       'avg_u_kbps_fixed', 'avg_lat_ms_fixed', 'tests_fixed', 'devices_fixed',
+       'ookla_distance_fixed', 'weekday_var', 'weekend_var', 'weekday_max',
+       'weekend_max'],
+      dtype='object')
+     modis.LC_Type1.mode  modis.LC_Type1.var  modis.LC_Type1.evg_conif  ...  weekend_var  weekday_max  weekend_max
+564                 13.0              0.2900                       0.0  ...     0.002892          5.0          1.0
+190                 10.0              0.0000                       0.0  ...     0.002609         12.0         17.0
+311                 13.0              0.0000                       0.0  ...     0.002892          5.0          1.0
+645                 13.0              0.3456                       0.0  ...     0.001075         14.0         18.0
+86                  10.0              0.0000                       0.0  ...     0.000508         14.0         17.0
+..                   ...                 ...                       ...  ...          ...          ...          ...
+447                 10.0              2.1600                       0.0  ...     0.000411         12.0          5.0
+771                 10.0              0.0000                       0.0  ...     0.002892          5.0          1.0
+302                 10.0              0.0000                       0.0  ...     0.002892          5.0          1.0
+147                 13.0              0.0000                       0.0  ...     0.005969         23.0          9.0
+471                 13.0              2.4900                       0.0  ...     0.002892          5.0          1.0
+[746 rows x 60 columns]
+Index(['modis.LC_Type1.mode', 'modis.LC_Type1.var', 'modis.LC_Type1.evg_conif',
+       'modis.LC_Type1.evg_broad', 'modis.LC_Type1.dcd_needle',
+       'modis.LC_Type1.dcd_broad', 'modis.LC_Type1.mix_forest',
+       'modis.LC_Type1.cls_shrub', 'modis.LC_Type1.open_shrub',
+       'modis.LC_Type1.woody_savanna', 'modis.LC_Type1.savanna',
+       'modis.LC_Type1.grassland', 'modis.LC_Type1.perm_wetland',
+       'modis.LC_Type1.cropland', 'modis.LC_Type1.urban',
+       'modis.LC_Type1.crop_nat_veg', 'modis.LC_Type1.perm_snow',
+       'modis.LC_Type1.barren', 'modis.LC_Type1.water_bds',
+       'pop.population_density.var', 'pop.population_density.max',
+       'pop.population_density.min',
+       'human_settlement_layer_built_up.built_characteristics.mode',
+       'human_settlement_layer_built_up.built_characteristics.var',
+       'human_settlement_layer_built_up.built_characteristics.open_low_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_med_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_high_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_water',
+       'human_settlement_layer_built_up.built_characteristics.open_road',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3-6',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_6-15',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_15-30',
+       'human_settlement_layer_built_up.built_characteristics.build_non_res_30',
+       'human_settlement_layer_built_up.built_characteristics.built',
+       'global_human_modification.gHM.var',
+       'global_human_modification.gHM.min', 'transmission_line_distance',
+       'nightlight.avg_rad.var', 'nightlight.avg_rad.max',
+       'nightlight.avg_rad.min', 'nightlight.cf_cvg.var',
+       'nightlight.cf_cvg.max', 'nightlight.cf_cvg.min', 'avg_d_kbps_mobile',
+       'avg_u_kbps_mobile', 'avg_lat_ms_mobile', 'tests_mobile',
+       'devices_mobile', 'ookla_distance_mobile', 'avg_d_kbps_fixed',
+       'avg_u_kbps_fixed', 'avg_lat_ms_fixed', 'tests_fixed', 'devices_fixed',
+       'ookla_distance_fixed', 'weekday_var', 'weekend_var', 'weekday_max',
+       'weekend_max'],
+      dtype='object')
+564    0
+190    1
+311    0
+645    0
+86     1
+      ..
+447    0
+771    0
+302    0
+147    1
+471    0
+Name: label, Length: 746, dtype: int64
+257
+1014    0
+919     0
+894     0
+1686    0
+1421    0
+       ..
+637     1
+108     1
+1387    0
+1194    0
+520     1
+Name: label, Length: 1751, dtype: int64
+611
+      modis.LC_Type1.mode  modis.LC_Type1.var  modis.LC_Type1.evg_conif  ...  weekend_var  weekday_max  weekend_max
+1014                 10.0            0.000000                       0.0  ...     0.002568         20.0          1.0
+919                  13.0            0.000000                       0.0  ...     0.002892          5.0          1.0
+894                  13.0            0.000000                       0.0  ...     0.002892          5.0          1.0
+1686                 13.0            1.641600                       0.0  ...     0.003569         15.0         21.0
+1421                 13.0            0.000000                       0.0  ...     0.002892          5.0          1.0
+...                   ...                 ...                       ...  ...          ...          ...          ...
+637                  13.0            0.972222                       0.0  ...     0.005969         23.0          9.0
+108                  13.0            1.641600                       0.0  ...     0.000508         14.0         17.0
+1387                 13.0            2.000000                       0.0  ...     0.000411         12.0          5.0
+1194                 13.0            2.000000                       0.0  ...     0.002892          5.0          1.0
+520                   7.0            6.854400                       0.0  ...     0.000020          9.0          5.0
+[1751 rows x 60 columns]
+Index(['modis.LC_Type1.mode', 'modis.LC_Type1.var', 'modis.LC_Type1.evg_conif',
+       'modis.LC_Type1.evg_broad', 'modis.LC_Type1.dcd_needle',
+       'modis.LC_Type1.dcd_broad', 'modis.LC_Type1.mix_forest',
+       'modis.LC_Type1.cls_shrub', 'modis.LC_Type1.open_shrub',
+       'modis.LC_Type1.woody_savanna', 'modis.LC_Type1.savanna',
+       'modis.LC_Type1.grassland', 'modis.LC_Type1.perm_wetland',
+       'modis.LC_Type1.cropland', 'modis.LC_Type1.urban',
+       'modis.LC_Type1.crop_nat_veg', 'modis.LC_Type1.perm_snow',
+       'modis.LC_Type1.barren', 'modis.LC_Type1.water_bds',
+       'pop.population_density.var', 'pop.population_density.max',
+       'pop.population_density.min',
+       'human_settlement_layer_built_up.built_characteristics.mode',
+       'human_settlement_layer_built_up.built_characteristics.var',
+       'human_settlement_layer_built_up.built_characteristics.open_low_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_med_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_high_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_water',
+       'human_settlement_layer_built_up.built_characteristics.open_road',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3-6',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_6-15',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_15-30',
+       'human_settlement_layer_built_up.built_characteristics.build_non_res_30',
+       'human_settlement_layer_built_up.built_characteristics.built',
+       'global_human_modification.gHM.var',
+       'global_human_modification.gHM.min', 'transmission_line_distance',
+       'nightlight.avg_rad.var', 'nightlight.avg_rad.max',
+       'nightlight.avg_rad.min', 'nightlight.cf_cvg.var',
+       'nightlight.cf_cvg.max', 'nightlight.cf_cvg.min', 'avg_d_kbps_mobile',
+       'avg_u_kbps_mobile', 'avg_lat_ms_mobile', 'tests_mobile',
+       'devices_mobile', 'ookla_distance_mobile', 'avg_d_kbps_fixed',
+       'avg_u_kbps_fixed', 'avg_lat_ms_fixed', 'tests_fixed', 'devices_fixed',
+       'ookla_distance_fixed', 'weekday_var', 'weekend_var', 'weekday_max',
+       'weekend_max'],
+      dtype='object')
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+Model accuracy is: 0.9973190348525469
+No model hyperparameter tuning
+True Positive is 256
+True Negative is 488
+False Positive is 1
+False Negative is 1
+False positive rate is 0.002044989775051125
+True positive rate is 0.9961089494163424
+False negative rate is 0.0038910505836575876
+True negative rate is 0.9979550102249489
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 350, in <module>
+    if model == 'rf':
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 350, in <module>
+    if model == 'rf':
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

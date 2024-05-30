@@ -231,7 +231,7 @@ def clean_dataframes(df):
 	df = df.drop(columns=['connectivity.1', 'Unnamed: 0', 'Unnamed: 0.1'])
 	return df
 
-
+'''
 aois = ['BIH', 'BLZ', 'BWA', 'GIN', 'MNG', 'RWA', 'BRA']
 data_type = ['Training', 'Testing']
 for aoi in aois:
@@ -242,7 +242,53 @@ for aoi in aois:
 		df_clean = clean_dataframes(df)
 		df_clean.to_csv('/Users/kelseydoerksen/Desktop/Giga/Connectivity/{}/1000m_buffer/{}Data_uncorrelated.csv'.
 						format(aoi, data))
+'''
+
+
+def add_label(gdf_schools, feature_df):
+	"""
+	Adding label (school/non-school) to features
+	:param: school_location_gdf: geodataframe to get locations from
+	:param:
+	:return:
+	"""
+	df_schools = pd.DataFrame()
+	df_schools['lat'] = gdf_schools['geometry'].y
+	df_schools['lon'] = gdf_schools['geometry'].x
+
+	lon_vals = df_schools['lon'].values.tolist()
+	lat_vals = df_schools['lat'].values.tolist()
+
+	school_locations = []
+	for i in range(len(lon_vals)):
+		school_locations.append((lon_vals[i], lat_vals[i]))
+
+	df_schools['school_locations'] = school_locations
+
+	f_lon_vals = feature_df['lon'].values.tolist()
+	f_lat_vals = feature_df['lat'].values.tolist()
+	feature_locations = []
+	for i in range(len(f_lon_vals)):
+		feature_locations.append((f_lon_vals[i], f_lat_vals[i]))
+
+	import ipdb
+	ipdb.set_trace()
+	feature_df['location'] = feature_locations
+
+	for loc in feature_locations:
+		if loc not in school_locations:
+			feature_df = feature_df[feature_df.location != loc]
 
 
 
+
+# Load in data and subset for only school locations
+sample_location_gdf = gpd.read_file('/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/BWA/BWA_train.geojson')
+sample_location_gdf_epsg = sample_location_gdf.to_crs(crs='EPSG:4326')
+schools = sample_location_gdf_epsg[sample_location_gdf_epsg['class'] == 'school']
+
+feat_df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/BWA/300m_buffer_toremove_nonschools/'
+					  'global_human_modification_gHM_2016_custom_buffersize_300_with_time.csv')
+
+add_label(schools, feat_df)
 

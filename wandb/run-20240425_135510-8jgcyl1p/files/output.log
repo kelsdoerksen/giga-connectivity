@@ -1,0 +1,11 @@
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+Model accuracy is: 1.0
+No model hyperparameter tuning
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 345, in <module>
+    rf.run_rf(
+  File "/Users/kelseydoerksen/code/giga-connectivity/classifiers/rf.py", line 116, in run_rf
+    predictions = (probs[:, 1] >= 0.5)
+IndexError: index 1 is out of bounds for axis 1 with size 1

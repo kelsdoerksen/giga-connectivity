@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 289, in <module>
+    train_data, test_data = load_schoolmapping_data(aoi, buffer, data_split)
+TypeError: load_schoolmapping_data() missing 1 required positional argument: 'data_split_type'

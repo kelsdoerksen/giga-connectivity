@@ -16,6 +16,7 @@ args = parser.parse_args()
 aoi = args.aoi
 target = args.target
 
+
 def get_lat_lon_list(df, country_name, save_dir):
     """
     Get list of latitude, longitude
@@ -59,12 +60,6 @@ def get_lat_lon_list_from_gdp(df, country_name, save_dir):
         json.dump(coords_dict, outfile)
 
 
-# Running for schools
-#save_dir = '/Users/kelseydoerksen/Desktop/Giga/{}'.format(args.aoi)
-#df = pd.read_csv('{}/{}_school_geolocation_coverage_master.csv'.format(args.aoi, save_dir))
-#get_lat_lon_list(df, args.aoi, save_dir)
-
-
 def eliminate_correlated_features(df, threshold):
     """
     Modified function from giga-ml-utils
@@ -95,9 +90,11 @@ def eliminate_correlated_features(df, threshold):
     return df_filtered
 
 
-# Running uncorrelated feature selection
+
+'''
+# Running uncorrelated feature selection -> uncomment if you would like to run
 buffer = 1000
-aois = ['GIN']
+aois = ['BWA']
 target = 'schools'
 for aoi in aois:
     print('Running for buffer: {}, aoi: {}'.format(buffer, aoi))
@@ -106,7 +103,7 @@ for aoi in aois:
         identity_cols = ['giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations']
         cols_to_drop = ['Unnamed: 0', 'giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations']
     if target == 'schools':
-        root_dir = '/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/{}/{}m_buffer'.format(aoi, buffer)
+        root_dir = '/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/{}/{}m_buffer_nonschool'.format(aoi, buffer)
         identity_cols = ['UID', 'lat', 'lon', 'class']
         cols_to_drop = ['Unnamed: 0', 'UID', 'lat', 'lon', 'class']
 
@@ -118,55 +115,16 @@ for aoi in aois:
 
     combined_df = pd.concat([df_identity, df_filt], axis=1)
     combined_df.to_csv('{}/uncorrelated_feature_space.csv'.format(root_dir))
-
 '''
 
 # Running lat, lon coordinate generation for airPy processing script
-aois = ['NAM', 'BIH', 'BLZ', 'CRB', 'GHA', 'GIN', 'MNG', 'RWA', 'SEN', 'SSD', 'ZWE']
+aois = ['BWA']
 for aoi in aois:
     gpd_df = gpd.read_file('/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/{}/{}_train.geojson'.format(aoi, aoi))
     save_dir = '/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/{}'.format(aoi)
     get_lat_lon_list_from_gdp(gpd_df, aoi, save_dir)
 
 
-# Scrap scripts for fixing a preivous lon = lat value issue
-# Aka, all I need to do is load in the coordinates for the country of interest, get the list of lon values from this
-# and for each of the data csvs I have, replace the lon column data with the correct lon values
-aois = ['BWA']
-months = ['jan', 'feb', 'mar', 'apr', 'may', 'june', 'july', 'aug', 'sept', 'oct', 'nov', 'dec']
-for aoi in aois:
-    coords = open('/Users/kelseydoerksen/Desktop/Giga/{}/{}_coordinates.json'.format(aoi, aoi), 'r')
-    coords_data = json.loads(coords.read())
-    correct_lons = coords_data['lons']
-
-    # Fix modis
-    modis_df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/{}/modis_2020_custom_buffersize_5000_with_time.csv'.
-                           format(aoi))
-    modis_df['lon'] = correct_lons
-    modis_df.to_csv('/Users/kelseydoerksen/Desktop/Giga/{}/modis_2020_custom_buffersize_5000_with_time.csv'.
-                           format(aoi))
-
-    # Fix population
-    pop_df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/{}/pop_2020_custom_buffersize_5000_with_time.csv'.
-                           format(aoi))
-    pop_df['lon'] = correct_lons
-    pop_df.to_csv('/Users/kelseydoerksen/Desktop/Giga/{}/pop_2020_custom_buffersize_5000_with_time.csv'.
-                    format(aoi))
-
-    for month in months:
-        # Fix cf_cvg
-        cf_df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/{}/nightlight_cf_cvg_{}_2022_'
-                            'custom_buffersize_5000_with_time.csv'.format(aoi, month))
-        cf_df['lon'] = correct_lons
-        cf_df.to_csv('/Users/kelseydoerksen/Desktop/Giga/{}/nightlight_avg_rad_{}_2022_'
-                            'custom_buffersize_5000_with_time.csv'.format(aoi, month))
-        # Fix avg_rad
-        avg_rad_df = pd.read_csv('/Users/kelseydoerksen/Desktop/Giga/{}/nightlight_avg_rad_{}_2022_'
-                            'custom_buffersize_5000_with_time.csv'.format(aoi, month))
-        avg_rad_df['lon'] = correct_lons
-        avg_rad_df.to_csv('/Users/kelseydoerksen/Desktop/Giga/{}/nightlight_avg_rad_{}_2022_'
-                     'custom_buffersize_5000_with_time.csv'.format(aoi, month))
-'''
 
 
 

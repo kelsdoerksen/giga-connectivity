@@ -1,0 +1,13 @@
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+Model accuracy before any fine-tuning is: 0.7331460674157303
+Running grid search cv...
+True Positive is 8
+True Negative is 250
+False Positive is 5
+False Negative is 93
+False positive rate is 0.0196078431372549
+True positive rate is 0.07920792079207921
+False negative rate is 0.9207920792079208
+True negative rate is 0.9803921568627451

@@ -1,0 +1,13 @@
+Creating instance of Random Forest model...
+Fitting model...
+Evaluating model...
+Model accuracy is: 0.7878787878787878
+No model hyperparameter tuning
+True Positive is 6
+True Negative is 45
+False Positive is 10
+False Negative is 5
+False positive rate is 0.18181818181818182
+True positive rate is 0.5454545454545454
+False negative rate is 0.45454545454545453
+True negative rate is 0.8181818181818182

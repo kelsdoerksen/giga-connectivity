@@ -1,0 +1,13 @@
+Scaling data...
+Creating instance of LR model...
+Fitting data...
+The hard predictions were right 74.53% of the time
+No model hyperparameter tuning
+True Positive is 116
+True Negative is 440
+False Positive is 49
+False Negative is 141
+False positive rate is 0.10020449897750511
+True positive rate is 0.45136186770428016
+False negative rate is 0.5486381322957199
+True negative rate is 0.8997955010224948
