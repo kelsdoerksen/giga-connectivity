@@ -30,6 +30,15 @@ This work aims to support government agencies and connectivity providers in impr
 
 [VIIRS Nighttime Lights](https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMCFG)
 
+## ⚙️ Data Processing
+Prior to generating features, the coordinates of the school and non-school samples were extracted from the `AOI_train.geojson` file provided by UNICEF with the `get_lat_lon_list_from_gdp` function in the `processing_scripts.py` script.
+
+To generate the tabular features extracted from Google Earth Engine data, the [airPy](https://github.com/kelsdoerksen/airPy) package was used with the following command: 
+```
+python run_airpy.py --gee_data <QUERIED DATA> --band <QUERIED DATA BAND> --region <COORDINATES OF SCHOOLS/NON-SCHOOLS> --date <DATE> --analysis_type <COLLECTION> --buffer_size <BUFFER_SIZE> --configs_dir <DIRECTORY TO SAVE CONFIGS> --save_dir <DIRECTORY TO SAVE TABULAR FEATURES> --add_time no --save_type <CSV>
+```
+
+Distance to electrical transmission line and ookla speedtest data features were calculated in the `get_elec` and `get_ookla` functions in the `generate_features.py` script.
 
 
 ## 📚 Code Organization
