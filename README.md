@@ -32,6 +32,10 @@ This work aims to support government agencies and connectivity providers in impr
 
 [VIIRS Nighttime Lights](https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMCFG)
 
+[Ookla Speedtest](https://www.ookla.com/ookla-for-good/open-data)
+
+[World Bank Electrical Power Grid](https://energydata.info/dataset/derived-map-global-electricity-transmission-and-distribution-lines)
+
 ## ⚙️ Data Processing
 Prior to generating features, the coordinates of the school and non-school samples were extracted from the `AOI_train.geojson` file provided by UNICEF with the `get_lat_lon_list_from_gdp` function in the `processing_scripts.py` script.
 
