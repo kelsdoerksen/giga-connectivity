@@ -1,0 +1,13 @@
+Scaling data...
+Creating instance of MLP model...
+Fitting data...
+The hard predictions were right 61.39% of the time
+Running grid search cv...
+True Positive is 0
+True Negative is 163
+False Positive is 0
+False Negative is 96
+False positive rate is 0.0
+True positive rate is 0.0
+False negative rate is 1.0
+True negative rate is 1.0

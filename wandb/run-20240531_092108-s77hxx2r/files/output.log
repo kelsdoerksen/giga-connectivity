@@ -1,0 +1,127 @@
+> /Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py(192)load_schoolmapping_data()
+    191
+--> 192         training_dataset = training_dataset.dropna()
+    193         testing_dataset = testing_dataset.dropna()
+      Unnamed: 0                               UID  ...  weekday_peak_hour_oct  weekday_measurement_count_oct
+431         1012       AUG-BWA-NON_SCHOOL-10133248  ...                    6.0                           82.0
+1573         637      OVERTURE-BWA-SCHOOL-00000383  ...                   17.0                            1.0
+1199        1748  OVERTURE-BWA-NON_SCHOOL-00001124  ...                   19.0                           10.0
+859           23           OSM-BWA-SCHOOL-00000029  ...                    NaN                            NaN
+1539         603      OVERTURE-BWA-SCHOOL-00000303  ...                   17.0                            1.0
+...          ...                               ...  ...                    ...                            ...
+1348        1897  OVERTURE-BWA-NON_SCHOOL-00001655  ...                   13.0                           66.0
+1634         149        UNICEF-BWA-SCHOOL-00000134  ...                    NaN                            NaN
+1738         253        UNICEF-BWA-SCHOOL-00000370  ...                    0.0                           39.0
+488         1022       AUG-BWA-NON_SCHOOL-10701566  ...                   17.0                           10.0
+1547         611      OVERTURE-BWA-SCHOOL-00000326  ...                    6.0                            3.0
+[1782 rows x 16 columns]
+     Unnamed: 0.1  Unnamed: 0                               UID  ...  ookla_distance_fixed                           school_locations  dataset
+0               0           0           OSM-BWA-SCHOOL-00000001  ...            231.707172  (27.502190999999993, -21.170283999999995)    train
+1               1           1           OSM-BWA-SCHOOL-00000003  ...            166.882701             (27.491786999999995, -21.1702)    train
+2               2           2           OSM-BWA-SCHOOL-00000004  ...              0.000000   (25.888709999999996, -24.66651899999999)    train
+3               3           3           OSM-BWA-SCHOOL-00000005  ...             32.734888            (25.883495, -24.66213499999999)    train
+4               4           4           OSM-BWA-SCHOOL-00000006  ...            628.220868   (27.836403999999998, -21.96837999999999)    train
+..            ...         ...                               ...  ...                   ...                                        ...      ...
+238          2514        2514  OVERTURE-BWA-NON_SCHOOL-00001668  ...             34.022019                       (27.50946, -21.1859)      val
+239          2545        2545  OVERTURE-BWA-NON_SCHOOL-00001764  ...             14.866414          (27.5138371, -21.202461999999993)      val
+240          2568        2568  OVERTURE-BWA-NON_SCHOOL-00001837  ...            301.147922          (25.859028499999994, -24.8742642)      val
+241          2575        2575  OVERTURE-BWA-NON_SCHOOL-00001856  ...              0.000000  (27.845184899999992, -21.985821199999993)      val
+242          2579        2579  OVERTURE-BWA-NON_SCHOOL-00001867  ...           2530.082410           (25.6152417, -24.44006670000001)      val
+[2345 rows x 61 columns]
+                                   UID  weekend_peak_hour_dec  ...  ookla_distance_fixed                           school_locations
+0          AUG-BWA-NON_SCHOOL-10133248                    5.0  ...              0.000000   (27.442343444214355, -21.42246961548775)
+1         OVERTURE-BWA-SCHOOL-00000383                   16.0  ...            835.595056          (27.502202599999997, -21.1295143)
+2     OVERTURE-BWA-NON_SCHOOL-00001124                    NaN  ...            471.531440  (25.591382999999997, -21.427787999999996)
+3              OSM-BWA-SCHOOL-00000029                   14.0  ...            352.735319           (25.409048999999992, -25.646612)
+4         OVERTURE-BWA-SCHOOL-00000303                   23.0  ...            607.625167          (26.1433171, -24.418908799999997)
+...                                ...                    ...  ...                   ...                                        ...
+1777  OVERTURE-BWA-NON_SCHOOL-00001655                    7.0  ...             76.999518   (23.416666699999997, -19.98333330000001)
+1778        UNICEF-BWA-SCHOOL-00000134                    NaN  ...          15070.768661    (27.27901330090222, -23.29718978368476)
+1779        UNICEF-BWA-SCHOOL-00000370                    9.0  ...              0.000000  (27.127486854802743, -22.528076633735736)
+1780       AUG-BWA-NON_SCHOOL-10701566                    NaN  ...              0.000000    (27.86006005132993, -21.97834473012217)
+1781      OVERTURE-BWA-SCHOOL-00000326                   10.0  ...            546.315576            (26.83316, -23.133609999999997)
+[1782 rows x 72 columns]
+                                   UID  weekend_peak_hour_dec  ...  ookla_distance_fixed                           school_locations
+0          AUG-BWA-NON_SCHOOL-10133248                    5.0  ...              0.000000   (27.442343444214355, -21.42246961548775)
+6          OSM-BWA-NON_SCHOOL-00000022                   14.0  ...              0.000000                    (27.506709, -21.172129)
+8          AUG-BWA-NON_SCHOOL-04778559                    6.0  ...            654.933680    (23.50772249977085, -19.93240813675105)
+11          UNICEF-BWA-SCHOOL-00000766                   10.0  ...            122.221107  (23.402387847095497, -19.995030222986532)
+15    OVERTURE-BWA-NON_SCHOOL-00001827                    5.0  ...            145.071039  (25.953896999999998, -24.675553999999998)
+...                                ...                    ...  ...                   ...                                        ...
+1771  OVERTURE-BWA-NON_SCHOOL-00001694                   14.0  ...            219.812104          (25.583619799999997, -21.4124222)
+1773        UNICEF-BWA-SCHOOL-00000105                   11.0  ...              0.000000   (26.83535447621413, -23.102015433275835)
+1774  OVERTURE-BWA-NON_SCHOOL-00001478                   13.0  ...              0.000000          (25.8383435, -24.638544900000003)
+1777  OVERTURE-BWA-NON_SCHOOL-00001655                    7.0  ...             76.999518   (23.416666699999997, -19.98333330000001)
+1779        UNICEF-BWA-SCHOOL-00000370                    9.0  ...              0.000000  (27.127486854802743, -22.528076633735736)
+[781 rows x 72 columns]
+Index(['UID', 'weekend_peak_hour_dec', 'weekend_measurement_count_dec',
+       'weekday_peak_hour_dec', 'weekday_measurement_count_dec', 'dataset',
+       'label', 'weekend_peak_hour_nov', 'weekend_measurement_count_nov',
+       'weekday_peak_hour_nov', 'weekday_measurement_count_nov',
+       'weekend_peak_hour_oct', 'weekend_measurement_count_oct',
+       'weekday_peak_hour_oct', 'weekday_measurement_count_oct', 'lat', 'lon',
+       'class', 'modis.LC_Type1.mode', 'modis.LC_Type1.var',
+       'modis.LC_Type1.evg_conif', 'modis.LC_Type1.evg_broad',
+       'modis.LC_Type1.dcd_needle', 'modis.LC_Type1.dcd_broad',
+       'modis.LC_Type1.mix_forest', 'modis.LC_Type1.cls_shrub',
+       'modis.LC_Type1.open_shrub', 'modis.LC_Type1.woody_savanna',
+       'modis.LC_Type1.savanna', 'modis.LC_Type1.grassland',
+       'modis.LC_Type1.perm_wetland', 'modis.LC_Type1.cropland',
+       'modis.LC_Type1.urban', 'modis.LC_Type1.crop_nat_veg',
+       'modis.LC_Type1.perm_snow', 'modis.LC_Type1.barren',
+       'modis.LC_Type1.water_bds', 'pop.population_density.var',
+       'pop.population_density.min',
+       'human_settlement_layer_built_up.built_characteristics.mode',
+       'human_settlement_layer_built_up.built_characteristics.var',
+       'human_settlement_layer_built_up.built_characteristics.open_low_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_med_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_high_veg',
+       'human_settlement_layer_built_up.built_characteristics.open_water',
+       'human_settlement_layer_built_up.built_characteristics.open_road',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_3-6',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_6-15',
+       'human_settlement_layer_built_up.built_characteristics.built_non_res_15-30',
+       'human_settlement_layer_built_up.built_characteristics.build_non_res_30',
+       'human_settlement_layer_built_up.built_characteristics.built',
+       'global_human_modification.gHM.var',
+       'global_human_modification.gHM.min', 'transmission_line_distance',
+       'nightlight.avg_rad.var', 'nightlight.avg_rad.min',
+       'nightlight.cf_cvg.var', 'nightlight.cf_cvg.min', 'avg_d_kbps_mobile',
+       'avg_u_kbps_mobile', 'avg_lat_ms_mobile', 'tests_mobile',
+       'devices_mobile', 'ookla_distance_mobile', 'avg_d_kbps_fixed',
+       'avg_u_kbps_fixed', 'avg_lat_ms_fixed', 'tests_fixed', 'devices_fixed',
+       'ookla_distance_fixed', 'school_locations'],
+      dtype='object')
+                                   UID  weekend_peak_hour_dec  ...  ookla_distance_fixed                           school_locations
+0          AUG-BWA-NON_SCHOOL-10133248                    5.0  ...              0.000000   (27.442343444214355, -21.42246961548775)
+1         OVERTURE-BWA-SCHOOL-00000383                   16.0  ...            835.595056          (27.502202599999997, -21.1295143)
+2     OVERTURE-BWA-NON_SCHOOL-00001124                    NaN  ...            471.531440  (25.591382999999997, -21.427787999999996)
+3              OSM-BWA-SCHOOL-00000029                   14.0  ...            352.735319           (25.409048999999992, -25.646612)
+4         OVERTURE-BWA-SCHOOL-00000303                   23.0  ...            607.625167          (26.1433171, -24.418908799999997)
+...                                ...                    ...  ...                   ...                                        ...
+1777  OVERTURE-BWA-NON_SCHOOL-00001655                    7.0  ...             76.999518   (23.416666699999997, -19.98333330000001)
+1778        UNICEF-BWA-SCHOOL-00000134                    NaN  ...          15070.768661    (27.27901330090222, -23.29718978368476)
+1779        UNICEF-BWA-SCHOOL-00000370                    9.0  ...              0.000000  (27.127486854802743, -22.528076633735736)
+1780       AUG-BWA-NON_SCHOOL-10701566                    NaN  ...              0.000000    (27.86006005132993, -21.97834473012217)
+1781      OVERTURE-BWA-SCHOOL-00000326                   10.0  ...            546.315576            (26.83316, -23.133609999999997)
+[1782 rows x 72 columns]
+Traceback (most recent call last):
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 352, in <module>
+    return X_train, X_test
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 192, in load_schoolmapping_data
+    testing_dataset = testing_dataset.drop(columns='Unnamed: 0')
+  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 192, in load_schoolmapping_data
+    testing_dataset = testing_dataset.drop(columns='Unnamed: 0')
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/Users/kelseydoerksen/opt/anaconda3/envs/giga/lib/python3.10/bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+If you suspect this is an IPython 8.7.0 bug, please report it at:
+    https://github.com/ipython/ipython/issues
+or send an email to the mailing list at ipython-dev@python.org
+You can print a more detailed traceback right now with "%tb", or use "%debug"
+to interactively debug it.
+Extra-detailed tracebacks for bug-reporting purposes can be enabled via:
+    %config Application.verbose_crash=True

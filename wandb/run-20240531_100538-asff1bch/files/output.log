@@ -1,0 +1,12 @@
+Creating instance of GB model...
+Fitting data...
+The hard predictions were right 69.23% of the time
+No model hyperparameter tuning
+True Positive is 5
+True Negative is 67
+False Positive is 1
+False Negative is 31
+False positive rate is 0.014705882352941176
+True positive rate is 0.1388888888888889
+False negative rate is 0.8611111111111112
+True negative rate is 0.9852941176470589

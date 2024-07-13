@@ -1,0 +1,13 @@
+Scaling data...
+Creating instance of MLP model...
+Fitting data...
+The hard predictions were right 61.78% of the time
+No model hyperparameter tuning
+True Positive is 39
+True Negative is 121
+False Positive is 42
+False Negative is 57
+False positive rate is 0.25766871165644173
+True positive rate is 0.40625
+False negative rate is 0.59375
+True negative rate is 0.7423312883435583

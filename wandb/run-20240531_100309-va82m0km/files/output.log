@@ -1,0 +1,13 @@
+Scaling data...
+Creating instance of SVM model...
+Fitting data...
+The hard predictions were right 62.93% of the time
+No model hyperparameter tuning
+True Positive is 3
+True Negative is 161
+False Positive is 2
+False Negative is 93
+False positive rate is 0.012269938650306749
+True positive rate is 0.03125
+False negative rate is 0.96875
+True negative rate is 0.9877300613496932

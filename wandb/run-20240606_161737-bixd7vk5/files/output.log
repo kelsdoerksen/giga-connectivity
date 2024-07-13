@@ -1,0 +1,12 @@
+Creating instance of GB model...
+Fitting data...
+The hard predictions were right 66.02% of the time
+Running grid search cv...
+True Positive is 21
+True Negative is 149
+False Positive is 14
+False Negative is 75
+False positive rate is 0.08588957055214724
+True positive rate is 0.21875
+False negative rate is 0.78125
+True negative rate is 0.9141104294478528

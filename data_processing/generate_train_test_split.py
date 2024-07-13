@@ -102,14 +102,16 @@ def subset_by_region(poly_gdf, region_subset, samples_df):
 # Read in dataset
 print('Processing features for {}'.format(aoi))
 if target == 'schools':
+    '''
     dataset_schools = pd.read_csv('{}/{}/{}m_buffer_school/full_feature_space.csv'.format(base_filepath, aoi, buffer))
     dataset_nonschools = pd.read_csv('{}/{}/{}m_buffer_nonschool/full_feature_space.csv'
                                      .format(base_filepath, aoi, buffer))
     dataset = pd.concat([dataset_schools, dataset_nonschools])
     dataset = dataset.drop(columns=['Unnamed: 0'])
-
+    '''
+    dataset = pd.read_csv('{}/{}/{}m_buffer_new/full_feature_space.csv'.format(base_filepath, aoi, buffer))
     # Set save directory
-    save_directory = '{}/{}/{}m_buffer_combined'.format(base_filepath, aoi, buffer)
+    save_directory = '{}/{}/{}m_buffer_new'.format(base_filepath, aoi, buffer)
 
     # Remove correlated features
     dataset_no_info = dataset.drop(columns=['UID', 'lat', 'lon', 'class', 'school_locations'])
@@ -126,9 +128,9 @@ if target == 'schools':
         test = combined_df[combined_df['dataset'] == 'test']
         val = combined_df[combined_df['dataset'] == 'val']
 
-        train.to_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated_uniceflabel.csv'.format(base_filepath, aoi, buffer))
-        test.to_csv('{}/{}/{}m_buffer/TestingData_uncorrelated_uniceflabel.csv'.format(base_filepath, aoi, buffer))
-        val.to_csv('{}/{}/{}m_buffer/ValData_uncorrelated_uniceflabel.csv'.format(base_filepath, aoi, buffer))
+        train.to_csv('{}/{}/{}m_buffer_new/TrainingData_uncorrelated_uniceflabel.csv'.format(base_filepath, aoi, buffer))
+        test.to_csv('{}/{}/{}m_buffer_new/TestingData_uncorrelated_uniceflabel.csv'.format(base_filepath, aoi, buffer))
+        val.to_csv('{}/{}/{}m_buffer_new/ValData_uncorrelated_uniceflabel.csv'.format(base_filepath, aoi, buffer))
 
     if split_type == 'percentage':
         print('Running for data split: {}'.format(split_type))

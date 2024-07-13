@@ -11,7 +11,6 @@ from sklearn.utils import shuffle
 import os
 from sklearn.preprocessing import MinMaxScaler
 from datetime import datetime
-import geopandas as gpd
 
 def get_args():
     parser = argparse.ArgumentParser(description='Running ML Pipeline for Connectivity or School Prediction')
@@ -24,7 +23,7 @@ def get_args():
                                            'satclip-resnet18-l10, satclip-resnet18-l40, satclip-resnet50-l10,'
                                            'satclip-resnet50-l40, satclip-vit16-l10, satclip-vit16-l40, '
                                            'precursor-geofoundation_e011, combined, dino-vitb14, dino-vitl14,'
-                                           'dino-vits14, mobility_combo, mobility_only, mobility_subset')
+                                           'dino-vits14, mobility_buffer, mobility_nearest')
     parser.add_argument('--parameter_tuning', help='Specify if parameter tuning. True or False.')
     parser.add_argument('--target', help='Specify model target. Must be one of connectivity or school')
     parser.add_argument('--data_split', help='Data split for the model. Either percentage (standard 70/30) or'
@@ -158,13 +157,144 @@ def load_schoolmapping_data(country, buffer_extent, feature_space, data_split_ty
     School Mapping data processing for ML classifier
     :return:
     """
+    if feature_space == 'mobility_buffer':
+        mobility_df = pd.read_csv('{}/{}/Mobility/sample_df_mobility_300m_buffer_timeseries_combined.csv'.format(
+            root_dir, country))
+        mobility_df['class'] = mobility_df['class'].map({'school': 1, 'non_school': 0})
+        mobility_df = mobility_df.loc[:, ~mobility_df.columns.str.contains('var')]
+        train_df = mobility_df[mobility_df['dataset'] == 'train']
+        test_df = mobility_df[mobility_df['dataset'] == 'test']
+        val_df = mobility_df[mobility_df['dataset'] == 'val']
+
+        train_df = pd.concat([train_df, val_df])
+
+        training_dataset = shuffle(train_df)
+        testing_dataset = shuffle(test_df)
+
+        training_dataset = training_dataset.rename(columns={'class': 'label'})
+        testing_dataset = testing_dataset.rename(columns={'class': 'label'})
+
+        geo_training_df = pd.read_csv(
+            '{}/{}/{}m_buffer_new/TrainingData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+                                                                                    buffer_extent))
+        geo_test_df = pd.read_csv('{}/{}/{}m_buffer_new/TestingData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+                                                                                                     buffer_extent))
+        geo_validation_df = pd.read_csv(
+            '{}/{}/{}m_buffer_new/ValData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+                                                                               buffer_extent))
+        # Combine train and val
+        geo_train_df = pd.concat([geo_training_df, geo_validation_df])
+
+        # combine feature spaces
+        training_dataset = training_dataset.drop(columns='Unnamed: 0')
+        geo_train_df = geo_train_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1'])
+
+        testing_dataset = testing_dataset.drop(columns='Unnamed: 0')
+        geo_test_df = geo_test_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1'])
+
+        training_dataset_combined = training_dataset.merge(geo_train_df)
+        testing_dataset_combined = testing_dataset.merge(geo_test_df)
+
+        training_dataset_combined = training_dataset_combined.dropna()
+        testing_dataset_combined = testing_dataset_combined.dropna()
+
+        return training_dataset_combined, testing_dataset_combined
+
+    if feature_space == 'mobility_nearest':
+        mobility_df = pd.read_csv('{}/{}/Mobility/sample_df_mobility_nearest_timeseries_combined.csv'.format(
+            root_dir, country))
+        mobility_df = mobility_df.loc[:, ~mobility_df.columns.str.contains('var')]
+        mobility_df['class'] = mobility_df['class'].map({'school': 1, 'non_school': 0})
+        train_df = mobility_df[mobility_df['dataset'] == 'train']
+        test_df = mobility_df[mobility_df['dataset'] == 'test']
+        val_df = mobility_df[mobility_df['dataset'] == 'val']
+
+        train_df = pd.concat([train_df, val_df])
+
+        training_dataset = shuffle(train_df)
+        testing_dataset = shuffle(test_df)
+
+        training_dataset = training_dataset.rename(columns={'class': 'label'})
+        testing_dataset = testing_dataset.rename(columns={'class': 'label'})
+
+        geo_training_df = pd.read_csv(
+            '{}/{}/{}m_buffer_new/TrainingData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+                                                                                    buffer_extent))
+        geo_test_df = pd.read_csv(
+            '{}/{}/{}m_buffer_new/TestingData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+                                                                                   buffer_extent))
+        geo_validation_df = pd.read_csv(
+            '{}/{}/{}m_buffer_new/ValData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+                                                                               buffer_extent))
+        # Combine train and val
+        geo_train_df = pd.concat([geo_training_df, geo_validation_df])
+
+        # combine feature spaces
+        training_dataset = training_dataset.drop(columns='Unnamed: 0')
+        geo_train_df = geo_train_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1'])
+
+        testing_dataset = testing_dataset.drop(columns='Unnamed: 0')
+        geo_test_df = geo_test_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1'])
+
+        training_dataset_combined = training_dataset.merge(geo_train_df)
+        testing_dataset_combined = testing_dataset.merge(geo_test_df)
+
+        training_dataset_combined = training_dataset_combined.dropna()
+        testing_dataset_combined = testing_dataset_combined.dropna()
+
+        return training_dataset_combined, testing_dataset_combined
+
+    if feature_space == 'mobility_inter':
+        mobility_df = pd.read_csv('{}/{}/Mobility/sample_df_mobility_inter_timeseries_combined.csv'.format(
+            root_dir, country))
+        mobility_df = mobility_df.loc[:, ~mobility_df.columns.str.contains('var')]
+        mobility_df['class'] = mobility_df['class'].map({'school': 1, 'non_school': 0})
+        train_df = mobility_df[mobility_df['dataset'] == 'train']
+        test_df = mobility_df[mobility_df['dataset'] == 'test']
+        val_df = mobility_df[mobility_df['dataset'] == 'val']
+
+        train_df = pd.concat([train_df, val_df])
+
+        training_dataset = shuffle(train_df)
+        testing_dataset = shuffle(test_df)
+
+        training_dataset = training_dataset.rename(columns={'class': 'label'})
+        testing_dataset = testing_dataset.rename(columns={'class': 'label'})
+
+        geo_training_df = pd.read_csv(
+            '{}/{}/{}m_buffer_new/TrainingData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+                                                                                    buffer_extent))
+        geo_test_df = pd.read_csv(
+            '{}/{}/{}m_buffer_new/TestingData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+                                                                                   buffer_extent))
+        geo_validation_df = pd.read_csv(
+            '{}/{}/{}m_buffer_new/ValData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+                                                                               buffer_extent))
+        # Combine train and val
+        geo_train_df = pd.concat([geo_training_df, geo_validation_df])
+
+        # combine feature spaces
+        training_dataset = training_dataset.drop(columns='Unnamed: 0')
+        geo_train_df = geo_train_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1'])
+
+        testing_dataset = testing_dataset.drop(columns='Unnamed: 0')
+        geo_test_df = geo_test_df.drop(columns=['Unnamed: 0', 'Unnamed: 0.1'])
+
+        training_dataset_combined = training_dataset.merge(geo_train_df)
+        testing_dataset_combined = testing_dataset.merge(geo_test_df)
+
+        training_dataset_combined = training_dataset_combined.dropna()
+        testing_dataset_combined = testing_dataset_combined.dropna()
+
+        return training_dataset_combined, testing_dataset_combined
+
     if feature_space == 'engineer':
         if data_split_type == 'unicef':
-            training_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+            training_df = pd.read_csv('{}/{}/{}m_buffer_new/TrainingData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
                                                                                                        buffer_extent))
-            test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+            test_df = pd.read_csv('{}/{}/{}m_buffer_new/TestingData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
                                                                                                        buffer_extent))
-            validation_df = pd.read_csv('{}/{}/{}m_buffer/ValData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
+            validation_df = pd.read_csv('{}/{}/{}m_buffer_new/ValData_uncorrelated_uniceflabel.csv'.format(root_dir, country,
                                                                                                        buffer_extent))
             # Combine train and val and split later when hyp tuning
             train_df = pd.concat([training_df, validation_df])
@@ -185,15 +315,6 @@ def load_schoolmapping_data(country, buffer_extent, feature_space, data_split_ty
             # Removing boundary features since we are geospatial cross-validating?
             train_df.loc[:, ~train_df.columns.str.startswith('boundary')]
             test_df.loc[:, ~test_df.columns.str.startswith('boundary')]
-    if feature_space == 'mobility_300':
-        train_df = ''
-        test_df = ''
-    if feature_space == 'mobility_inter':
-        train_df = ''
-        test_df = ''
-    if feature_space == 'mobility_nearest':
-        train_df = ''
-        test_df = ''
 
     if country == 'BWA':
         train_df = train_df.drop(columns=['UID'])
