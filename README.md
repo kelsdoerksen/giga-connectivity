@@ -48,6 +48,16 @@ python run_airpy.py --gee_data <QUERIED DATA> --band <QUERIED DATA BAND> --regio
 
 Distance to electrical transmission line and ookla speedtest data features were calculated in the `get_elec` and `get_ookla` functions in the `generate_features.py` script.
 
+ML-ready features are generated with the `generate_features.py` script with the following command:
+```
+python generate_features.py --root_dir --save_dir --aoi --buffer --target
+```
+Where the configurable parameters refer to:
+* `--root_dir`: Directory path where data is stored
+* `--save_dir`: Directory path to save generated features
+* `--aoi`: Country/Region of interest
+* `--buffer`: Buffer extent surrounding target
+* `--target`: ML model target type. Must be one of `school` or `connectivity`
 
 ## 📚 Code Organization
 To run the pipeline, the following command is used:
@@ -62,7 +72,7 @@ The available configurable parameters are:
     *   `svm`: support vector machine
     *   `lr`: logistic regression
 * `--aoi`: Country
-* `--buffer`: Buffer extent surrounding school/non-school. Currently supports 300, 500, 1000m extents
+* `--buffer`: Buffer extent surrounding target
 * `--root_dir`: Directory of data
 * `--experiment_type`: Wandb experiment type. Online or Offline to save and push run directly to Wandb project.
 * `--features`: Feature space to use to train/test model
