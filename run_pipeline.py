@@ -12,6 +12,7 @@ import os
 from sklearn.preprocessing import MinMaxScaler
 from datetime import datetime
 
+
 def get_args():
     parser = argparse.ArgumentParser(description='Running ML Pipeline for Connectivity or School Prediction')
     parser.add_argument('--model', help='ML Model. Must be one of rf, svm, lr, gb, mlp.')
