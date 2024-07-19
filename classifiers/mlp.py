@@ -9,42 +9,8 @@ from sklearn.metrics import make_scorer, accuracy_score
 import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
 from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
-import pandas as pd
-import matplotlib.pyplot as plt
+from analysis import confusion_matrix
 
-
-def calc_confusion_matrix(y_test, y_pred, savedir):
-    """
-    Calculates confusion matrix
-    """
-    predictions = (y_pred >= 0.5)
-
-    CM = confusion_matrix(y_test, predictions)
-    TN = CM[0][0]
-    FN = CM[1][0]
-    TP = CM[1][1]
-    FP = CM[0][1]
-
-    print('True Positive is {}'.format(TP))
-    print('True Negative is {}'.format(TN))
-    print('False Positive is {}'.format(FP))
-    print('False Negative is {}'.format(FN))
-
-    FP_Rate = FP / (FP + TN)
-    TP_Rate = TP / (TP + FN)
-    FN_Rate = FN / (FN + TP)
-    TN_Rate = TN / (TN + FP)
-
-    print('False positive rate is {}'.format(FP_Rate))
-    print('True positive rate is {}'.format(TP_Rate))
-    print('False negative rate is {}'.format(FN_Rate))
-    print('True negative rate is {}'.format(TN_Rate))
-
-    with open('{}/confusionmatrix.txt'.format(savedir), 'w') as f:
-        f.write('False positive rate is {}'.format(FP_Rate))
-        f.write('True positive rate is {}'.format(TP_Rate))
-        f.write('False negative rate is {}'.format(FN_Rate))
-        f.write('True negative rate is {}'.format(TN_Rate))
 
 def run_mlp(X_train,
            y_train,
@@ -89,7 +55,7 @@ def run_mlp(X_train,
         predictions = (probs[:, 1] >= 0.5)
         predictions = predictions * 1
         f1 = f1_score(y_test, predictions)
-        calc_confusion_matrix(y_test, probs[:, 1], results_dir)
+        confusion_matrix(y_test, probs[:, 1], results_dir)
 
         # Saving results for further plotting
         results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)

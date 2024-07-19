@@ -1,6 +1,6 @@
 """
-Preprocessing scripts to split feature space into 70% train, 30% test for
-deterministic results
+Preprocessing scripts to split feature space into 70% train, 15% test,
+15% val for deterministic results
 """
 
 import random
@@ -10,25 +10,19 @@ import argparse
 import geopandas as gpd
 import numpy as np
 
-parser = argparse.ArgumentParser(description='Splitting data into training and testing sets',
-                                 formatter_class=argparse.RawTextHelpFormatter)
-parser.add_argument("--aoi", help="Country of interest")
-parser.add_argument("--buffer", help="Buffer extent around school to extract data from")
-parser.add_argument("--target", help="Model target, must be one of connectivity or schools")
-parser.add_argument("--split_type", help="How to split the train and test set, either split it percentage or geography")
-args = parser.parse_args()
 
-aoi = args.aoi
-buffer = args.buffer
-target = args.target
-split_type = args.split_type
+def get_args():
 
-if target == 'connectivity':
-    base_filepath = '/Users/kelseydoerksen/Desktop/Giga/Connectivity'
-    label = 'connectivity'
-if target == 'schools':
-    base_filepath = '/Users/kelseydoerksen/Desktop/Giga/SchoolMapping'
-    label = 'class'
+    parser = argparse.ArgumentParser(description='Splitting data into training and testing sets',
+                                     formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("--root_dir", help='Root directory that contains geodataframe files for regional split')
+    parser.add_argument("--data_dir", help="Directory of full/uncorrelated feature space to split")
+    parser.add_argument("--save_dir", help="Directory to save split data")
+    parser.add_argument("--target", help="Model target, must be one of connectivity or schools")
+    parser.add_argument("--split_type", help="How to split the train and test set, either split it "
+                                             "percentage or geography")
+    parser.add_argument("--aoi", help='Country/Region generating data for')
+    return parser.parse_args()
 
 seed = random.seed(46)
 
@@ -99,60 +93,57 @@ def subset_by_region(poly_gdf, region_subset, samples_df):
     return samples_df
 
 
-# Read in dataset
-print('Processing features for {}'.format(aoi))
-if target == 'schools':
-    '''
-    dataset_schools = pd.read_csv('{}/{}/{}m_buffer_school/full_feature_space.csv'.format(base_filepath, aoi, buffer))
-    dataset_nonschools = pd.read_csv('{}/{}/{}m_buffer_nonschool/full_feature_space.csv'
-                                     .format(base_filepath, aoi, buffer))
-    dataset = pd.concat([dataset_schools, dataset_nonschools])
-    dataset = dataset.drop(columns=['Unnamed: 0'])
-    '''
-    dataset = pd.read_csv('{}/{}/{}m_buffer_new/full_feature_space.csv'.format(base_filepath, aoi, buffer))
-    # Set save directory
-    save_directory = '{}/{}/{}m_buffer_new'.format(base_filepath, aoi, buffer)
+if __name__ == '__main__':
+    args = get_args()
+    data_dir = args.data_dir
+    save_dir = args.save_dir
+    target = args.target
+    split_type = args.split_type
+    root_dir = args.root_dir
+    aoi = args.aoi
 
-    # Remove correlated features
-    dataset_no_info = dataset.drop(columns=['UID', 'lat', 'lon', 'class', 'school_locations'])
-    features_to_remove = eliminate_correlated_features(dataset_no_info, 0.9, save_directory)
-    dataset_uncorr = dataset.drop(columns=features_to_remove)
+    # Read in dataset
+    dataset = pd.read_csv('{}/uncorrelated_feature_space.csv'.format(data_dir))
 
-    if split_type == 'unicef':
-        print('Splitting data according to unicef-defined train/val/test')
-        unicef_poly = gpd.read_file('{}/{}/{}_train.geojson'.format(base_filepath, aoi, aoi))
-        unicef_poly_id = unicef_poly[['dataset', 'UID']]
-        combined_df = pd.merge(dataset_uncorr, unicef_poly_id, on='UID')
-
-        train = combined_df[combined_df['dataset'] == 'train']
-        test = combined_df[combined_df['dataset'] == 'test']
-        val = combined_df[combined_df['dataset'] == 'val']
-
-        train.to_csv('{}/{}/{}m_buffer_new/TrainingData_uncorrelated_uniceflabel.csv'.format(base_filepath, aoi, buffer))
-        test.to_csv('{}/{}/{}m_buffer_new/TestingData_uncorrelated_uniceflabel.csv'.format(base_filepath, aoi, buffer))
-        val.to_csv('{}/{}/{}m_buffer_new/ValData_uncorrelated_uniceflabel.csv'.format(base_filepath, aoi, buffer))
+    if target == 'connectivity':
+        label = dataset['connectivity']
+    if target == 'schools':
+        label = dataset['label']
 
     if split_type == 'percentage':
         print('Running for data split: {}'.format(split_type))
-        X_train, X_test, y_train, y_test = train_test_split(dataset_uncorr, dataset_uncorr[label],
-                                                            test_size=0.3, random_state = seed)
+        X_train, X_test, y_train, y_test = train_test_split(dataset, label, test_size=0.3, random_state = seed)
         train = pd.concat([X_train, y_train], axis=1)
-        test = pd.concat([X_test, y_test], axis=1)
-        train.to_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(base_filepath, aoi, buffer))
-        test.to_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(base_filepath, aoi, buffer))
+
+        # Split test in half for validation
+        X_val, X_test_half, y_val, y_test_half = train_test_split(X_test, y_test, test_size=0.5, random_state=seed)
+        test = pd.concat([X_test_half, y_test_half], axis=1)
+        val = pd.concat([X_val, y_val], axis=1)
+
+        train.to_csv('{}/TrainingData.csv'.format(save_dir))
+        test.to_csv('{}/TestingData.csv'.format(save_dir))
+        val.to_csv('{}/ValData.csv'.format(save_dir))
 
     if split_type == 'geography':
         for region in list(region_dict.keys()):
             print('Running for data split: {}, region: {}'.format(split_type, region))
             # Split by the geographic region of interest
-            aoi_polygon = gpd.read_file('{}/{}/geoBoundaries-{}-ADM2.geojson'.format(base_filepath, aoi, aoi))
-            df_of_features = subset_by_region(aoi_polygon, region, dataset_uncorr)
+            aoi_polygon = gpd.read_file('{}/geoBoundaries-{}-ADM2.geojson'.format(root_dir, aoi))
+            df_of_features = subset_by_region(aoi_polygon, aoi, dataset)
 
             train = df_of_features[df_of_features['split'] == 'Train']
             test = df_of_features[df_of_features['split'] == 'Test']
 
+            # Subset a percentage of the training set as validation for hyperparameter tuning
+            train = train.sample(n=len(train))
+            val = train[0:int(0.15*len(train))]
+            train = train.iloc[int(0.15*len(train)):]
+
+
             # Drop the column denoting split, and drop columns with admin boundaries because we don't want to include this
             train = train.drop(columns='split')
             test = test.drop(columns='split')
-            train.to_csv('{}/TrainingData_uncorrelated_{}_split.csv'.format(save_directory, region))
-            test.to_csv('{}/TestingData_uncorrelated_{}_split.csv'.format(save_directory, region))
+            val = val.drop(columns='split')
+            train.to_csv('{}/TrainingData_{}_split.csv'.format(save_dir, region))
+            test.to_csv('{}/TestingData_{}_split.csv'.format(save_dir, region))
+            val.to_csv('{}/ValData_{}_split.csv'.format(save_dir, region))

@@ -6,6 +6,7 @@ import pandas as pd
 import argparse
 import geopandas as gpd
 from sklearn.preprocessing import OneHotEncoder
+import data_processing.processing_scripts as dp
 
 parser = argparse.ArgumentParser(description='Generating features for ML Classifiers',
                                  formatter_class=argparse.RawTextHelpFormatter)
@@ -244,13 +245,11 @@ def get_feature_space(data_dir, region, buffer_ext, target_type, save_path):
 
     print('Getting ghsl features...')
     df_ghsl = pd.read_csv('{}/{}/{}m_buffer/human_settlement_layer_built_up_built_characteristics_2018'
-                          '_custom_buffersize_{}_with_time.csv'.
-                          format(data_dir, region, buffer_ext, buffer_ext))
+                          '_custom_buffersize_{}_with_time.csv'.format(data_dir, region, buffer_ext, buffer_ext))
 
     print('Getting ghm features...')
     df_ghm = pd.read_csv('{}/{}/{}m_buffer/global_human_modification_gHM_2016'
-                         '_custom_buffersize_{}_with_time.csv'.
-                         format(data_dir, region, buffer_ext, buffer_ext))
+                         '_custom_buffersize_{}_with_time.csv'.format(data_dir, region, buffer_ext, buffer_ext))
 
     print('Getting elec distance features...')
     df_distance = get_elec(region, df_samples, data_dir)
@@ -289,11 +288,11 @@ def get_feature_space(data_dir, region, buffer_ext, target_type, save_path):
 
     # Remove duplicated column names from concatenating
     unique_df = unique_df.loc[:, ~unique_df.columns.duplicated()]
+    unique_df.to_csv('{}/full_feature_space.csv'.format(save_path))
 
-    if target == 'school':
-        unique_df.to_csv('{}/full_feature_space.csv'.format(save_path))
-    else:
-        unique_df.to_csv('{}/full_feature_space.csv'.format(save_path))
+    # Remove Pearson correlated feature and save
+    df_uncorr = dp.eliminate_correlated_features(unique_df, 0.2, save_path)
+    df_uncorr.to_csv('{}/uncorrelated_feature_space.csv'.format(save_path))
 
 
 if __name__ == '__main__':

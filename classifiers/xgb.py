@@ -1,8 +1,8 @@
 """
-gb pipeline for ML call
+xgb pipeline for ML call
 """
 
-from sklearn.ensemble import GradientBoostingClassifier
+from xgboost import XGBClassifier
 import pickle
 from sklearn.model_selection import GridSearchCV
 import wandb
@@ -11,7 +11,7 @@ from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
 from analysis import confusion_matrix
 
 
-def run_gb(X_train,
+def run_xgb(X_train,
            y_train,
            X_test,
            y_test,
@@ -21,14 +21,14 @@ def run_gb(X_train,
            results_dir,
            tuning):
     """
-    Run gb model
+    Run xgb model
     """
 
-    model_name = 'gb'
+    model_name = 'xgb'
 
-    # Create instance of GB model
-    print('Creating instance of GB model...')
-    clf = GradientBoostingClassifier(random_state=48)
+    # Create instance of XGB model
+    print('Creating instance of XGB model...')
+    clf = XGBClassifier(random_state=48)
 
     # Fit to training data
     print('Fitting data...')
@@ -51,7 +51,7 @@ def run_gb(X_train,
         predictions = (probs[:, 1] >= 0.5)
         predictions = predictions * 1
         f1 = f1_score(y_test, predictions)
-        confusion_matrix(y_test, probs[:, 1], results_dir)
+        calc_confusion_matrix(y_test, probs[:, 1], results_dir)
 
         # Saving results for further plotting
         results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
@@ -64,13 +64,12 @@ def run_gb(X_train,
         model_setup = 'tuned'
         # Tune the model
         param_grid = {
-            'loss': ['log_loss', 'exponential'],
-            'learning_rate': [0.05, 0.1, 0.5, 1],
-            'n_estimators': [100, 200, 300],
-            'criterion': ['friedman_mse', 'squared_error'],
-            'min_samples_split': [2, 4, 6],
-            'min_samples_leaf': [1, 3, 5],
-            'max_features': ['sqrt', 'log2', None]
+            'eta': [0.01, 0.05, 0.1, 0.15, 0.2],
+            'max_depth': [3, 4, 5, 6],
+            'min_child_weight': [0, 1, 2],
+            'max_delta_step': [0, 1, 2],
+            'subsample': [0, 0.5, 0.75, 1],
+            'tree_method': ['auto', 'exact', 'approx']
         }
         # grid search cv
         grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=5, n_jobs=-1)
@@ -87,7 +86,7 @@ def run_gb(X_train,
                                             results_dir=results_dir, prefix_name=model_setup)
 
         tuned_probs = best_clf.predict_proba(X_test)
-        calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
+        confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
         # Saving results for further plotting
         results_for_plotting(y_test, tuned_probs, test_latitudes, test_longitudes, results_dir, model_name)
 

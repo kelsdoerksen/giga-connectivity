@@ -14,7 +14,7 @@ from sklearn.ensemble import RandomForestClassifier
 import wandb
 import pickle
 from analysis.generating_results import results_for_plotting
-import seaborn as sn
+from analysis import confusion_matrix
 
 
 def calc_importance(model, X, save_dir):
@@ -31,46 +31,6 @@ def calc_importance(model, X, save_dir):
   plt.savefig('{}/FeatureImportances.png'.format(save_dir), bbox_inches='tight')
 
   return df
-
-
-def calc_confusion_matrix(y_test, y_pred, savedir):
-    """
-    Calculates confusion matrix
-    """
-    predictions = (y_pred >= 0.5)
-
-    CM = confusion_matrix(y_test, predictions)
-    TN = CM[0][0]
-    FN = CM[1][0]
-    TP = CM[1][1]
-    FP = CM[0][1]
-
-    print('True Positive is {}'.format(TP))
-    print('True Negative is {}'.format(TN))
-    print('False Positive is {}'.format(FP))
-    print('False Negative is {}'.format(FN))
-
-    FP_Rate = FP / (FP + TN)
-    TP_Rate = TP / (TP + FN)
-    FN_Rate = FN / (FN + TP)
-    TN_Rate = TN / (TN + FP)
-
-    print('False positive rate is {}'.format(FP_Rate))
-    print('True positive rate is {}'.format(TP_Rate))
-    print('False negative rate is {}'.format(FN_Rate))
-    print('True negative rate is {}'.format(TN_Rate))
-
-    with open('{}/confusionmatrix.txt'.format(savedir), 'w') as f:
-        f.write('False positive rate is {}'.format(FP_Rate))
-        f.write('True positive rate is {}'.format(TP_Rate))
-        f.write('False negative rate is {}'.format(FN_Rate))
-        f.write('True negative rate is {}'.format(TN_Rate))
-
-    classes = ['0','1']
-    df_cfm = pd.DataFrame(CM, index=classes, columns=classes)
-    plt.figure(figsize=(10, 7))
-    cfm_plot = sn.heatmap(df_cfm, annot=True)
-    cfm_plot.figure.savefig("{}/cfm.png".format(savedir))
 
 
 def run_rf(X_train,
@@ -119,7 +79,7 @@ def run_rf(X_train,
         # Saving results for further plotting
         results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
         calc_importance(forest, X_test, results_dir)
-        calc_confusion_matrix(y_test, probs[:, 1], results_dir)
+        confusion_matrix(y_test, probs[:, 1], results_dir)
 
         wandb_exp.log({
             'roc': wandb.plot.roc_curve(y_test, probs),

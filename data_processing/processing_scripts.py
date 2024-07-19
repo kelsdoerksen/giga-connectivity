@@ -1,20 +1,9 @@
-import pandas as pd
 import json
-import argparse
 import numpy as np
-import geopandas as gpd
 
 """
-Some scrap scripts/functions
+Some data preprocessing functions
 """
-
-parser = argparse.ArgumentParser(description='Generating features for Random Forest',
-                                 formatter_class=argparse.RawTextHelpFormatter)
-parser.add_argument("--aoi", help="Country of interest")
-parser.add_argument("--target", help="ML target, must be one of connectivity or schools")
-args = parser.parse_args()
-aoi = args.aoi
-target = args.target
 
 
 def get_lat_lon_list(df, country_name, save_dir):
@@ -60,7 +49,7 @@ def get_lat_lon_list_from_gdp(df, country_name, save_dir):
         json.dump(coords_dict, outfile)
 
 
-def eliminate_correlated_features(df, threshold):
+def eliminate_correlated_features(df, threshold, save_dir):
     """
     Modified function from giga-ml-utils
     :return: df of uncorrelated features
@@ -81,48 +70,13 @@ def eliminate_correlated_features(df, threshold):
     for idx, row in highly_correlated_pairs.iterrows():
         features_to_drop.add(row['level_0'])  # Drop the first feature
     print('Features removed were: {}'.format(features_to_drop))
-    with open('{}/correlated_features.txt'.format(root_dir), 'w') as f:
+    with open('{}/correlated_features.txt'.format(save_dir), 'w') as f:
         f.write('Features removed were: {}'.format(features_to_drop))
 
     # drop the identified features
     df_filtered = df.drop(features_to_drop, axis=1)
 
     return df_filtered
-
-
-
-'''
-# Running uncorrelated feature selection -> uncomment if you would like to run
-buffer = 1000
-aois = ['BWA']
-target = 'schools'
-for aoi in aois:
-    print('Running for buffer: {}, aoi: {}'.format(buffer, aoi))
-    if target == 'connectivity':
-        root_dir = '/Users/kelseydoerksen/Desktop/Giga/Connectivity/{}/{}m_buffer'.format(aoi, buffer)
-        identity_cols = ['giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations']
-        cols_to_drop = ['Unnamed: 0', 'giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations']
-    if target == 'schools':
-        root_dir = '/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/{}/{}m_buffer_nonschool'.format(aoi, buffer)
-        identity_cols = ['UID', 'lat', 'lon', 'class']
-        cols_to_drop = ['Unnamed: 0', 'UID', 'lat', 'lon', 'class']
-
-    df = pd.read_csv('{}/full_feature_space.csv'.format(root_dir))
-
-    df_identity = df[identity_cols]
-    df = df.drop(columns=cols_to_drop)
-    df_filt = eliminate_correlated_features(df, 0.9)
-
-    combined_df = pd.concat([df_identity, df_filt], axis=1)
-    combined_df.to_csv('{}/uncorrelated_feature_space.csv'.format(root_dir))
-'''
-
-# Running lat, lon coordinate generation for airPy processing script
-aois = ['BWA']
-for aoi in aois:
-    gpd_df = gpd.read_file('/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/{}/{}_train.geojson'.format(aoi, aoi))
-    save_dir = '/Users/kelseydoerksen/Desktop/Giga/SchoolMapping/{}'.format(aoi)
-    get_lat_lon_list_from_gdp(gpd_df, aoi, save_dir)
 
 
 

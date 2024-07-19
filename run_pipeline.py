@@ -4,7 +4,7 @@ for connectivity prediction
 """
 
 import argparse
-from classifiers import lr, rf, svm, mlp, gb
+from classifiers import lr, rf, svm, mlp, gb, xgb
 import wandb
 import pandas as pd
 from sklearn.utils import shuffle
@@ -15,7 +15,7 @@ from datetime import datetime
 
 def get_args():
     parser = argparse.ArgumentParser(description='Running ML Pipeline for Connectivity or School Prediction')
-    parser.add_argument('--model', help='ML Model. Must be one of rf, svm, lr, gb, mlp.')
+    parser.add_argument('--model', help='ML Model. Must be one of rf, svm, lr, gb, mlp, xgb')
     parser.add_argument('--aoi', help='Country of interest')
     parser.add_argument('--buffer', help='Buffer extent for data')
     parser.add_argument('--root_dir', help='Root directory of project')
@@ -491,6 +491,18 @@ if __name__ == '__main__':
 
     if model == 'gb':
         gb.run_gb(
+            Xtrain,
+            ytrain,
+            Xtest,
+            ytest,
+            test_latitudes,
+            test_longitudes,
+            experiment,
+            results,
+            hyper_tuning)
+
+    if model =='xgb':
+        xgb.run_xgb(
             Xtrain,
             ytrain,
             Xtest,
