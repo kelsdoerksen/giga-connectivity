@@ -8,7 +8,6 @@ from classifiers import lr, rf, svm, mlp, gb, xgb
 import wandb
 import pandas as pd
 from sklearn.utils import shuffle
-import os
 from sklearn.preprocessing import MinMaxScaler
 from datetime import datetime
 import os
