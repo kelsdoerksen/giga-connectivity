@@ -42,10 +42,10 @@ def load_connectivity_data(country, buffer_extent, feature_space):
     :return:
     """
     if feature_space == 'engineer':
-        training_dataset = pd.read_csv(
+        training_data = pd.read_csv(
             '{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
-        testing_dataset = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
-        val_dataset = pd.read_csv('{}/{}/{}m_buffer/ValData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
+        testing_data = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
+        val_data = pd.read_csv('{}/{}/{}m_buffer/ValData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
 
     if feature_space == 'engineer_with_aux':
         train_df = pd.read_csv(
