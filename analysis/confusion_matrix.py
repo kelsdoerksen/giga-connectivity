@@ -12,7 +12,8 @@ def calc_confusion_matrix(label, preds, savedir):
     """
     Calculates confusion matrix
     """
-    CM = confusion_matrix(label, preds)
+    preds_binary = (preds > 0.5) * 1
+    CM = confusion_matrix(label, preds_binary)
     TN = CM[0][0]
     FN = CM[1][0]
     TP = CM[1][1]
