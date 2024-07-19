@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 190, in <module>
-    get_class_balance(train_data, test_data, results)
-  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 120, in get_class_balance
-    with open('{}/classbalance.txt'.format(savedir), 'w') as f:
-FileNotFoundError: [Errno 2] No such file or directory: '/Users/kelseydoerksen/Desktop/Giga/BWA/results_1000m/glowing-horse-234/classbalance.txt'

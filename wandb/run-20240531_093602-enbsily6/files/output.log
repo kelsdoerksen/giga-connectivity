@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 381, in <module>
-    train_data, test_data = load_schoolmapping_data(aoi, buffer, features, data_split)
-  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 285, in load_schoolmapping_data
-    train_df = train_df.drop(columns=['UID'])
-AttributeError: 'str' object has no attribute 'drop'

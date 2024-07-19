@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 230, in <module>
-    get_class_balance(train_data, test_data, results)
-  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 142, in get_class_balance
-    positive_samples_total = sum(train_df['connectivity']) + sum(test_df['connectivity'])
-TypeError: unsupported operand type(s) for +: 'int' and 'str'

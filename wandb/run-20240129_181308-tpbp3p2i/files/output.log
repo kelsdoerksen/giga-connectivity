@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/kelseydoerksen/code/giga-connectivity/run_pipeline.py", line 139, in <module>
-    svm.run_svm(
-NameError: name 'svm' is not defined
