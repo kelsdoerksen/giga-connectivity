@@ -131,7 +131,7 @@ def run_rf(X_train,
         predictions = predictions.tolist()
         f1 = f1_score(y_test, predictions, zero_division=0)
         calc_importance(best_forest, X_test, results_dir)
-        confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
+        confusion_matrix.confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
 
         wandb_exp.log({
             'Best Model Params': rf_cv.best_params_,
