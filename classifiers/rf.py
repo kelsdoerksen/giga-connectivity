@@ -105,7 +105,7 @@ def run_rf(X_train,
         # grid search cv
         rf_cv = GridSearchCV(estimator=forest,
                                    param_grid=param_grid,
-                                   scoring={'accuracy', 'f1'},
+                                   scoring=['accuracy', 'f1'],
                                    refit='f1',
                                    cv=5,
                                    n_jobs=-1,
