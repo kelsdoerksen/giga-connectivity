@@ -13,7 +13,7 @@ from sklearn.ensemble import RandomForestClassifier
 import wandb
 import pickle
 from analysis.generating_results import results_for_plotting
-from analysis import confusion_matrix
+from analysis.confusion_matrix import calc_confusion_matrix
 
 
 def calc_importance(model, X, save_dir):
@@ -80,7 +80,7 @@ def run_rf(X_train,
         # Saving results for further plotting
         results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
         calc_importance(forest, X_test, results_dir)
-        confusion_matrix(y_test, probs[:, 1], results_dir)
+        calc_confusion_matrix(y_test, probs[:, 1], results_dir)
 
         wandb_exp.log({
             'roc': wandb.plot.roc_curve(y_test, probs),
@@ -131,7 +131,7 @@ def run_rf(X_train,
         predictions = predictions.tolist()
         f1 = f1_score(y_test, predictions, zero_division=0)
         calc_importance(best_forest, X_test, results_dir)
-        confusion_matrix.confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
+        calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
 
         wandb_exp.log({
             'Best Model Params': rf_cv.best_params_,
