@@ -31,6 +31,7 @@ def get_args():
                                              'defined geography by user. Currently supports split of BWA admin'
                                              'zone 2 division')
     parser.add_argument('--wandb_dir', help='Wandb directory to save run information to')
+    parser.add_argument('--results_dir', help='Results directory')
 
     return parser.parse_args()
 
@@ -410,6 +411,7 @@ if __name__ == '__main__':
     model_target = args.target
     data_split = args.data_split
     wandb_dir = args.wandb_dir
+    results_dir = args.results_dir
 
     # Set up experiment
     experiment = wandb.init(project='giga-research',
@@ -432,8 +434,8 @@ if __name__ == '__main__':
     if experiment_type == 'offline':
         results = '{}/{}/results_{}m/{}'.format(root_dir, aoi, buffer, wandb.run.id)
     else:
-        if not os.path.exists('{}/{}/results_{}m/{}'.format(root_dir, aoi, buffer, experiment.name)):
-            results = '{}/{}/results_{}m/{}'.format(root_dir, aoi, buffer, experiment.name)
+        if not os.path.exists('{}/{}/results_{}m/{}'.format(results_dir, aoi, buffer, experiment.name)):
+            results = '{}/{}/results_{}m/{}'.format(results_dir, aoi, buffer, experiment.name)
 
     os.mkdir(results)
 
