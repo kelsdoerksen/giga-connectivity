@@ -12,14 +12,16 @@ from analysis import confusion_matrix
 
 
 def run_xgb(X_train,
-           y_train,
-           X_test,
-           y_test,
-           test_latitudes,
-           test_longitudes,
-           wandb_exp,
-           results_dir,
-           tuning):
+            y_train,
+            X_test,
+            y_test,
+            X_val,
+            y_val,
+            test_latitudes,
+            test_longitudes,
+            wandb_exp,
+            results_dir,
+            tuning):
     """
     Run xgb model
     """
@@ -51,7 +53,7 @@ def run_xgb(X_train,
         predictions = (probs[:, 1] >= 0.5)
         predictions = predictions * 1
         f1 = f1_score(y_test, predictions)
-        calc_confusion_matrix(y_test, probs[:, 1], results_dir)
+        confusion_matrix(y_test, probs[:, 1], results_dir)
 
         # Saving results for further plotting
         results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)

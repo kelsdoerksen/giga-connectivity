@@ -44,10 +44,12 @@ def load_connectivity_data(country, buffer_extent, feature_space):
         train_df = pd.read_csv(
             '{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
         test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
+        val_df = pd.read_csv('{}/{}/{}m_buffer/ValData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
 
         if country == 'BWA':
             train_df = train_df.drop(columns=['UID'])
             test_df = test_df.drop(columns=['UID'])
+            val_df = val_df.drop(columns=['UID'])
 
     if feature_space == 'engineer_with_aux':
         train_df = pd.read_csv(
@@ -337,7 +339,7 @@ def load_schoolmapping_data(country, buffer_extent, feature_space, data_split_ty
     return training_dataset, testing_dataset
 
 
-def get_class_balance(train_df, test_df, savedir):
+def get_class_balance(train_df, test_df, val_df, savedir):
     """
     Calculate class balance for total, train and test set to save
     :param: train_df: training data
@@ -346,8 +348,8 @@ def get_class_balance(train_df, test_df, savedir):
     :return:
     """
 
-    positive_samples_total = sum(train_df['label']) + sum(test_df['label'])
-    negative_sampels_total = len(train_df) + len(test_df) - positive_samples_total
+    positive_samples_total = sum(train_df['label']) + sum(test_df['label'] + sum(val_df['label']))
+    negative_sampels_total = len(train_df) + len(test_df) + len(val_df) - positive_samples_total
 
     with open('{}/classbalance.txt'.format(savedir), 'w') as f:
         f.write('Number of positive samples total is: {}'.format(positive_samples_total))
@@ -356,8 +358,10 @@ def get_class_balance(train_df, test_df, savedir):
         f.write('Number of negative training samples is: {}'.format(len(train_df) - sum(train_df['label'])))
         f.write('Number of positive testing samples is: {}'.format(sum(test_df['label'])))
         f.write('Number of negative testing samples is: {}'.format(len(test_df) - sum(test_df['label'])))
+        f.write('Number of positive validation samples is: {}'.format(sum(val_df['label'])))
+        f.write('Number of negative validation samples is: {}'.format(len(val_df) - sum(val_df['label'])))
 
-def preprocess_samples(train_df, test_df, model_type):
+def preprocess_samples(train_df, test_df, val_df):
     """
     Light preprocessing to data before running through models
     """
@@ -367,26 +371,30 @@ def preprocess_samples(train_df, test_df, model_type):
 
     X_test = test_df.drop(columns=cols_to_drop, errors='ignore')
     X_train = train_df.drop(columns=cols_to_drop, errors='ignore')
+    X_val = val_df.drop(columns=cols_to_drop, errors='ignore')
 
-    models_with_scaling = ['svm', 'lr', 'mlp']
-    if model_type in models_with_scaling:
-        cols_list = X_train.columns.tolist()
-        print('Scaling data...')
-        # scale the data if we are not using trees/GB model
-        train_scaler = MinMaxScaler()
-        train_scaler.fit(X_train)
-        X_train_scaled = train_scaler.transform(X_train)
 
-        test_scaler = MinMaxScaler()
-        test_scaler.fit(X_test)
-        X_test_scaled = test_scaler.transform(X_test)
+    cols_list = X_train.columns.tolist()
+    print('Scaling data...')
+    # scale the data if we are not using trees/GB model
+    train_scaler = MinMaxScaler()
+    train_scaler.fit(X_train)
+    X_train_scaled = train_scaler.transform(X_train)
 
-        # Return as dfs
-        X_train_scaled_df = pd.DataFrame(data=X_train_scaled, columns=cols_list)
-        X_test_scaled_df = pd.DataFrame(data=X_test_scaled, columns=cols_list)
-        return X_train_scaled_df, X_test_scaled_df
+    test_scaler = MinMaxScaler()
+    test_scaler.fit(X_test)
+    X_test_scaled = test_scaler.transform(X_test)
 
-    return X_train, X_test
+    val_scaler = MinMaxScaler()
+    val_scaler.fit(X_val)
+    X_val_scaled = val_scaler.transform(X_val)
+
+    # Return as dfs
+    X_train_scaled_df = pd.DataFrame(data=X_train_scaled, columns=cols_list)
+    X_test_scaled_df = pd.DataFrame(data=X_test_scaled, columns=cols_list)
+    X_val_scaled_df = pd.DataFrame(data=X_val_scaled, columns=cols_list)
+
+    return X_train_scaled_df, X_test_scaled_df, X_val_scaled_df
 
 
 if __name__ == '__main__':
@@ -415,7 +423,7 @@ if __name__ == '__main__':
 
     if model_target == 'connectivity':
         label = 'connectivity'
-        train_data, test_data = load_connectivity_data(aoi, buffer, features)
+        train_data, test_data, val_data = load_connectivity_data(aoi, buffer, features)
     if model_target == 'school':
         label = 'class'
         train_data, test_data = load_schoolmapping_data(aoi, buffer, features, data_split)
@@ -430,7 +438,7 @@ if __name__ == '__main__':
     os.mkdir(results)
 
     # Save data class balance breakdown
-    get_class_balance(train_data, test_data, results)
+    get_class_balance(train_data, test_data, val_data, results)
 
     # Save lat, lon for X test and then drop label and location data
     test_latitudes = test_data['lat']
@@ -439,10 +447,12 @@ if __name__ == '__main__':
     # Some light preprocessing on data before running through models
     train_df = train_data.dropna()
     test_df = test_data.dropna()
+    val_df = val_data.dropna()
 
     ytrain = train_df['label']
     ytest = test_df['label']
-    Xtrain, Xtest = preprocess_samples(train_df, test_df, model)
+    yval = val_df['label']
+    Xtrain, Xtest, Xval = preprocess_samples(train_df, test_df, val_df)
 
     # Run model
     if model == 'rf':
@@ -451,6 +461,8 @@ if __name__ == '__main__':
             ytrain,
             Xtest,
             ytest,
+            Xval,
+            yval,
             test_latitudes,
             test_longitudes,
             experiment,
@@ -463,6 +475,8 @@ if __name__ == '__main__':
             ytrain,
             Xtest,
             ytest,
+            Xval,
+            yval,
             test_latitudes,
             test_longitudes,
             experiment,
@@ -475,6 +489,8 @@ if __name__ == '__main__':
             ytrain,
             Xtest,
             ytest,
+            Xval,
+            yval,
             test_latitudes,
             test_longitudes,
             experiment,
@@ -487,6 +503,8 @@ if __name__ == '__main__':
             ytrain,
             Xtest,
             ytest,
+            Xval,
+            yval,
             test_latitudes,
             test_longitudes,
             experiment,
@@ -499,6 +517,8 @@ if __name__ == '__main__':
             ytrain,
             Xtest,
             ytest,
+            Xval,
+            yval,
             test_latitudes,
             test_longitudes,
             experiment,
@@ -511,6 +531,8 @@ if __name__ == '__main__':
             ytrain,
             Xtest,
             ytest,
+            Xval,
+            yval,
             test_latitudes,
             test_longitudes,
             experiment,

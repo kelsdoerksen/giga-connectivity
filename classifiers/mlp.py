@@ -13,13 +13,15 @@ from analysis import confusion_matrix
 
 
 def run_mlp(X_train,
-           y_train,
-           X_test,
-           y_test,
-           test_latitudes,
-           test_longitudes,
-           wandb_exp,
-           results_dir,
+            y_train,
+            X_test,
+            y_test,
+            X_val,
+            y_val,
+            test_latitudes,
+            test_longitudes,
+            wandb_exp,
+            results_dir,
             tuning):
     """
     Run mlp model
@@ -93,7 +95,7 @@ def run_mlp(X_train,
         cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
                                             prefix_name=model_setup)
         tuned_probs = best_clf.predict_proba(X_test)
-        calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
+        confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
 
         predictions = (tuned_probs[:, 1] >= 0.5)
         predictions = predictions * 1

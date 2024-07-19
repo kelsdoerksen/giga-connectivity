@@ -12,13 +12,15 @@ from analysis import confusion_matrix
 
 
 def run_svm(X_train,
-           y_train,
-           X_test,
-           y_test,
-           test_latitudes,
-           test_longitudes,
-           wandb_exp,
-           results_dir,
+            y_train,
+            X_test,
+            y_test,
+            X_val,
+            y_val,
+            test_latitudes,
+            test_longitudes,
+            wandb_exp,
+            results_dir,
             tuning):
     """
     Run svm model

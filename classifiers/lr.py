@@ -15,6 +15,8 @@ def run_lr(X_train,
            y_train,
            X_test,
            y_test,
+           X_val,
+           y_val,
            test_latitudes,
            test_longitudes,
            wandb_exp,
@@ -78,7 +80,7 @@ def run_lr(X_train,
         best_clf = grid_search.best_estimator_
 
         tuned_probs = best_clf.predict_proba(X_test)
-        calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
+        confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
 
         # CV scoring
         cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5,

@@ -15,6 +15,8 @@ def run_gb(X_train,
            y_train,
            X_test,
            y_test,
+           X_val,
+           y_val,
            test_latitudes,
            test_longitudes,
            wandb_exp,
@@ -87,7 +89,7 @@ def run_gb(X_train,
                                             results_dir=results_dir, prefix_name=model_setup)
 
         tuned_probs = best_clf.predict_proba(X_test)
-        calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
+        confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
         # Saving results for further plotting
         results_for_plotting(y_test, tuned_probs, test_latitudes, test_longitudes, results_dir, model_name)
 

@@ -7,8 +7,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import (confusion_matrix, accuracy_score, f1_score,
-                             fbeta_score, classification_report, precision_recall_curve, auc,
-                             roc_auc_score, recall_score, precision_score)
+                             fbeta_score, recall_score, precision_score)
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 import wandb
@@ -37,6 +36,8 @@ def run_rf(X_train,
            y_train,
            X_test,
            y_test,
+           X_val,
+           y_val,
            test_latitudes,
            test_longitudes,
            wandb_exp,
@@ -64,7 +65,7 @@ def run_rf(X_train,
     probs = forest.predict_proba(X_test)
 
     model_score = forest.score(X_test, y_test)
-    print('Model accuracy before any fine-tuning is: {}'.format(model_score))
+    print('Model accuracy on test set before any fine-tuning on validation is: {}'.format(model_score))
 
     if not eval(tuning):
         print('No model hyperparameter tuning')
@@ -111,8 +112,8 @@ def run_rf(X_train,
                              )
 
         # Fit the grid search to the data
-        print('Running grid search cv...')
-        rf_cv.fit(X_train, y_train)
+        print('Running grid search cv on validation set...')
+        rf_cv.fit(X_val, y_val)
 
         # Set model to best estimator from grid search
         best_forest = rf_cv.best_estimator_
@@ -130,7 +131,7 @@ def run_rf(X_train,
         predictions = predictions.tolist()
         f1 = f1_score(y_test, predictions, zero_division=0)
         calc_importance(best_forest, X_test, results_dir)
-        calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
+        confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
 
         wandb_exp.log({
             'Best Model Params': rf_cv.best_params_,
