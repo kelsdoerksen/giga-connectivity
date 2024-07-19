@@ -47,11 +47,6 @@ def load_connectivity_data(country, buffer_extent, feature_space):
         test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
         val_df = pd.read_csv('{}/{}/{}m_buffer/ValData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
 
-        if country == 'BWA':
-            train_df = train_df.drop(columns=['UID'])
-            test_df = test_df.drop(columns=['UID'])
-            val_df = val_df.drop(columns=['UID'])
-
     if feature_space == 'engineer_with_aux':
         train_df = pd.read_csv(
             '{}/{}/{}m_buffer/TrainingData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
