@@ -11,6 +11,7 @@ from sklearn.utils import shuffle
 import os
 from sklearn.preprocessing import MinMaxScaler
 from datetime import datetime
+import os
 
 
 def get_args():
@@ -30,6 +31,7 @@ def get_args():
     parser.add_argument('--data_split', help='Data split for the model. Either percentage (standard 70/30) or'
                                              'defined geography by user. Currently supports split of BWA admin'
                                              'zone 2 division')
+    parser.add_argument('--wandb_dir', help='Wandb directory to save run information to')
 
     return parser.parse_args()
 
@@ -400,10 +402,13 @@ if __name__ == '__main__':
     hyper_tuning = args.parameter_tuning
     model_target = args.target
     data_split = args.data_split
+    wandb_dir = args.wandb_dir
 
     # Set up experiment
     experiment = wandb.init(project='giga-research',
-                            resume='allow', anonymous='must')
+                            resume='allow',
+                            anonymous='must',
+                            dir='wandb_env')
     experiment.config.update(
         dict(aoi=aoi, buffer=buffer, model=model, target=model_target,
              data_split=data_split)
