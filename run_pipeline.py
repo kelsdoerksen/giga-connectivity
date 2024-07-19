@@ -42,10 +42,10 @@ def load_connectivity_data(country, buffer_extent, feature_space):
     :return:
     """
     if feature_space == 'engineer':
-        train_df = pd.read_csv(
+        training_dataset = pd.read_csv(
             '{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
-        test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
-        val_df = pd.read_csv('{}/{}/{}m_buffer/ValData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
+        testing_dataset = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
+        val_dataset = pd.read_csv('{}/{}/{}m_buffer/ValData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
 
     if feature_space == 'engineer_with_aux':
         train_df = pd.read_csv(
@@ -148,8 +148,9 @@ def load_connectivity_data(country, buffer_extent, feature_space):
 
     training_dataset = training_data.rename(columns={'connectivity': 'label'})
     testing_dataset = testing_data.rename(columns={'connectivity': 'label'})
+    val_dataset = val_data.rename(columns={'connectivity': 'label'})
 
-    return training_dataset, testing_dataset
+    return training_dataset, testing_dataset, val_dataset
 
 
 def load_schoolmapping_data(country, buffer_extent, feature_space, data_split_type):
