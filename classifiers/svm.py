@@ -75,12 +75,15 @@ def run_svm(X_train,
 
         # Fit the grid search to the data
         print('Running grid search cv...')
-        grid_search.fit(X_train, y_train)
+        grid_search.fit(X_val, y_val)
         # grid_search.best_params_
         best_clf = grid_search.best_estimator_
 
+        # Fit our best model with training set
+        best_clf.fit(X_train, y_train)
+
         tuned_probs = best_clf.predict_proba(X_test)
-        confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
+        calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
 
         # CV scoring
         cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5,

@@ -79,9 +79,12 @@ def run_xgb(X_train,
         # Fit the grid search to the data
         # Turning off grid search manually because it is taking so long and I just want to compare
         print('Running grid search cv...')
-        grid_search.fit(X_train, y_train)
+        grid_search.fit(X_val, y_val)
         # grid_search.best_params_
         best_clf = grid_search.best_estimator_
+
+        # Fit our best model with training set
+        best_clf.fit(X_train, y_train)
 
         # CV scoring
         cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5,

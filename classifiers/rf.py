@@ -118,6 +118,9 @@ def run_rf(X_train,
         # Set model to best estimator from grid search
         best_forest = rf_cv.best_estimator_
 
+        # Fit best estimator to our training set
+        best_forest.fit(X_train, y_train)
+
         # Prediction with best forest
         tuned_probs = best_forest.predict_proba(X_test)
 

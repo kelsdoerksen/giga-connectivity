@@ -84,6 +84,9 @@ def run_gb(X_train,
         # grid_search.best_params_
         best_clf = grid_search.best_estimator_
 
+        # Fit our best model with training set
+        best_clf.fit(X_train, y_train)
+
         # CV scoring
         cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5,
                                             results_dir=results_dir, prefix_name=model_setup)

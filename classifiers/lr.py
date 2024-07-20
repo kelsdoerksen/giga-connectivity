@@ -79,6 +79,9 @@ def run_lr(X_train,
         # grid_search.best_params_
         best_clf = grid_search.best_estimator_
 
+        # Fit our best model with training set
+        best_clf.fit(X_train, y_train)
+
         tuned_probs = best_clf.predict_proba(X_test)
         calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
 
