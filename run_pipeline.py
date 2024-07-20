@@ -428,9 +428,9 @@ if __name__ == '__main__':
 
     # Make results directory
     if experiment_type == 'offline':
-        results = '{}/{}/results_{}m/{}'.format(root_dir, aoi, buffer, wandb.run.id)
+        results = '{}/{}/results_{}m/{}_{}'.format(root_dir, aoi, buffer, model, wandb.run.id)
     else:
-        if not os.path.exists('{}/{}/results_{}m/{}'.format(results_dir, aoi, buffer, experiment.name)):
+        if not os.path.exists('{}/{}/results_{}m/{}_{}'.format(results_dir, aoi, buffer, model, experiment.name)):
             results = '{}/{}/results_{}m/{}_{}'.format(results_dir, aoi, buffer, model, experiment.name)
 
     os.mkdir(results)
