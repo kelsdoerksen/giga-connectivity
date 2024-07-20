@@ -9,7 +9,7 @@ from sklearn.metrics import make_scorer, accuracy_score
 import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
 from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
-from analysis import confusion_matrix
+from analysis.confusion_matrix import calc_confusion_matrix
 
 
 def run_mlp(X_train,
@@ -95,7 +95,7 @@ def run_mlp(X_train,
         cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
                                             prefix_name=model_setup)
         tuned_probs = best_clf.predict_proba(X_test)
-        confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
+        calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
 
         predictions = (tuned_probs[:, 1] >= 0.5)
         predictions = predictions * 1

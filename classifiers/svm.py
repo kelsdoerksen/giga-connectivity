@@ -8,7 +8,7 @@ from sklearn.model_selection import GridSearchCV
 import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
 from sklearn.metrics import f1_score, accuracy_score
-from analysis import confusion_matrix
+from analysis.confusion_matrix import calc_confusion_matrix
 
 
 def run_svm(X_train,
@@ -52,7 +52,7 @@ def run_svm(X_train,
         predictions = (probs[:, 1] >= 0.5)
         predictions = predictions * 1
         f1 = f1_score(y_test, predictions)
-        confusion_matrix(y_test, probs[:, 1], results_dir)
+        calc_confusion_matrix(y_test, probs[:, 1], results_dir)
 
         # Saving results for further plotting
         results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)

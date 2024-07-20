@@ -8,7 +8,7 @@ from sklearn.model_selection import GridSearchCV
 import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
 from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
-from analysis import confusion_matrix
+from analysis.confusion_matrix import calc_confusion_matrix
 
 
 def run_gb(X_train,
@@ -89,7 +89,7 @@ def run_gb(X_train,
                                             results_dir=results_dir, prefix_name=model_setup)
 
         tuned_probs = best_clf.predict_proba(X_test)
-        confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
+        calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
         # Saving results for further plotting
         results_for_plotting(y_test, tuned_probs, test_latitudes, test_longitudes, results_dir, model_name)
 
