@@ -6,7 +6,7 @@ Random Forest ML call for pipeline
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.metrics import (confusion_matrix, accuracy_score, f1_score,
+from sklearn.metrics import (accuracy_score, f1_score,
                              fbeta_score, recall_score, precision_score)
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
@@ -14,6 +14,7 @@ import wandb
 import pickle
 from analysis.generating_results import results_for_plotting
 from analysis.confusion_matrix import calc_confusion_matrix
+import random
 
 
 def calc_importance(model, X, save_dir):
@@ -48,11 +49,12 @@ def run_rf(X_train,
     """
 
     model_name = 'rf'
+    seed = random.randint(0, 1000)
 
     # Create an instance of Random Forest
     print('Creating instance of Random Forest model...')
     forest = RandomForestClassifier(criterion='gini',
-                                    random_state=87,
+                                    random_state=seed,
                                     n_estimators=200,
                                     n_jobs=-1)
 

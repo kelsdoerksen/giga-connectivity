@@ -9,6 +9,7 @@ import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
 from sklearn.metrics import f1_score, accuracy_score
 from analysis.confusion_matrix import calc_confusion_matrix
+import random
 
 
 def run_svm(X_train,
@@ -26,10 +27,11 @@ def run_svm(X_train,
     Run svm model
     """
     model_name = 'svm'
+    seed  = random.randint(0, 1000)
 
     # Create instance of SVM model
     print('Creating instance of SVM model...')
-    clf = SVC(random_state=48, probability=True)
+    clf = SVC(random_state=seed, probability=True)
 
     # Fit to training data
     print('Fitting data...')

@@ -4,12 +4,13 @@ MLP pipeline for ML call
 
 from sklearn.neural_network import MLPClassifier
 import pickle
-from sklearn.model_selection import cross_validate, GridSearchCV
-from sklearn.metrics import make_scorer, accuracy_score
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import make_scorer
 import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
 from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
 from analysis.confusion_matrix import calc_confusion_matrix
+import random
 
 
 def run_mlp(X_train,
@@ -28,10 +29,11 @@ def run_mlp(X_train,
     """
 
     model_name = 'mlp'
+    seed = random.randint(0, 1000)
 
     # Create instance of MLP model
     print('Creating instance of MLP model...')
-    clf = MLPClassifier(random_state=48, max_iter=15000)
+    clf = MLPClassifier(random_state=seed, max_iter=15000)
 
     # Fit to training data
     print('Fitting data...')
@@ -87,7 +89,7 @@ def run_mlp(X_train,
 
         # Fit the grid search to the data
         print('Running grid search cv...')
-        grid_search.fit(X_train, y_train)
+        grid_search.fit(X_val, y_val)
         # grid_search.best_params_
         best_clf = grid_search.best_estimator_
 
@@ -95,8 +97,8 @@ def run_mlp(X_train,
         best_clf.fit(X_train, y_train)
 
         # CV scoring
-        cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5, results_dir=results_dir,
-                                            prefix_name=model_setup)
+        cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5,
+                                            results_dir=results_dir, prefix_name=model_setup)
         tuned_probs = best_clf.predict_proba(X_test)
         calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
 

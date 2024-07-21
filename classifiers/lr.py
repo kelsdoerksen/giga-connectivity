@@ -9,6 +9,7 @@ import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
 from sklearn.metrics import f1_score, accuracy_score
 from analysis.confusion_matrix import calc_confusion_matrix
+import random
 
 
 def run_lr(X_train,
@@ -27,10 +28,11 @@ def run_lr(X_train,
     """
 
     model_name = 'lr'
+    seed = random.randint(0, 1000)
 
     # Create instance of Logistic Regression model
     print('Creating instance of LR model...')
-    clf = LogisticRegression(max_iter=7000, random_state=48)
+    clf = LogisticRegression(max_iter=7000, random_state=seed)
 
     # Fit to training data
     print('Fitting data...')
@@ -54,7 +56,7 @@ def run_lr(X_train,
         predictions = (probs[:, 1] >= 0.5)
         predictions = predictions * 1
         f1 = f1_score(y_test, predictions)
-        confusion_matrix(y_test, probs[:, 1], results_dir)
+        calc_confusion_matrix(y_test, probs[:, 1], results_dir)
 
         # Saving results for further plotting
         results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
@@ -75,7 +77,7 @@ def run_lr(X_train,
 
         # Fit the grid search to the data
         print('Running grid search cv...')
-        grid_search.fit(X_train, y_train)
+        grid_search.fit(X_val, y_val)
         # grid_search.best_params_
         best_clf = grid_search.best_estimator_
 

@@ -3,6 +3,7 @@ xgb pipeline for ML call
 """
 
 from xgboost import XGBClassifier
+import random
 import pickle
 from sklearn.model_selection import GridSearchCV
 import wandb
@@ -27,10 +28,11 @@ def run_xgb(X_train,
     """
 
     model_name = 'xgb'
+    seed = random.randint(0, 1000)
 
     # Create instance of XGB model
     print('Creating instance of XGB model...')
-    clf = XGBClassifier(random_state=48)
+    clf = XGBClassifier(random_state=seed)
 
     # Fit to training data
     print('Fitting data...')

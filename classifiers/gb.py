@@ -9,6 +9,7 @@ import wandb
 from analysis.generating_results import cross_validate_scoring, results_for_plotting
 from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
 from analysis.confusion_matrix import calc_confusion_matrix
+import random
 
 
 def run_gb(X_train,
@@ -27,10 +28,11 @@ def run_gb(X_train,
     """
 
     model_name = 'gb'
+    seed = random.randint(0, 1000)
 
     # Create instance of GB model
     print('Creating instance of GB model...')
-    clf = GradientBoostingClassifier(random_state=48)
+    clf = GradientBoostingClassifier(random_state=seed)
 
     # Fit to training data
     print('Fitting data...')
@@ -80,7 +82,7 @@ def run_gb(X_train,
         # Fit the grid search to the data
         # Turning off grid search manually because it is taking so long and I just want to compare
         print('Running grid search cv...')
-        grid_search.fit(X_train, y_train)
+        grid_search.fit(X_val, y_val)
         # grid_search.best_params_
         best_clf = grid_search.best_estimator_
 
