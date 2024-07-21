@@ -411,6 +411,7 @@ if __name__ == '__main__':
 
     # Set up experiment
     experiment = wandb.init(project='giga-research',
+                            tag='aaai',
                             resume='allow',
                             anonymous='must',
                             dir='wandb_env')
