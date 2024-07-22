@@ -158,10 +158,8 @@ def get_elec(region, school_df, data_dir):
     """
     Add distance to electrical grid to feature space
     """
-    if region == 'BWA':
-        country_mask = gpd.read_file('{}/{}/{}_extent.geojson'.format(data_dir, aoi, aoi))
-    else:
-        country_mask = gpd.read_file('{}/{}/geoBoundaries-{}-ADM2.geojson'.format(data_dir, aoi, aoi))
+
+    country_mask = gpd.read_file('{}/{}/geoBoundaries-{}-ADM2.geojson'.format(data_dir, region, region))
 
     elec_df = gpd.read_file('{}/PowerGrid/grid.gpkg'.format(data_dir), mask=country_mask)
 
@@ -306,7 +304,7 @@ def get_feature_space(data_dir, region, buffer_ext, target_type, save_path):
 
     if target == 'connectivity':
         # Filter out schools from Isabelle's methodology
-        filtered = filter_schools(aoi, feature_space, data_dir)
+        filtered = filter_schools(region, feature_space, data_dir)
         final_feature_space = filtered.drop(['Unnamed: 0'], axis=1)
         # Drop nans that exist in the label -> we can't validate if there is/is not connectivity
         final_feature_space = final_feature_space[final_feature_space['connectivity'].notna()]
