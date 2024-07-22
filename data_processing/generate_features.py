@@ -6,7 +6,7 @@ import pandas as pd
 import argparse
 import geopandas as gpd
 from sklearn.preprocessing import OneHotEncoder
-from data_processing import processing_scripts
+from data_processing.processing_scripts import eliminate_correlated_features
 
 parser = argparse.ArgumentParser(description='Generating features for ML Classifiers',
                                  formatter_class=argparse.RawTextHelpFormatter)
@@ -291,7 +291,7 @@ def get_feature_space(data_dir, region, buffer_ext, target_type, save_path):
     unique_df.to_csv('{}/full_feature_space.csv'.format(save_path))
 
     # Remove Pearson correlated feature and save
-    df_uncorr = processing_scripts.eliminate_correlated_features(unique_df, 0.2, save_path)
+    df_uncorr = eliminate_correlated_features(unique_df, 0.2, save_path)
     df_uncorr.to_csv('{}/uncorrelated_feature_space.csv'.format(save_path))
 
 
