@@ -6,7 +6,6 @@ import pandas as pd
 import argparse
 import geopandas as gpd
 from sklearn.preprocessing import OneHotEncoder
-from data_processing.processing_scripts import eliminate_correlated_features
 
 parser = argparse.ArgumentParser(description='Generating features for ML Classifiers',
                                  formatter_class=argparse.RawTextHelpFormatter)
@@ -16,6 +15,37 @@ parser.add_argument("--aoi", help="Country of interest")
 parser.add_argument("--buffer", help="Buffer extent around school to extract data from")
 parser.add_argument("--target", help='Specify is target is connectivity prediction or school prediction.'
                                      'Must be one of school or connectivity')
+
+
+def eliminate_correlated_features(df, threshold, save_dir):
+    """
+    Modified function from giga-ml-utils
+    :return: df of uncorrelated features
+    """
+    # calculate correlation matrix
+    corr_matrix = df.corr().abs()
+
+    # identify pairs of highly correlated features
+    upper_triangle = corr_matrix.where(
+        np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
+    highly_correlated_pairs = (
+        upper_triangle.stack().reset_index().rename(columns={0: 'correlation'}))
+    highly_correlated_pairs = highly_correlated_pairs[
+        highly_correlated_pairs['correlation'] > threshold]
+
+    # drop features from level_0
+    features_to_drop = set()
+    for idx, row in highly_correlated_pairs.iterrows():
+        features_to_drop.add(row['level_0'])  # Drop the first feature
+    print('Features removed were: {}'.format(features_to_drop))
+    with open('{}/correlated_features.txt'.format(save_dir), 'w') as f:
+        f.write('Features removed were: {}'.format(features_to_drop))
+
+    # drop the identified features
+    df_filtered = df.drop(features_to_drop, axis=1)
+
+    return df_filtered
+
 
 
 def filter_schools(region, giga_df, data_dir):
