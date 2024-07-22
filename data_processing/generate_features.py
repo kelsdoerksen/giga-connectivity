@@ -140,7 +140,7 @@ def get_ookla(region, ookla_type, data_dir, school_df):
     """
     # Load data
     country_mask = gpd.read_file('{}/{}/geoBoundaries-{}-ADM2.geojson'.format(data_dir, region, region))
-    ookla_df = gpd.read_file('gps_{}_tiles.shp'.format(ookla_type), mask=country_mask)
+    ookla_df = gpd.read_file('{}/{}/gps_{}_tiles.shp'.format(data_dir, region, ookla_type), mask=country_mask)
 
     # Transform crs to 3857 for distance calculation
     school_df = school_df.to_crs(crs=3857)
@@ -161,7 +161,7 @@ def get_elec(region, school_df, data_dir):
 
     country_mask = gpd.read_file('{}/{}/geoBoundaries-{}-ADM2.geojson'.format(data_dir, region, region))
 
-    elec_df = gpd.read_file('{}/PowerGrid/grid.gpkg'.format(data_dir), mask=country_mask)
+    elec_df = gpd.read_file('{}/grid.gpkg'.format(data_dir), mask=country_mask)
 
     # Transform crs to 3857 for distance calculation
     school_df = school_df.to_crs(crs=3857)
