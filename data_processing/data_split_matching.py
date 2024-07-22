@@ -11,9 +11,8 @@ def get_args():
                                      formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("--root_dir", help='Root directory that contains geodataframe files for regional split')
     parser.add_argument("--save_dir", help="Directory to save split data")
-    parser.add_argument("--split_type", help="How to split the train and test set, either split it "
-                                             "percentage or geography")
     parser.add_argument("--aoi", help='Country/Region generating data for')
+    parser.add_argument("--buffer", help='Buffer extent')
     return parser.parse_args()
 
 
