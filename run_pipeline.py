@@ -364,7 +364,8 @@ def preprocess_samples(train_df, test_df, val_df):
     """
     cols_to_drop = ['connectivity', 'lat', 'lon', 'giga_id_school', 'location', 'data_split', 'label', 'Unnamed: 0',
                     'school_locations', 'class.1', 'fid', 'UID', 'dataset', 'iso', 'rurban', 'class',
-                    'UID', 'class_y', 'Unnamed: 0.1', 'connectivity.1', 'Unnamed: 0.2', ]
+                    'UID', 'class_y', 'Unnamed: 0.1', 'connectivity.1', 'Unnamed: 0.2', 'connectivity.1',
+                    'Unnamed: 0_x',  'Unnamed: 0_y', 'split']
 
     X_test = test_df.drop(columns=cols_to_drop, errors='ignore')
     X_train = train_df.drop(columns=cols_to_drop, errors='ignore')
@@ -411,7 +412,7 @@ if __name__ == '__main__':
 
     # Set up experiment
     experiment = wandb.init(project='giga-research',
-                            tag='aaai',
+                            tags=['aaai'],
                             resume='allow',
                             anonymous='must',
                             dir='wandb_env')
