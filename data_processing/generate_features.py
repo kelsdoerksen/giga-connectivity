@@ -55,7 +55,7 @@ def filter_schools(region, giga_df, data_dir):
     """
 
     print('The number of schools before cleaning the dataset is: {}'.format(len(giga_df)))
-    cleaned_df = gpd.read_file('{}/isa_clean/{}_clean.geojson'.format(data_dir, region))
+    cleaned_df = gpd.read_file('{}/{}/{}_clean.geojson'.format(data_dir, region, region))
     cleaned_school_ids = cleaned_df[cleaned_df['clean'] <=1]    # 1 means I am removing kindergarden
     correct_schools_list = cleaned_school_ids['giga_id_school'].tolist()
 
