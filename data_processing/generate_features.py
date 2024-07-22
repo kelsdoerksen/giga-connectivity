@@ -6,6 +6,7 @@ import pandas as pd
 import argparse
 import geopandas as gpd
 from sklearn.preprocessing import OneHotEncoder
+import numpy as np
 
 parser = argparse.ArgumentParser(description='Generating features for ML Classifiers',
                                  formatter_class=argparse.RawTextHelpFormatter)
@@ -321,9 +322,18 @@ def get_feature_space(data_dir, region, buffer_ext, target_type, save_path):
     unique_df = unique_df.loc[:, ~unique_df.columns.duplicated()]
     unique_df.to_csv('{}/full_feature_space.csv'.format(save_path))
 
+    # Remove id columns before calculating correlation
+    id_cols = ['giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations']
+    df_id = unique_df[['giga_id_school', 'lat', 'lon', 'connectivity', 'school_locations']]
+    unique_df_no_id = unique_df.drop(columns=id_cols)
+
     # Remove Pearson correlated feature and save
-    df_uncorr = eliminate_correlated_features(unique_df, 0.2, save_path)
-    df_uncorr.to_csv('{}/uncorrelated_feature_space.csv'.format(save_path))
+    df_uncorr = eliminate_correlated_features(unique_df_no_id, 0.9, save_path)
+
+    # add back id cols
+    df_uncorr_with_id = pd.concat([df_uncorr, df_id], axis=1)
+
+    df_uncorr_with_id.to_csv('{}/uncorrelated_feature_space.csv'.format(save_path))
 
 
 if __name__ == '__main__':
