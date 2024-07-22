@@ -47,7 +47,6 @@ def eliminate_correlated_features(df, threshold, save_dir):
     return df_filtered
 
 
-
 def filter_schools(region, giga_df, data_dir):
     """
     Using Isa's cleaned dataset, filter
@@ -154,17 +153,18 @@ def get_ookla(region, ookla_type, data_dir, school_df):
     return combined_df
 
 
-def get_elec(region, school_df, data_dir):
+def get_elec(region, sample_df, data_dir):
     """
     Add distance to electrical grid to feature space
     """
-
+    school_gdf = gpd.GeoDataFrame(sample_df, geometry=gpd.points_from_xy(sample_df.lon, sample_df.lat),
+                                  crs='EPSG:4326')
     country_mask = gpd.read_file('{}/{}/geoBoundaries-{}-ADM2.geojson'.format(data_dir, region, region))
 
     elec_df = gpd.read_file('{}/grid.gpkg'.format(data_dir), mask=country_mask)
 
     # Transform crs to 3857 for distance calculation
-    school_df = school_df.to_crs(crs=3857)
+    school_df = school_gdf.to_crs(crs=3857)
     elec_df = elec_df.to_crs(crs=3857)
 
     combined_df = calc_nearest_point(elec_df, school_df, 'transmission_line')
