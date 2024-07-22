@@ -48,5 +48,6 @@ if __name__ == '__main__':
     id_df = pd.read_csv('{}/{}/{}_id_info.csv'.format(root, aoi, aoi))
     splits = ['Training', 'Testing', 'Val']
     for split in splits:
+        print('Running for data split: {}'.format(split))
         df = get_data_split(split, feature_df, id_df)
         df.to_csv('{}/{}Data_uncorrelated.csv'.format(save, split))
