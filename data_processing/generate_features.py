@@ -141,7 +141,8 @@ def get_ookla(region, ookla_type, data_dir, sample_df):
                                   crs='EPSG:4326')
     # Load data
     country_mask = gpd.read_file('{}/{}/geoBoundaries-{}-ADM2.geojson'.format(data_dir, region, region))
-    ookla_df = gpd.read_file('{}/gps_{}_tiles.shp'.format(data_dir, ookla_type), mask=country_mask)
+    ookla_df = gpd.read_file('{}/2023-10-01_performance_{}_tiles/gps_{}_tiles.shp'.
+                             format(data_dir, ookla_type, ookla_type), mask=country_mask)
 
     # Transform crs to 3857 for distance calculation
     school_df = school_gdf.to_crs(crs=3857)
