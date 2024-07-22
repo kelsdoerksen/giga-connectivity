@@ -60,7 +60,14 @@ def run_gb(X_train,
         # Saving results for further plotting
         results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
 
+        # Logging results to wandb
+        # --- Logging metrics
         wandb_exp.log({
+            'CV accuracies': cv_scoring['test_accuracy'],
+            'Average CV accuracy': cv_scoring['test_accuracy'].mean(),
+            'Average CV F1': cv_scoring['test_f1'].mean(),
+            'Test set F1': f1,
+            'Test set accuracy': accuracy_score(y_test, predictions),
             'roc': wandb.plot.roc_curve(y_test, probs)
         })
 
@@ -80,7 +87,6 @@ def run_gb(X_train,
         grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=5, n_jobs=-1)
 
         # Fit the grid search to the data
-        # Turning off grid search manually because it is taking so long and I just want to compare
         print('Running grid search cv...')
         grid_search.fit(X_val, y_val)
         # grid_search.best_params_
@@ -89,10 +95,7 @@ def run_gb(X_train,
         # Fit our best model with training set
         best_clf.fit(X_train, y_train)
 
-        # CV scoring
-        cv_scoring = cross_validate_scoring(best_clf, X_train, y_train, ['accuracy', 'f1'], cv=5,
-                                            results_dir=results_dir, prefix_name=model_setup)
-
+        # Predict on unseen test set
         tuned_probs = best_clf.predict_proba(X_test)
         calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
         # Saving results for further plotting
@@ -106,19 +109,10 @@ def run_gb(X_train,
         predictions = predictions * 1
         f1 = f1_score(y_test, predictions)
 
+        # --- Logging metrics
         wandb_exp.log({
             'Best Model Params': grid_search.best_params_,
-            'roc': wandb.plot.roc_curve(y_test, tuned_probs)
+            'roc': wandb.plot.roc_curve(y_test, tuned_probs),
+            'Test set F1': f1,
+            'Test set accuracy': accuracy_score(y_test, predictions)
         })
-
-
-
-    # Logging results to wandb
-    # --- Logging metrics
-    wandb_exp.log({
-        'CV accuracies': cv_scoring['test_accuracy'],
-        'Average CV accuracy': cv_scoring['test_accuracy'].mean(),
-        'Average CV F1': cv_scoring['test_f1'].mean(),
-        'Test set F1': f1,
-        'Test set accuracy': accuracy_score(y_test, predictions)
-    })

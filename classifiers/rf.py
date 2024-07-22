@@ -138,12 +138,11 @@ def run_rf(X_train,
         calc_importance(best_forest, X_test, results_dir)
         calc_confusion_matrix(y_test, tuned_probs[:, 1], results_dir)
 
+
+        # --- Logging metrics
         wandb_exp.log({
             'Best Model Params': rf_cv.best_params_,
             'roc': wandb.plot.roc_curve(y_test, tuned_probs),
-            'accuracy': accuracy_score(y_test, predictions),
-            'f1': f1,
-            'recall': recall_score(y_test, predictions, zero_division=0),
-            'precision': precision_score(y_test, predictions, zero_division=0),
-            'fbeta': fbeta_score(y_test, predictions, beta=0.5, zero_division=0)
+            'Test set F1': f1,
+            'Test set accuracy': accuracy_score(y_test, predictions)
         })
