@@ -44,7 +44,7 @@ if __name__ == '__main__':
     aoi = args.aoi
     buffer = args.buffer
 
-    feature_df = pd.read_csv('{}/{}/{}m_buffer/uncorrelate_feature_space.csv'.format(root, aoi, buffer))
+    feature_df = pd.read_csv('{}/{}/{}m_buffer/uncorrelated_feature_space.csv'.format(root, aoi, buffer))
     id_df = pd.read_csv('{}/{}/{}_id_info.csv'.format(root, aoi, aoi))
     splits = ['Training', 'Testing', 'Val']
     for split in splits:
