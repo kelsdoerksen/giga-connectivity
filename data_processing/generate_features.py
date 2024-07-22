@@ -254,7 +254,7 @@ def get_feature_space(data_dir, region, buffer_ext, target_type, save_path):
     :return: csv of features for aoi specified
     '''
     if target_type == 'connectivity':
-        df_schools = pd.read_csv('{}/{}/{}_school_geolocation_coverage_master.csv'.format(data_dir, region, region))
+        df_samples = pd.read_csv('{}/{}/{}_school_geolocation_coverage_master.csv'.format(data_dir, region, region))
 
     if target == 'school':
         df_samples = gpd.read_file('{}/{}/{}_train.geojson'.format(data_dir, region, region))
@@ -292,8 +292,8 @@ def get_feature_space(data_dir, region, buffer_ext, target_type, save_path):
 
     if target == 'connectivity':
         print('Getting label...')
-        df_schools['connectivity'] = df_schools['connectivity'].map({'Yes': 1, 'No': 0})
-        df_school_id = df_schools[['giga_id_school', 'lat','lon', 'connectivity']]
+        df_samples['connectivity'] = df_samples['connectivity'].map({'Yes': 1, 'No': 0})
+        df_school_id = df_samples[['giga_id_school', 'lat','lon', 'connectivity']]
 
     if target == 'school':
         df_samples['class'] = df_samples['class'].map({'school': 1, 'non_school': 0})
