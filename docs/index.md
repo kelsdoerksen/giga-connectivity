@@ -5,7 +5,7 @@
 
 
 # Introduction
-This project develops Machine Learning models to predict binary connectivity of schools to the internet. The models are trained on a combination of UN-provided survey data and open-source remote sensing data. This work is in support of UNICEF's [Giga](https://giga.global/) initiative to connect every child to the internet by 2030.
+This project develops Machine Learning models to predict binary connectivity of schools to the internet. The models are trained on a combination of UN-provided survey data and open-source remote sensing data. This work is in support of UNICEF's [Giga](https://giga.global/) initiative to connect every child to the internet by 2030, in a join collaboration with the European Space Agency [Phi-Lab](https://philab.esa.int/).
 
 # Dataset  
 ### Google Earth Engine
