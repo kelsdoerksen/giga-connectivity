@@ -4,6 +4,7 @@ for connectivity prediction
 """
 
 import argparse
+import sklearn
 from classifiers import lr, rf, svm, mlp, gb, xgb
 import wandb
 import pandas as pd
@@ -51,6 +52,8 @@ def load_connectivity_data(country, buffer_extent, feature_space):
             '{}/{}/{}m_buffer/TrainingData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
         testing_data = pd.read_csv(
             '{}/{}/{}m_buffer/TestingData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
+        val_data = pd.read_csv(
+            '{}/{}/{}m_buffer/ValData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
 
     if feature_space == 'combined':
         # To update
@@ -317,6 +320,7 @@ def get_class_balance(train_df, test_df, val_df, savedir):
         f.write('Number of negative testing samples is: {}'.format(len(test_df) - sum(test_df['label'])))
         f.write('Number of positive validation samples is: {}'.format(sum(val_df['label'])))
         f.write('Number of negative validation samples is: {}'.format(len(val_df) - sum(val_df['label'])))
+
 
 def preprocess_samples(train_df, test_df, val_df):
     """
