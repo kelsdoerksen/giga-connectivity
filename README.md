@@ -38,6 +38,14 @@ The multi-modal satellite and ground-based data was curated from open-access dat
 
 [World Bank Electrical Power Grid](https://energydata.info/dataset/derived-map-global-electricity-transmission-and-distribution-lines)
 
+This work also explores the use of location encoder-extracted feature embeddings from various Clip based models, inclucding:
+
+[SatCLIP](https://arxiv.org/abs/2311.17179)
+
+[GeoCLIP](https://arxiv.org/abs/2309.16020)
+
+[CSP](https://arxiv.org/abs/2305.01118)
+
 ## ⚙️ Data Processing
 Prior to generating features, the coordinates of the school and non-school samples were extracted from the `AOI_train.geojson` file provided by UNICEF with the `get_lat_lon_list_from_gdp` function in the `processing_scripts.py` script.
 
