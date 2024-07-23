@@ -22,9 +22,8 @@ def get_args():
     parser.add_argument('--experiment_type', help='Experiment type')
     parser.add_argument('--features', help='Type of feature space. Must be one of engineer (hand crafted features),'
                                            'satclip-resnet18-l10, satclip-resnet18-l40, satclip-resnet50-l10,'
-                                           'satclip-resnet50-l40, satclip-vit16-l10, satclip-vit16-l40, '
-                                           'precursor-geofoundation_e011, combined, dino-vitb14, dino-vitl14,'
-                                           'dino-vits14, mobility_buffer, mobility_nearest')
+                                           'satclip-resnet50-l40, satclip-vit16-l10, satclip-vit16-l40, GeoCLIP, CSP,'
+                                           'precursor-geofoundation_e011, combined, mobility_buffer, mobility_nearest')
     parser.add_argument('--parameter_tuning', help='Specify if parameter tuning. True or False.')
     parser.add_argument('--target', help='Specify model target. Must be one of connectivity or school')
     parser.add_argument('--data_split', help='Data split for the model. Either percentage (standard 70/30) or'
@@ -48,103 +47,64 @@ def load_connectivity_data(country, buffer_extent, feature_space):
         val_data = pd.read_csv('{}/{}/{}m_buffer/ValData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
 
     if feature_space == 'engineer_with_aux':
-        train_df = pd.read_csv(
+        training_data = pd.read_csv(
             '{}/{}/{}m_buffer/TrainingData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
-        test_df = pd.read_csv(
+        testing_data = pd.read_csv(
             '{}/{}/{}m_buffer/TestingData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
 
-    if feature_space in ['dinov2_vits14', 'dinov2_vitb14', 'dinov2_vitl14']:
-        # Read in dino embeddings and append
-        eng_train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country,
-                                                                                           buffer_extent))
-        eng_test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country,
-                                                                                         buffer_extent))
-        dino_emb = pd.read_csv('{}/{}/Embeddings/BWA_{}_embeds.csv'.format(root_dir, country, feature_space))
-
-        merge_train = pd.merge(eng_train_df, dino_emb, on='UID')
-        merge_test = pd.merge(eng_test_df, dino_emb, on='UID')
-
-        train_df = train_df.rename(columns={'class_x': 'label'})
-        test_df = test_df.rename(columns={'class_x': 'label'})
-
-    if feature_space in ['dinov2_vits14_o', 'dinov2_vitb14_o', 'dinov2_vitl14_o']:
-        # Read in dino embeddings and append
-        eng_train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country,
-                                                                                           buffer_extent))
-        eng_test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country,
-                                                                                         buffer_extent))
-        dino_emb = pd.read_csv('{}/{}/Embeddings/BWA_{}_embeds.csv'.format(root_dir, country, feature_space[0:13]))
-        dino_emb['label'] = dino_emb['class'].map({'school': 1, 'non_school': 0})
-
-        train_uid = eng_train_df['UID']
-        test_uid = eng_test_df['UID']
-
-        # Get lat, lons so we can plot later in figs
-        train_lats = eng_train_df.sort_values(by='UID')['lat']
-        train_lons = eng_train_df.sort_values(by='UID')['lon']
-
-        test_lats = eng_test_df.sort_values(by='UID')['lat']
-        test_lons = eng_test_df.sort_values(by='UID')['lon']
-
-        # Subset dinov2 to ensure we have matching UIDs to concat
-        train_df = dino_emb[dino_emb.UID.isin(train_uid)]
-        test_df = dino_emb[dino_emb.UID.isin(test_uid)]
-
-        train_df = train_df.sort_values(by='UID')
-        test_df = test_df.sort_values(by='UID')
-
-        # Add lat, lon to df so we can plot later
-        train_df['lat'] = train_lats.values
-        train_df['lon'] = train_lons.values
-        test_df['lat'] = test_lats.values
-        test_df['lon'] = test_lons.values
-
     if feature_space == 'combined':
-        eng_train_df = pd.read_csv(
-            '{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
-        eng_test_df = pd.read_csv(
-            '{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
+        # To update
+        eng_train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.
+                                   format(root_dir, country, buffer_extent))
+        eng_test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.
+                                  format(root_dir, country, buffer_extent))
+        eng_val_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.
+                                 format(root_dir, country, buffer_extent))
         emb_train_df = pd.read_csv(
-            '{}/{}/embeddings/TrainingData_embeddings_precursor-geofoundation_v04_e008_z18_embeddings.csv'.
-            format(root_dir, country))
+            '{}/{}/embeddings/{}_embeddings_precursor-geofoundation_v04_e008_z18_embeddings_TrainingData.csv'.
+                format(root_dir, country, country))
         emb_test_df = pd.read_csv(
-            '{}/{}/embeddings/TestingData_embeddings_precursor-geofoundation_v04_e008_z18_embeddings.csv'.
-            format(root_dir, country))
+            '{}/{}/embeddings/{}_embeddings_precursor-geofoundation_v04_e008_z18_embeddings_TestingData.csv'.
+            format(root_dir, country, country))
+        emb_val_df = pd.read_csv(
+            '{}/{}/embeddings/{}_embeddings_precursor-geofoundation_v04_e008_z18_embeddings_ValData.csv'.
+                format(root_dir, country, country))
 
         eng_train_df = eng_train_df.sort_values(by='giga_id_school')
         eng_test_df = eng_test_df.sort_values(by='giga_id_school')
+        eng_val_df = eng_val_df.sort_values(by='giga_id_school')
         emb_train_df = emb_train_df.sort_values(by='giga_id_school')
         emb_test_df = emb_test_df.sort_values(by='giga_id_school')
+        emb_val_df = emb_val_df.sort_values(by='giga_id_school')
 
         combined_train = pd.concat([eng_train_df, emb_train_df], axis=1)
         combined_test = pd.concat([eng_test_df, emb_test_df], axis=1)
+        combined_val = pd.concat([eng_val_df, emb_val_df], axis=1)
 
         training_data = combined_train
         testing_data = combined_test
+        val_data = combined_val
 
-    if feature_space in ['GeoCLIP',
-                         'CSPfMoW', 'satclip-resnet18-l10', 'satclip-resnet18-l40', 'satclip-resnet50-l10',
+    if feature_space in ['GeoCLIP', 'CSP', 'satclip-resnet18-l10', 'satclip-resnet18-l40', 'satclip-resnet50-l10',
                          'satclip-resnet50-l40', 'satclip-vit16-l10', 'satclip-vit16-l40']:
-        training_data = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_Training.csv'.format(root_dir, country, country,
-                                                                                            feature_space))
-        testing_data = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_Testing.csv'.format(root_dir, country, country,
-                                                                                          feature_space))
+        training_data = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_TrainingData.csv'.format(root_dir, country,
+                                                                                                country, feature_space))
+        testing_data = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_TestingData.csv'.format(root_dir, country,
+                                                                                              country, feature_space))
+        val_data = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_ValData.csv'.format(root_dir, country, country,
+                                                                                      feature_space))
 
-    if feature_space in ['embeddings_precursor-geofoundation_v04_e025_z17',
-                         'embeddings_precursor-geofoundation_v04_e025_z18',
-                         'embeddings_school-predictor_v01_e025_z17',
-                         'embeddings_school-predictor_v01_e025_z18',
-                         'embeddings_precursor-geofoundation_v04_e008_z18',
-                         'embeddings_precursor-geofoundation_v04_e008_z17']:
-        training_data = pd.read_csv('{}/{}/embeddings/TrainingData_{}_embeddings.csv'.format(root_dir, country,
+    if feature_space in ['precursor-geofoundation_v04_e008_z17_embeddings',
+                         'precursor-geofoundation_v04_e008_z18_embeddings',
+                         'school-predictor_v01_e025_z17_embeddings',
+                         'embeddings_school-predictor_v01_e025_z18_embeddings',
+                         'esa_z17_v2-embeddings']:
+        training_data = pd.read_csv('{}/{}/embeddings/{}_embeddings_TrainingData.csv'.format(root_dir, country, country,
                                                                                              feature_space))
-        testing_data = pd.read_csv('{}/{}/embeddings/TestingData_{}_embeddings.csv'.format(root_dir, country,
+        testing_data = pd.read_csv('{}/{}/embeddings/{}_embeddings_TestingData.csv'.format(root_dir, country, country,
                                                                                            feature_space))
-    if feature_space in ['esa_z18_v2-embeddings', "esa_z17_v2-embeddings"]:
-        training_data = pd.read_csv('{}/{}/embeddings/{}_Train_{}.csv'.format(root_dir, country, country,
-                                                                              feature_space))
-        testing_data = pd.read_csv('{}/{}/embeddings/{}_Test_{}.csv'.format(root_dir, country, country,
-                                                                            feature_space))
+        val_data = pd.read_csv('{}/{}/embeddings/{}_embeddings_ValData.csv'.format(root_dir, country, country,
+                                                                                   feature_space))
 
     training_dataset = training_data.rename(columns={'connectivity': 'label'})
     testing_dataset = testing_data.rename(columns={'connectivity': 'label'})

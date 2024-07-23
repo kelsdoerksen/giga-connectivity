@@ -8,7 +8,6 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 import argparse
 import geopandas as gpd
-import numpy as np
 
 
 def get_args():
@@ -24,7 +23,6 @@ def get_args():
     parser.add_argument("--aoi", help='Country/Region generating data for')
     return parser.parse_args()
 
-seed = random.seed(46)
 
 # Admin 1 zones; admin 2 zones to spatially cross-validate
 region_dict = {
@@ -40,33 +38,7 @@ region_dict = {
     'Chobe': ['Chobe']
 }
 
-
-def eliminate_correlated_features(df, threshold, save_dir):
-    """
-    Modified function from giga-ml-utils
-    :return: df of uncorrelated features
-    """
-    # calculate correlation matrix
-    corr_matrix = df.corr().abs()
-
-    # identify pairs of highly correlated features
-    upper_triangle = corr_matrix.where(
-        np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
-    highly_correlated_pairs = (
-        upper_triangle.stack().reset_index().rename(columns={0: 'correlation'}))
-    highly_correlated_pairs = highly_correlated_pairs[
-        highly_correlated_pairs['correlation'] > threshold]
-
-    # drop features from level_0
-    features_to_drop = set()
-    for idx, row in highly_correlated_pairs.iterrows():
-        features_to_drop.add(row['level_0'])  # Drop the first feature
-    print('Features removed were: {}'.format(features_to_drop))
-    with open('{}/correlated_features.txt'.format(save_dir), 'w') as f:
-        f.write('Features removed were: {}'.format(features_to_drop))
-
-    return list(features_to_drop)
-
+seed = random.randint(0, 1000)
 
 def subset_by_region(poly_gdf, region_subset, samples_df):
     """
@@ -107,8 +79,10 @@ if __name__ == '__main__':
 
     if target == 'connectivity':
         label = dataset['connectivity']
+        dataset = dataset.drop(columns=['connectivity'])
     if target == 'schools':
         label = dataset['label']
+        dataset = dataset.drop(columns=['label'])
 
     if split_type == 'percentage':
         print('Running for data split: {}'.format(split_type))
