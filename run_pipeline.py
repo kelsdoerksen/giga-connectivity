@@ -4,7 +4,6 @@ for connectivity prediction
 """
 
 import argparse
-import sklearn
 from classifiers import lr, rf, svm, mlp, gb, xgb
 import wandb
 import pandas as pd
