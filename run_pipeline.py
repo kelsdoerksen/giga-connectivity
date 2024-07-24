@@ -381,7 +381,7 @@ if __name__ == '__main__':
                             dir='wandb_env')
     experiment.config.update(
         dict(aoi=aoi, buffer=buffer, model=model, target=model_target,
-             data_split=data_split)
+             data_split=data_split, features=features)
     )
 
     if model_target == 'connectivity':
