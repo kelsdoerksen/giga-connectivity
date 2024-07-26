@@ -404,19 +404,20 @@ if __name__ == '__main__':
 
     os.mkdir(results)
 
-    # Save data class balance breakdown
-    get_class_balance(train_data, test_data, val_data, results)
-
     cols_to_drop = ['Unnamed: 0.1', 'Unnamed: 0', 'Unnamed: 0.2']
     test_data = test_data.drop(columns=cols_to_drop, errors='ignore')
     train_data = train_data.drop(columns=cols_to_drop, errors='ignore')
 
     test_data = test_data.dropna()
     train_data = train_data.dropna()
+    val_data = val_data.dropna()
 
     # Save lat, lon for X test and then drop label and location data
     test_latitudes = test_data['lat']
     test_longitudes = test_data['lon']
+
+    # Save data class balance breakdown
+    get_class_balance(train_data, test_data, val_data, results)
 
     ytrain = train_data['label']
     ytest = test_data['label']
