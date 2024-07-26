@@ -43,7 +43,8 @@ def load_connectivity_data(country, buffer_extent, feature_space):
     if feature_space == 'engineer':
         training_data = pd.read_csv(
             '{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
-        testing_data = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
+        testing_data = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir, country,
+                                                                                          buffer_extent))
         val_data = pd.read_csv('{}/{}/{}m_buffer/ValData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
 
     if feature_space == 'engineer_with_aux':
@@ -54,23 +55,27 @@ def load_connectivity_data(country, buffer_extent, feature_space):
         val_data = pd.read_csv(
             '{}/{}/{}m_buffer/ValData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
 
-    if feature_space == 'combined':
-        # To update
-        eng_train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.
-                                   format(root_dir, country, buffer_extent))
-        eng_test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.
-                                  format(root_dir, country, buffer_extent))
-        eng_val_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.
-                                 format(root_dir, country, buffer_extent))
-        emb_train_df = pd.read_csv(
-            '{}/{}/embeddings/{}_embeddings_precursor-geofoundation_v04_e008_z18_embeddings_TrainingData.csv'.
-                format(root_dir, country, country))
-        emb_test_df = pd.read_csv(
-            '{}/{}/embeddings/{}_embeddings_precursor-geofoundation_v04_e008_z18_embeddings_TestingData.csv'.
-            format(root_dir, country, country))
-        emb_val_df = pd.read_csv(
-            '{}/{}/embeddings/{}_embeddings_precursor-geofoundation_v04_e008_z18_embeddings_ValData.csv'.
-                format(root_dir, country, country))
+    if feature_space in ['esa_combined', 'geoclip_combined', 'esa_combined', 'csp_combined']:
+        eng_train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir,
+                                                                                           country, buffer_extent))
+        eng_test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir,
+                                                                                         country, buffer_extent))
+        eng_val_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir,
+                                                                                        country, buffer_extent))
+        embed_name = ''
+        if feature_space == 'esa_combined':
+            embed_name = 'embeddings_precursor-geofoundation_v04_e008_z18_embeddings'
+        if feature_space == 'geoclip_combined':
+            embed_name = 'GeoCLIP'
+        if feature_space == 'csp_combined':
+            embed_name == 'CSP'
+
+        emb_train_df = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_TrainingData.csv'.
+                                   format(root_dir, country, country, embed_name))
+        emb_test_df = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_TestingData.csv'.
+                                  format(root_dir, country, country, embed_name))
+        emb_val_df = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_ValData.csv'.
+                                 format(root_dir, country, country, embed_name))
 
         eng_train_df = eng_train_df.sort_values(by='giga_id_school')
         eng_test_df = eng_test_df.sort_values(by='giga_id_school')
@@ -96,17 +101,16 @@ def load_connectivity_data(country, buffer_extent, feature_space):
         val_data = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_ValData.csv'.format(root_dir, country, country,
                                                                                       feature_space))
 
-    if feature_space in ['precursor-geofoundation_v04_e008_z17_embeddings',
-                         'precursor-geofoundation_v04_e008_z18_embeddings',
-                         'school-predictor_v01_e025_z17_embeddings',
+    if feature_space in ['embeddings_precursor-geofoundation_v04_e008_z17_embeddings',
+                         'embeddings_precursor-geofoundation_v04_e008_z18_embeddings',
+                         'embeddings_school-predictor_v01_e025_z17_embeddings',
                          'embeddings_school-predictor_v01_e025_z18_embeddings',
                          'esa_z17_v2-embeddings']:
-        training_data = pd.read_csv('{}/{}/embeddings/{}_embeddings_TrainingData.csv'.format(root_dir, country, country,
-                                                                                             feature_space))
-        testing_data = pd.read_csv('{}/{}/embeddings/{}_embeddings_TestingData.csv'.format(root_dir, country, country,
-                                                                                           feature_space))
-        val_data = pd.read_csv('{}/{}/embeddings/{}_embeddings_ValData.csv'.format(root_dir, country, country,
+        training_data = pd.read_csv('{}/{}/embeddings/{}_{}_TrainingData.csv'.format(root_dir, country, country,
+                                                                                     feature_space))
+        testing_data = pd.read_csv('{}/{}/embeddings/{}_{}_TestingData.csv'.format(root_dir, country, country,
                                                                                    feature_space))
+        val_data = pd.read_csv('{}/{}/embeddings/{}_{}_ValData.csv'.format(root_dir, country, country, feature_space))
 
     training_dataset = training_data.rename(columns={'connectivity': 'label'})
     testing_dataset = testing_data.rename(columns={'connectivity': 'label'})
@@ -337,7 +341,7 @@ def preprocess_samples(train_df, test_df, val_df):
 
     cols_list = X_train.columns.tolist()
     print('Scaling data...')
-    # scale the data if we are not using trees/GB model
+    # scale the data
     train_scaler = MinMaxScaler()
     train_scaler.fit(X_train)
     X_train_scaled = train_scaler.transform(X_train)
@@ -403,19 +407,22 @@ if __name__ == '__main__':
     # Save data class balance breakdown
     get_class_balance(train_data, test_data, val_data, results)
 
+    cols_to_drop = ['Unnamed: 0.1', 'Unnamed: 0', 'Unnamed: 0.2']
+    test_data = test_data.drop(columns=cols_to_drop, errors='ignore')
+    train_data = train_data.drop(columns=cols_to_drop, errors='ignore')
+
+    test_data = test_data.dropna()
+    train_data = train_data.dropna()
+
     # Save lat, lon for X test and then drop label and location data
     test_latitudes = test_data['lat']
     test_longitudes = test_data['lon']
 
-    # Some light preprocessing on data before running through models
-    train_df = train_data.dropna()
-    test_df = test_data.dropna()
-    val_df = val_data.dropna()
+    ytrain = train_data['label']
+    ytest = test_data['label']
+    yval = val_data['label']
+    Xtrain, Xtest, Xval = preprocess_samples(train_data, test_data, val_data)
 
-    ytrain = train_df['label']
-    ytest = test_df['label']
-    yval = val_df['label']
-    Xtrain, Xtest, Xval = preprocess_samples(train_df, test_df, val_df)
 
     # Run model
     if model == 'rf':

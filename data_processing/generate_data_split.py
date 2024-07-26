@@ -40,6 +40,7 @@ region_dict = {
 
 seed = random.randint(0, 1000)
 
+
 def subset_by_region(poly_gdf, region_subset, samples_df):
     """
     Divide samples based on geographic location
