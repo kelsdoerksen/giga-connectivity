@@ -398,11 +398,11 @@ if __name__ == '__main__':
     # Make results directory
     if experiment_type == 'offline':
         results = '{}/{}/results_{}m/{}_{}'.format(root_dir, aoi, buffer, model, wandb.run.id)
+        os.mkdir(results)
     else:
         if not os.path.exists('{}/{}/results_{}m/{}_{}'.format(results_dir, aoi, buffer, model, experiment.name)):
             results = '{}/{}/results_{}m/{}_{}'.format(results_dir, aoi, buffer, model, experiment.name)
-
-    os.mkdir(results)
+            os.mkdir(results)
 
     cols_to_drop = ['Unnamed: 0.1', 'Unnamed: 0', 'Unnamed: 0.2']
     test_data = test_data.drop(columns=cols_to_drop, errors='ignore')
