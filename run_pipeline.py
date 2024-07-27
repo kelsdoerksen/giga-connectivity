@@ -70,11 +70,11 @@ def load_connectivity_data(country, buffer_extent, feature_space):
         if feature_space == 'csp_combined':
             embed_name == 'CSP'
 
-        emb_train_df = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_TrainingData.csv'.
+        emb_train_df = pd.read_csv('{}/{}/embeddings/{}_{}_TrainingData.csv'.
                                    format(root_dir, country, country, embed_name))
-        emb_test_df = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_TestingData.csv'.
+        emb_test_df = pd.read_csv('{}/{}/embeddings/{}_{}_TestingData.csv'.
                                   format(root_dir, country, country, embed_name))
-        emb_val_df = pd.read_csv('{}/{}/embeddings/{}_{}_embeddings_ValData.csv'.
+        emb_val_df = pd.read_csv('{}/{}/embeddings/{}_{}_ValData.csv'.
                                  format(root_dir, country, country, embed_name))
 
         eng_train_df = eng_train_df.sort_values(by='giga_id_school')
