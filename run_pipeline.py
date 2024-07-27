@@ -60,8 +60,7 @@ def load_connectivity_data(country, buffer_extent, feature_space):
                                                                                            country, buffer_extent))
         eng_test_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir,
                                                                                          country, buffer_extent))
-        eng_val_df = pd.read_csv('{}/{}/{}m_buffer/TestingData_uncorrelated.csv'.format(root_dir,
-                                                                                        country, buffer_extent))
+        eng_val_df = pd.read_csv('{}/{}/{}m_buffer/ValData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
         embed_name = ''
         if feature_space == 'esa_combined':
             embed_name = 'embeddings_precursor-geofoundation_v04_e008_z18_embeddings'
@@ -83,8 +82,7 @@ def load_connectivity_data(country, buffer_extent, feature_space):
         combined_test = eng_test_df.merge(emb_test_df, on=['giga_id_school', 'lat', 'lon', 'connectivity'],
                                           how='outer')
         combined_test.drop(columns=['Unnamed: 0_x', 'Unnamed: 0.1', 'Unnamed: 0_y'], errors='ignore')
-        combined_val = eng_train_df.merge(emb_val_df, on=['giga_id_school', 'lat', 'lon', 'connectivity'],
-                                          how='outer')
+        combined_val = eng_val_df.merge(emb_val_df, on=['giga_id_school', 'lat', 'lon', 'connectivity'], how='outer')
         combined_val.drop(columns=['Unnamed: 0_x', 'Unnamed: 0.1', 'Unnamed: 0_y'], errors='ignore')
 
         training_data = combined_train
