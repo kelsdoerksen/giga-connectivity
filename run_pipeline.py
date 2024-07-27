@@ -77,16 +77,15 @@ def load_connectivity_data(country, buffer_extent, feature_space):
         emb_val_df = pd.read_csv('{}/{}/embeddings/{}_{}_ValData.csv'.
                                  format(root_dir, country, country, embed_name))
 
-        eng_train_df = eng_train_df.sort_values(by='giga_id_school')
-        eng_test_df = eng_test_df.sort_values(by='giga_id_school')
-        eng_val_df = eng_val_df.sort_values(by='giga_id_school')
-        emb_train_df = emb_train_df.sort_values(by='giga_id_school')
-        emb_test_df = emb_test_df.sort_values(by='giga_id_school')
-        emb_val_df = emb_val_df.sort_values(by='giga_id_school')
-
-        combined_train = pd.concat([eng_train_df, emb_train_df], axis=1)
-        combined_test = pd.concat([eng_test_df, emb_test_df], axis=1)
-        combined_val = pd.concat([eng_val_df, emb_val_df], axis=1)
+        combined_train = eng_train_df.merge(emb_train_df, on=['giga_id_school', 'lat', 'lon', 'connectivity'],
+                                            how='outer')
+        combined_train.drop(columns=['Unnamed: 0_x', 'Unnamed: 0.1', 'Unnamed: 0_y'], errors='ignore')
+        combined_test = eng_test_df.merge(emb_test_df, on=['giga_id_school', 'lat', 'lon', 'connectivity'],
+                                          how='outer')
+        combined_test.drop(columns=['Unnamed: 0_x', 'Unnamed: 0.1', 'Unnamed: 0_y'], errors='ignore')
+        combined_val = eng_train_df.merge(emb_val_df, on=['giga_id_school', 'lat', 'lon', 'connectivity'],
+                                          how='outer')
+        combined_val.drop(columns=['Unnamed: 0_x', 'Unnamed: 0.1', 'Unnamed: 0_y'], errors='ignore')
 
         training_data = combined_train
         testing_data = combined_test
