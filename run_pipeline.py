@@ -62,8 +62,12 @@ def load_connectivity_data(country, buffer_extent, feature_space):
                                                                                          country, buffer_extent))
         eng_val_df = pd.read_csv('{}/{}/{}m_buffer/ValData_uncorrelated.csv'.format(root_dir, country, buffer_extent))
         embed_name = ''
-        if feature_space == 'esa_combined':
+        if feature_space == 'esa_combined_v04_e008_z18':
             embed_name = 'embeddings_precursor-geofoundation_v04_e008_z18_embeddings'
+        if feature_space == 'esa_combined_v04_e008_z17':
+            embed_name = 'embeddings_precursor-geofoundation_v04_e008_z17_embeddings'
+        if feature_space == 'esa_combined_z17_v2-embeddings':
+            embed_name = 'esa_z17_v2-embeddings'
         if feature_space == 'geoclip_combined':
             embed_name = 'GeoCLIP'
         if feature_space == 'csp_combined':
