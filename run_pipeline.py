@@ -55,7 +55,7 @@ def load_connectivity_data(country, buffer_extent, feature_space):
         val_data = pd.read_csv(
             '{}/{}/{}m_buffer/ValData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
 
-    if feature_space in ['esa_combined', 'geoclip_combined', 'esa_combined_v04_e008_z18',
+    if feature_space in ['esa_combined', 'geoclip_combined', 'esa_combined_v04_e008_z18', 'esa_combined_v04_e008_z17',
                          'esa_combined_z17_v2-embeddings', 'esa_z17_v2-embeddings', 'csp_combined']:
         eng_train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir,
                                                                                            country, buffer_extent))
