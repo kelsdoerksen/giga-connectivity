@@ -105,8 +105,14 @@ if __name__ == '__main__':
     save_dir = args.save_dir
     buffer = args.buffer
 
+    # Read in static dfs of info
     giga_school_df = pd.read_csv('{}/{}/{}_school_geolocation_coverage_master.csv'.format(root_dir, aoi, aoi))
     aoi_boundaries_file = gpd.read_file('{}/{}/geoBoundaries-{}-ADM2.geojson'.format(root_dir, aoi, aoi))
+    prim_age_df = pd.read_csv('{}/{}/PrimarySchool_ZonalStatistics_Features_{}.csv'.format(root_dir, aoi, aoi))
+    sec_age_df = pd.read_csv('{}/{}/Secondary_ZonalStatistics_Features_{}.csv'.format(root_dir, aoi, aoi))
+
+    prim_age_df = prim_age_df.drop(columns=['lat', 'lon'])
+    sec_age_df = sec_age_df.drop(columns=['lat', 'lon'])
 
     splits = ['Training', 'Testing', 'Val']
     for split in splits:
@@ -115,7 +121,8 @@ if __name__ == '__main__':
         encoder_df = get_boundary(aoi_boundaries_file, giga_school_df)
 
         combine = reduce(lambda x, y: pd.merge(x, y, on='giga_id_school', how='inner'),
-                         [feature_df, encoder_df, giga_aux]).drop(columns=['Unnamed: 0.1', 'Unnamed: 0'])
+                         [feature_df, encoder_df, giga_aux, prim_age_df, sec_age_df]).\
+            drop(columns=['Unnamed: 0.1', 'Unnamed: 0'])
 
         combine.to_csv('{}/{}Data_uncorrelated_with_aux.csv'.format(save_dir, split))
 
