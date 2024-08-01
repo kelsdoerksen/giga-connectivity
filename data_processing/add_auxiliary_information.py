@@ -124,5 +124,5 @@ if __name__ == '__main__':
                          [feature_df, encoder_df, giga_aux, prim_age_df, sec_age_df]).\
             drop(columns=['Unnamed: 0.1', 'Unnamed: 0'])
 
-        combine.to_csv('{}/{}Data_uncorrelated_with_aux.csv'.format(save_dir, split))
+        combine.to_csv('{}/{}Data_uncorrelated_with_aux_and_schoolage_pop.csv'.format(save_dir, split))
 

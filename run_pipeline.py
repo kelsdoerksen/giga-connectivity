@@ -55,6 +55,17 @@ def load_connectivity_data(country, buffer_extent, feature_space):
         val_data = pd.read_csv(
             '{}/{}/{}m_buffer/ValData_uncorrelated_with_aux.csv'.format(root_dir, country, buffer_extent))
 
+    if feature_space == 'engineer_with_aux_and_pop':
+        training_data = pd.read_csv(
+            '{}/{}/{}m_buffer/TrainingData_uncorrelated_with_aux_and_schoolage_pop.csv'
+                .format(root_dir, country, buffer_extent))
+        testing_data = pd.read_csv(
+            '{}/{}/{}m_buffer/TestingData_uncorrelated_with_aux_and_schoolage_pop.csv'
+                .format(root_dir, country, buffer_extent))
+        val_data = pd.read_csv(
+            '{}/{}/{}m_buffer/ValData_uncorrelated_with_aux_and_schoolage_pop.csv'
+                .format(root_dir, country, buffer_extent))
+
     if feature_space in ['esa_combined', 'geoclip_combined', 'esa_combined_v04_e008_z18', 'esa_combined_v04_e008_z17',
                          'esa_combined_z17_v2-embeddings', 'esa_z17_v2-embeddings', 'csp_combined']:
         eng_train_df = pd.read_csv('{}/{}/{}m_buffer/TrainingData_uncorrelated.csv'.format(root_dir,
@@ -382,6 +393,7 @@ if __name__ == '__main__':
     # Set up experiment
     experiment = wandb.init(project='giga-research',
                             tags=['aaai'],
+                            mode=str(experiment_type),
                             resume='allow',
                             anonymous='must',
                             dir='wandb_env')
@@ -406,9 +418,11 @@ if __name__ == '__main__':
             results = '{}/{}/results_{}m/{}_{}'.format(results_dir, aoi, buffer, model, experiment.name)
             os.mkdir(results)
 
-    cols_to_drop = ['Unnamed: 0.1', 'Unnamed: 0', 'Unnamed: 0.2']
+    cols_to_drop = ['Unnamed: 0.1', 'Unnamed: 0', 'Unnamed: 0.2', 'Unnamed: 0.1_x', 'Unnamed: 0.1_y',
+                    'Unnamed: 0_x', 'Unnamed: 0_y']
     test_data = test_data.drop(columns=cols_to_drop, errors='ignore')
     train_data = train_data.drop(columns=cols_to_drop, errors='ignore')
+    val_data = val_data.drop(columns=cols_to_drop, errors='ignore')
 
     test_data = test_data.dropna()
     train_data = train_data.dropna()
