@@ -32,7 +32,8 @@ def run_xgb(X_train,
 
     # Create instance of XGB model
     print('Creating instance of XGB model...')
-    clf = XGBClassifier(random_state=seed)
+    clf = XGBClassifier(random_state=seed, eta=0.05, max_depth=3, min_child_weight=0,
+                        max_delta_step=2,subsample=1,tree_method='approx')
 
     # Fit to training data
     print('Fitting data...')
@@ -53,9 +54,9 @@ def run_xgb(X_train,
             pickle.dump(clf, f)
 
         predictions = (probs[:, 1] >= 0.5)
-        probs = predictions * 1
+        predictions = predictions * 1
         f1 = f1_score(y_test, predictions)
-        calc_confusion_matrix(y_test, probs[:, 1], results_dir)
+        calc_confusion_matrix(y_test, predictions, results_dir)
 
         # Saving results for further plotting
         results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
