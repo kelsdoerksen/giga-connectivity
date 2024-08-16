@@ -79,7 +79,7 @@ The available configurable parameters are:
     *   `mlp`: multi-layer perceptron
     *   `svm`: support vector machine
     *   `lr`: logistic regression
-    *   `xgb`: 
+    *   `xgb`: extreme gradient boosting
 * `--aoi`: Country
 * `--buffer`: Buffer extent surrounding target
 * `--root_dir`: Directory of data
