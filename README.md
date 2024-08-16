@@ -15,7 +15,7 @@
 </div>
 
 ## 📄 Description
-This work presents the data processing, model training, testing, and analysis for the purposes of school mapping and school connectivity prediction utilizing Earth Observation data. This work is developed under Giga, a global initiative by UNICEF-ITU to connect every school to the internet by 2030 in collaboration with the European Space Agency Phi-lab.
+This work presents the data processing, model training, testing, and analysis for the purposes of school mapping and school connectivity prediction utilizing Earth Observation data. 
 
 Obtaining complete and accurate information on schools locations is a critical first step to accelerating digital connectivity and driving progress towards SDG4: Quality Education. However, precise GPS coordinate of schools are often inaccurate, incomplete, or even completely non-existent in many developing countries.  In support of the Giga initiative, we leverage machine learning and a combination of remote sensing and auxillary data to accelerate school mapping. We also investigate the ability of geospatial information to be used for predicting connectivity status of schools.
 
