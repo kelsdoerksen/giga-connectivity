@@ -1,6 +1,6 @@
 <div align="center">
 
-# UNICEF-Giga: School Mapping & Connectivity Prediction with Geospatial Data
+# UNICEF-Giga: School Connectivity Prediction with Geospatial Data and Machine Learning
 
 <p>
 <b><a href="#-description">Description</a></b>
