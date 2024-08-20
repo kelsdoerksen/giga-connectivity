@@ -55,7 +55,7 @@ def run_gb(X_train,
         predictions = (probs[:, 1] >= 0.5)
         predictions = predictions * 1
         f1 = f1_score(y_test, predictions)
-        confusion_matrix(y_test, probs[:, 1], results_dir)
+        #confusion_matrix(y_test, probs[:, 1], results_dir)
 
         # Saving results for further plotting
         results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)

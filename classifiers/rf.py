@@ -81,8 +81,8 @@ def run_rf(X_train,
 
         # Saving results for further plotting
         results_for_plotting(y_test, probs, test_latitudes, test_longitudes, results_dir, model_name)
-        calc_importance(forest, X_test, results_dir)
-        calc_confusion_matrix(y_test, probs[:, 1], results_dir)
+        #calc_importance(forest, X_test, results_dir)
+        #calc_confusion_matrix(y_test, probs[:, 1], results_dir)
 
         wandb_exp.log({
             'roc': wandb.plot.roc_curve(y_test, probs),
